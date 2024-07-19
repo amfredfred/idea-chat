@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from "react";
 import Navbar from "./components/Navbar";
 import { AiOutlineSend } from "react-icons/ai";
 import io from "socket.io-client";
@@ -5,7 +6,12 @@ import SettingsIcon from "./components/SettingsIcon";
 import SettingsClosed from "./components/SettingsClosed";
 const socket = io(import.meta.env.VITE_BASE_URI);
 import { motion, AnimatePresence } from "framer-motion";
+import { useRecoilState } from "recoil";
+import { userProfilePicState } from "./atoms/users";
+import { websiteThemeState } from "./atoms/website-theme";
+import axios from "axios";
 import messageNotification from "./assets/message_notification.mp3";
+import { userNameState } from "./atoms/users";
 import Focused from "./components/message-animations/Focused";
 import synthIcon from "./assets/synth.svg";
 import audioIcon from "./assets/audio.svg";
@@ -13,54 +19,170 @@ import slideIcon from "./assets/slide.svg";
 import onIcon from "./assets/on.svg";
 import ambientIcon from "./assets/ambient.svg";
 import winIcon from "./assets/win.svg";
+import { websiteAudioState } from "./atoms/website-theme";
 import winMusic from "./assets/win.mp3";
 import onMusic from "./assets/on.mp3";
 import slideMusic from "./assets/slide.mp3";
 import synthMusic from "./assets/synth.mp3";
 import ambientMusic from "./assets/ambient.mp3";
 import EquatorTest from "./components/message-animations/EquatorTest";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MobileNav from "./components/MobileNav";
 import Footer from "./components/Footer";
 import Pump from "./components/Pump";
 import Alpha from "./components/Alpha";
 import Chaos from "./components/message-animations/Chaos";
-import useChat from "./hooks/useChat";
+// import { walletAddressState } from "./atoms/wallet"
+// import { useNavigate } from "react-router-dom"
+const BASE_URI = import.meta.env.VITE_BASE_URI;
+
+interface Message {
+  _id: any;
+  message: string;
+  username: string;
+  profilePic: string;
+}
+interface InitialMessage {
+  _id: any;
+  message: string;
+  username: string;
+  profilePic: string;
+}
+interface Settings {
+  visual: string;
+  audio: string;
+  motion: string;
+}
+const totalWidth = window.innerWidth;
+const totalHeight = window.innerHeight;
 
 const Chat = () => {
-  
-  const { currentUserMessage,
-    setCurrentUserMessage,
-    isSettingsOpen,
-    setIsSettingsOpen,
-    // isMusicPlaying,
-    // setMusicIsPlaying,
-    settingsModal,
-    setSettingsModal,
-    websiteTheme,
-    setWebsiteTheme,
-    initialMessages,
-    // setInitialMessages,
-    newMessage,
-    // setNewMessage,
-    chatState,
-    setChatState,
-    // userName,
-    // setUserName,
-    // profilePicState,
-    // setProfilePicState,
-    notificationRef,
-    audioRef,
-    websiteAudio,
-    setWebsiteAudio,
-    navigate,
-    modalRef,
-    handleSendMessage,
-    handleKeyDown,
-    handleMusicPlayPause,
-    clickAnimation,
-    totalWidth,
-    totalHeight } = useChat()
+  const [currentUserMessage, setCurrentUserMessage] = useState("");
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isMusicPlayinh, setMusicIsPlaying] = useState(true);
+  const [settingsModal, setSettingsModal] = useState<Settings>({
+    visual: "rem",
+    audio: "win",
+    motion: "focused",
+  });
+  const [websiteTheme, setWebsiteTheme] = useRecoilState(websiteThemeState);
+  const [initialMessages, setInitialMessages] = useState<InitialMessage[]>([]);
+  const [newMessage, setNewMessage] = useState<Message[]>([]);
+  const [chatState, setChatState] = useState<"DEN" | "PUMP" | "ALPHA">("DEN");
+  const [userName, setUserName] = useRecoilState(userNameState);
+  const [profilePicState, setProfilePicState] =
+    useRecoilState(userProfilePicState);
+  const notificationRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [websiteAudio, setWebsiteAudio] = useRecoilState(websiteAudioState);
+  const navigate = useNavigate();
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    audioRef.current!.play();
+    const loadUserProfile = async () => {
+      const wAddress = localStorage.getItem("walletAddress");
+      try {
+        const response = await axios.get(
+          `${BASE_URI}/api/user-profile?walletAddress=${wAddress}`
+        );
+        const data = response.data;
+        if (data.username) {
+          setUserName(data.username);
+        }
+        if (data.profilePic) {
+          setProfilePicState(data.profilePic);
+        }
+      } catch (err: any) {
+        console.log("profile-error", err.message);
+      }
+    };
+    loadUserProfile();
+    const loadInitialMessages = async () => {
+      try {
+        const response = await axios.get(`${BASE_URI}/api/initialMessages`);
+        const messages = response.data;
+        if (messages) {
+          setInitialMessages(messages);
+        }
+      } catch (err) {
+        console.log("initial-messages-error", err);
+      }
+    };
+    loadInitialMessages();
+
+    const handleNewMessage = (msg: Message) => {
+      setNewMessage((prevMessages: Message[]) => {
+        notificationRef.current!.play();
+        return [...prevMessages, msg];
+      });
+    };
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("initialMessages");
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, []);
+
+  const handleSendMessage = () => {
+    if (currentUserMessage.length <= 500) {
+      if (currentUserMessage.trim()) {
+        socket.emit("sendMessage", {
+          username: userName,
+          message: currentUserMessage,
+          profilePic: profilePicState,
+        });
+        setCurrentUserMessage("");
+      }
+    } else {
+      alert("Character count exceeds 500");
+    }
+  };
+
+  const handleKeyDown = (e: any) => {
+    if (e.key === "Enter" && e.shiftKey) {
+      e.preventDefault();
+      setCurrentUserMessage((prevValue) => prevValue + "\n");
+    } else if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
+  const clickAnimation = {
+    scale: 0.9,
+    transition: { type: "spring", stiffness: 400, damping: 10 },
+  };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = websiteAudio;
+      audioRef.current.play();
+    }
+  }, [websiteAudio]);
+
+  const handleMusicPlayPause = () => {
+    if (isMusicPlayinh) {
+      audioRef.current?.pause();
+      setMusicIsPlaying(false);
+    } else {
+      audioRef.current?.play();
+      setMusicIsPlaying(true);
+    }
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setIsSettingsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const RenderComponent = () => {
     switch (chatState) {
@@ -111,10 +233,11 @@ const Chat = () => {
                     className="w-[90%]  lg:w-[50%] xl:w-[35%] 2xl:w-[35%] relative top-[-450px] lg:top-[-100px] text-black z-10 flex flex-col gap-[10px]  "
                   >
                     <div
-                      className={`${websiteTheme.bgColor === "#ffffff"
-                        ? "border border-black"
-                        : "border-none"
-                        } bg-white  p-5 rounded-[8px] flex flex-col gap-[20px] lg:gap-[5px] `}
+                      className={`${
+                        websiteTheme.bgColor === "#ffffff"
+                          ? "border border-black"
+                          : "border-none"
+                      } bg-white  p-5 rounded-[8px] flex flex-col gap-[20px] lg:gap-[5px] `}
                     >
                       <div className=" flex lg:items-center rounded-[8px] flex-col lg:flex-row ">
                         <div className=" w-[15%]  ">
@@ -139,10 +262,11 @@ const Chat = () => {
                                 <p>dont sin</p>
                               </div>
                               <p
-                                className={`text-[10px] lg:text-[16px] ${settingsModal.visual === "rem"
-                                  ? "text-[#0000FF]"
-                                  : "text-black"
-                                  }  lg:border-none lg:p-0`}
+                                className={`text-[10px] lg:text-[16px] ${
+                                  settingsModal.visual === "rem"
+                                    ? "text-[#0000FF]"
+                                    : "text-black"
+                                }  lg:border-none lg:p-0`}
                               >
                                 rem
                               </p>
@@ -165,10 +289,11 @@ const Chat = () => {
                                 <p>dont sin</p>
                               </div>
                               <p
-                                className={`text-[10px] lg:text-[16px] ${settingsModal.visual === "neo"
-                                  ? "text-[#0000FF]"
-                                  : "text-black"
-                                  }  rounded-[2px] p-[4px] lg:border-none lg:p-0`}
+                                className={`text-[10px] lg:text-[16px] ${
+                                  settingsModal.visual === "neo"
+                                    ? "text-[#0000FF]"
+                                    : "text-black"
+                                }  rounded-[2px] p-[4px] lg:border-none lg:p-0`}
                               >
                                 neo
                               </p>
@@ -191,10 +316,11 @@ const Chat = () => {
                                 <p>dont sin</p>
                               </div>
                               <p
-                                className={`text-[10px] lg:text-[16px] ${settingsModal.visual === "oen"
-                                  ? "text-[#0000FF]"
-                                  : "text-black"
-                                  }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
+                                className={`text-[10px] lg:text-[16px] ${
+                                  settingsModal.visual === "oen"
+                                    ? "text-[#0000FF]"
+                                    : "text-black"
+                                }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
                               >
                                 oen
                               </p>
@@ -217,10 +343,11 @@ const Chat = () => {
                                 <p>dont sin</p>
                               </div>
                               <p
-                                className={`text-[10px] lg:text-[16px] ${settingsModal.visual === "hmmm"
-                                  ? "text-[#0000FF]"
-                                  : "text-black"
-                                  }  rounded-[2px] p-[4px] lg:border-none lg:p-0`}
+                                className={`text-[10px] lg:text-[16px] ${
+                                  settingsModal.visual === "hmmm"
+                                    ? "text-[#0000FF]"
+                                    : "text-black"
+                                }  rounded-[2px] p-[4px] lg:border-none lg:p-0`}
                               >
                                 hmmm
                               </p>
@@ -243,10 +370,11 @@ const Chat = () => {
                                 <p>dont sin</p>
                               </div>
                               <p
-                                className={`text-[10px] lg:text-[16px] ${settingsModal.visual === "b/w"
-                                  ? "text-[#0000FF]"
-                                  : "text-black"
-                                  }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
+                                className={`text-[10px] lg:text-[16px] ${
+                                  settingsModal.visual === "b/w"
+                                    ? "text-[#0000FF]"
+                                    : "text-black"
+                                }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
                               >
                                 b/w
                               </p>
@@ -271,18 +399,20 @@ const Chat = () => {
                             onClick={() => setWebsiteAudio(winMusic)}
                           >
                             <div
-                              className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${websiteAudio === winMusic
-                                ? "border-[#0000FF]"
-                                : "border-black"
-                                }  h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
+                              className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${
+                                websiteAudio === winMusic
+                                  ? "border-[#0000FF]"
+                                  : "border-black"
+                              }  h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
                             >
                               <img src={winIcon} className=" w-[100%] h-auto" />
                             </div>
                             <p
-                              className={`text-[10px] lg:text-[16px] ${websiteAudio === winMusic
-                                ? "text-[#0000FF]"
-                                : "text-black"
-                                } p-[4px] rounded-[2px] lg:border-none`}
+                              className={`text-[10px] lg:text-[16px] ${
+                                websiteAudio === winMusic
+                                  ? "text-[#0000FF]"
+                                  : "text-black"
+                              } p-[4px] rounded-[2px] lg:border-none`}
                             >
                               win
                             </p>
@@ -293,10 +423,11 @@ const Chat = () => {
                             onClick={() => setWebsiteAudio(slideMusic)}
                           >
                             <div
-                              className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${websiteAudio === slideMusic
-                                ? "border-[#0000FF]"
-                                : "border-black"
-                                } h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
+                              className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${
+                                websiteAudio === slideMusic
+                                  ? "border-[#0000FF]"
+                                  : "border-black"
+                              } h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
                             >
                               <img
                                 src={slideIcon}
@@ -305,10 +436,11 @@ const Chat = () => {
                             </div>
 
                             <p
-                              className={` text-[10px] lg:text-[16px]  ${websiteAudio === slideMusic
-                                ? "text-[#0000FF]"
-                                : "text-black"
-                                }  p-[4px] rounded-[2px] lg:border-none`}
+                              className={` text-[10px] lg:text-[16px]  ${
+                                websiteAudio === slideMusic
+                                  ? "text-[#0000FF]"
+                                  : "text-black"
+                              }  p-[4px] rounded-[2px] lg:border-none`}
                             >
                               slide
                             </p>
@@ -319,10 +451,11 @@ const Chat = () => {
                             onClick={() => setWebsiteAudio(onMusic)}
                           >
                             <div
-                              className={` bg-[#ffffff] text-white text-[10px] p-2 border ${websiteAudio === onMusic
-                                ? "border-[#0000FF]"
-                                : "border-black"
-                                } h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
+                              className={` bg-[#ffffff] text-white text-[10px] p-2 border ${
+                                websiteAudio === onMusic
+                                  ? "border-[#0000FF]"
+                                  : "border-black"
+                              } h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
                             >
                               <img
                                 src={onIcon}
@@ -331,10 +464,11 @@ const Chat = () => {
                             </div>
 
                             <p
-                              className={` text-[10px] lg:text-[16px]  ${websiteAudio === onMusic
-                                ? "text-[#0000FF]"
-                                : "text-black"
-                                } p-[4px] rounded-[2px] lg:border-none`}
+                              className={` text-[10px] lg:text-[16px]  ${
+                                websiteAudio === onMusic
+                                  ? "text-[#0000FF]"
+                                  : "text-black"
+                              } p-[4px] rounded-[2px] lg:border-none`}
                             >
                               on
                             </p>
@@ -345,10 +479,11 @@ const Chat = () => {
                             onClick={() => setWebsiteAudio(synthMusic)}
                           >
                             <div
-                              className={` bg-[#ffffff] text-white text-[10px] p-2 border ${websiteAudio === synthMusic
-                                ? "border-[#0000FF]"
-                                : "border-black"
-                                } h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
+                              className={` bg-[#ffffff] text-white text-[10px] p-2 border ${
+                                websiteAudio === synthMusic
+                                  ? "border-[#0000FF]"
+                                  : "border-black"
+                              } h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
                             >
                               <img
                                 src={synthIcon}
@@ -357,10 +492,11 @@ const Chat = () => {
                             </div>
 
                             <p
-                              className={` text-[10px] lg:text-[16px] ${websiteAudio === synthMusic
-                                ? "text-[#0000FF]"
-                                : "text-black"
-                                }  p-[4px] rounded-[2px] lg:border-none`}
+                              className={` text-[10px] lg:text-[16px] ${
+                                websiteAudio === synthMusic
+                                  ? "text-[#0000FF]"
+                                  : "text-black"
+                              }  p-[4px] rounded-[2px] lg:border-none`}
                             >
                               synth
                             </p>
@@ -371,10 +507,11 @@ const Chat = () => {
                             onClick={() => setWebsiteAudio(ambientMusic)}
                           >
                             <div
-                              className={` bg-[#ffffff] text-white text-[10px] p-2 border ${websiteAudio === ambientMusic
-                                ? "border-[#0000FF]"
-                                : "border-black"
-                                } h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
+                              className={` bg-[#ffffff] text-white text-[10px] p-2 border ${
+                                websiteAudio === ambientMusic
+                                  ? "border-[#0000FF]"
+                                  : "border-black"
+                              } h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
                             >
                               <img
                                 src={ambientIcon}
@@ -383,10 +520,11 @@ const Chat = () => {
                             </div>
 
                             <p
-                              className={` text-[10px] lg:text-[16px] ${websiteAudio === ambientMusic
-                                ? "text-[#0000FF]"
-                                : "text-black"
-                                }  p-[4px] rounded-[2px] lg:border-none`}
+                              className={` text-[10px] lg:text-[16px] ${
+                                websiteAudio === ambientMusic
+                                  ? "text-[#0000FF]"
+                                  : "text-black"
+                              }  p-[4px] rounded-[2px] lg:border-none`}
                             >
                               ambient
                             </p>
@@ -410,10 +548,11 @@ const Chat = () => {
                             }
                           >
                             <div
-                              className={` bg-[#white] ${settingsModal.motion === "chaos"
-                                ? "text-[#0000FF] border border-[#0000FF]"
-                                : "text-black border border-black"
-                                }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`}
+                              className={` bg-[#white] ${
+                                settingsModal.motion === "chaos"
+                                  ? "text-[#0000FF] border border-[#0000FF]"
+                                  : "text-black border border-black"
+                              }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`}
                             >
                               <p>dont sin</p>
                               <p>dont sin</p>
@@ -433,10 +572,11 @@ const Chat = () => {
                             }
                           >
                             <div
-                              className={` bg-[#white] ${settingsModal.motion === "focused"
-                                ? "text-[#0000FF] border border-[#0000FF]"
-                                : "text-black border border-black"
-                                }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer `}
+                              className={` bg-[#white] ${
+                                settingsModal.motion === "focused"
+                                  ? "text-[#0000FF] border border-[#0000FF]"
+                                  : "text-black border border-black"
+                              }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer `}
                             >
                               <p>dont sin</p>
                               <p>dont sin</p>
@@ -456,10 +596,11 @@ const Chat = () => {
                             }
                           >
                             <div
-                              className={` bg-[#white] ${settingsModal.motion === "equator"
-                                ? "text-[#0000FF] border border-[#0000FF]"
-                                : "text-black border border-black"
-                                } lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`}
+                              className={` bg-[#white] ${
+                                settingsModal.motion === "equator"
+                                  ? "text-[#0000FF] border border-[#0000FF]"
+                                  : "text-black border border-black"
+                              } lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`}
                             >
                               <p>dont sin</p>
                               <p>dont sin</p>
@@ -516,10 +657,11 @@ const Chat = () => {
                       }}
                       placeholder="type something retarded..."
                       value={currentUserMessage}
-                      className={`bg-white ${websiteTheme.bgColor === "#ffffff"
-                        ? "border border-black"
-                        : "border-none"
-                        } text-[#121212] uppercase p-3 lg:p-5 text-[13px] lg:text-[18px] mx-auto rounded-[4px] lg:rounded-[8px] w-full outline-none resize-none`}
+                      className={`bg-white ${
+                        websiteTheme.bgColor === "#ffffff"
+                          ? "border border-black"
+                          : "border-none"
+                      } text-[#121212] uppercase p-3 lg:p-5 text-[13px] lg:text-[18px] mx-auto rounded-[4px] lg:rounded-[8px] w-full outline-none resize-none`}
                       onChange={(e) => setCurrentUserMessage(e.target.value)}
                       onKeyDown={handleKeyDown}
                       rows={1}
@@ -529,10 +671,11 @@ const Chat = () => {
               </AnimatePresence>
               <motion.button
                 whileTap={clickAnimation}
-                className={`p-[10px] lg:p-[15px] ${websiteTheme.bgColor === "#ffffff"
-                  ? "border border-black"
-                  : "border-none"
-                  } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
+                className={`p-[10px] lg:p-[15px] ${
+                  websiteTheme.bgColor === "#ffffff"
+                    ? "border border-black"
+                    : "border-none"
+                } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
                 onClick={handleSendMessage}
               >
                 <AiOutlineSend
@@ -545,10 +688,11 @@ const Chat = () => {
               {!isSettingsOpen && (
                 <motion.button
                   whileTap={clickAnimation}
-                  className={`p-[10px] lg:p-[15px] ${websiteTheme.bgColor === "#ffffff"
-                    ? "border border-black"
-                    : "border-none"
-                    } bg-white rounded-[4px] lg:rounded-[8px] lg:hidden`}
+                  className={`p-[10px] lg:p-[15px] ${
+                    websiteTheme.bgColor === "#ffffff"
+                      ? "border border-black"
+                      : "border-none"
+                  } bg-white rounded-[4px] lg:rounded-[8px] lg:hidden`}
                   onClick={handleSendMessage}
                 >
                   <AiOutlineSend
@@ -561,10 +705,11 @@ const Chat = () => {
               )}
               <motion.button
                 whileTap={clickAnimation}
-                className={`p-[10px] lg:p-[15px] ${websiteTheme.bgColor === "#ffffff"
-                  ? "border border-black"
-                  : "border-none"
-                  } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
+                className={`p-[10px] lg:p-[15px] ${
+                  websiteTheme.bgColor === "#ffffff"
+                    ? "border border-black"
+                    : "border-none"
+                } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
                 onClick={() => setIsSettingsOpen(!isSettingsOpen)}
               >
                 {isSettingsOpen ? (

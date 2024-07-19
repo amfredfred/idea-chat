@@ -10,18 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.12.0",
-    "@emotion/styled": "^11.12.0",
-    "@mui/lab": "^5.0.0-alpha.172",
-    "@mui/material": "^5.16.4",
     "@solana/spl-token": "^0.2.0",
     "@solana/wallet-adapter-base": "^0.9.7",
     "@solana/wallet-adapter-react": "^0.15.6",
     "@solana/wallet-adapter-react-ui": "^0.9.8",
     "@solana/wallet-adapter-wallets": "^0.16.10",
     "@solana/web3.js": "^1.47.3",
-    "@tanstack/react-query": "^5.51.9",
-    "@uidotdev/usehooks": "^2.4.1",
     "@vitejs/plugin-react": "^4.3.1",
     "axios": "^1.7.2",
     "framer-motion": "^11.2.10",

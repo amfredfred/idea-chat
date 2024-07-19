@@ -64,7 +64,7 @@ const Focused = ({
             profilePic={modalPfp}
           />
         )}
-        {initialMessages?.map?.((msg: InitialMessage, index: number) => (
+        {initialMessages?.map((msg: InitialMessage, index: number) => (
           <>
             <div
               className="flex gap-2 lg:gap-5 xl:gap-10 items-center overflow-y-auto"
