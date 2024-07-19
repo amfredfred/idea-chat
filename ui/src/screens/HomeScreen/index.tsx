@@ -56,44 +56,44 @@ export default function HomeScreen() {
     };
 
 
-    const connectedWalletComponent = (<></>
-        // <motion.div
-        //     initial={{ y: "100%" }}
-        //     animate={{ y: 0 }}
-        //     exit={{ y: "100%" }}
-        //     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        //     className={`bg-white ${showVerifying ? "opacity-100" : "opacity-100"
-        //         } coming-soon-shadow text-[#0000FF]  uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full flex flex-col gap-2 ${showWalletTransactionsError &&
-        //         "bg-opacity-0 anti-coming-soon-shadow opacity-100"
-        //         }`}  >
-        //     <div className=" mx-auto">
-        //         {showVerifying ? (
-        //             <>
-        //                 {showWalletTransactionsError ? (
-        //                     <div className=" text-white text-center mt-[-10px] flex flex-col gap-[10px] ">
-        //                         <div className=" flex justify-center">
-        //                             <TransactionsCountErrorIcon />
-        //                         </div>
-        //                         <p>access denied</p>
-        //                         <p className=" lg:w-[1000px]">
-        //                             wallet must have at least 69 transactions in the past
-        //                             to access this universe
-        //                         </p>
-        //                     </div>
-        //                 ) : (
-        //                     <p>verifying...</p>
-        //                 )}
-        //             </>
-        //         ) : (
-        //             <SolanaConnect
-        //                 setShowVerifying={setShowVerifying}
-        //                 setShowWalletTransactionsError={
-        //                     setShowWalletTransactionsError
-        //                 }
-        //             />
-        //         )}
-        //     </div>
-        // </motion.div>
+    const connectedWalletComponent = (
+        <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className={`bg-white ${showVerifying ? "opacity-100" : "opacity-100"
+                } coming-soon-shadow text-[#0000FF]  uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full flex flex-col gap-2 ${showWalletTransactionsError &&
+                "bg-opacity-0 anti-coming-soon-shadow opacity-100"
+                }`}  >
+            <div className=" mx-auto">
+                {showVerifying ? (
+                    <>
+                        {showWalletTransactionsError ? (
+                            <div className=" text-white text-center mt-[-10px] flex flex-col gap-[10px] ">
+                                <div className=" flex justify-center">
+                                    <TransactionsCountErrorIcon />
+                                </div>
+                                <p>access denied</p>
+                                <p className=" lg:w-[1000px]">
+                                    wallet must have at least 69 transactions in the past
+                                    to access this universe
+                                </p>
+                            </div>
+                        ) : (
+                            <p>verifying...</p>
+                        )}
+                    </>
+                ) : (
+                    <SolanaConnect
+                        setShowVerifying={setShowVerifying}
+                        setShowWalletTransactionsError={
+                            setShowWalletTransactionsError
+                        }
+                    />
+                )}
+            </div>
+        </motion.div>
     )
 
     return (
@@ -158,7 +158,6 @@ export default function HomeScreen() {
                             connect n chat
                         </button>
                     )}
-                    <SolanaConnect setShowVerifying={setShowVerifying} setShowWalletTransactionsError={(setShowWalletTransactionsError)} />
                 </div>
             </div>
             <div className="lg:hidden absolute top-0 left-0 w-full h-full bg-black opacity-30 z-0"></div>
