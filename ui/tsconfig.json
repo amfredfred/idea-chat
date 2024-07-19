@@ -21,14 +21,15 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "baseUrl": "./src",
     "paths": {
       "@src/*": [
-        "./src/*"
+        "*"
       ]
     }
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
   "references": [
     {

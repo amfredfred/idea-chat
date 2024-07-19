@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { socket } from '@src/api/socket-Io';
+
 import {
     websiteThemeState,
     websiteAudioState
@@ -76,7 +77,7 @@ const useChat = () => {
                     setProfilePicState(data.profilePic);
                 }
             } catch (err: any) {
-                console.log("profile-error", err.message);
+                console.log("profile-error", err?.message);
             }
         };
         loadUserProfile();
