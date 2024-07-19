@@ -1,7 +1,5 @@
-import React from 'react'
+import TokenExplorer from '@src/components/TokenExplorer'
 
-export default function () {
-    return (
-        <div>HOME PAGE</div>
-    )
+export default function HomeScreen() {
+    return <TokenExplorer />
 }

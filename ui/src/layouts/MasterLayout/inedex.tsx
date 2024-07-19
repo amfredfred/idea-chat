@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import NavigationBar from '../partials/NavigationBar'
-import FooterBar from '../partials/FooterBar'
+// import FooterBar from '../partials/FooterBar'
 
 export default function MasterLayout({ children }: { children: ReactNode }) {
   return (
@@ -9,7 +9,7 @@ export default function MasterLayout({ children }: { children: ReactNode }) {
       <div className="bg-black w-full h-full rounded-2xl">
         {children}
       </div>
-      <FooterBar />
+      {/* <FooterBar /> */}
     </div>
   )
 }
