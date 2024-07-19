@@ -12,15 +12,13 @@ import { useNavigate } from "react-router-dom";
 import { TransactionsCountErrorIcon } from "@src/components/Icons";
 
 export default function HomeScreen() {
+
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(true);
+    
     const [showConnectWallet, setShowConnectWallet] = useState(false);
-    const [walletAddress, setWalletAddressState] =
-        useRecoilState(walletAddressState);
-
-    const [showWalletTransactionsError, setShowWalletTransactionsError] =
-        useState(false);
-
+    const [walletAddress, setWalletAddressState] = useRecoilState(walletAddressState);
+    const [showWalletTransactionsError, setShowWalletTransactionsError] =  useState(false);
     const [showVerifying, setShowVerifying] = useState(false);
 
     const navigate = useNavigate();
