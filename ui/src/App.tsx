@@ -5,6 +5,7 @@ import HomeScreen from "./screens/HomeScreen";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useWallet } from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 
 function ProtectedRoute() {
   const wallet = useWallet();
@@ -14,6 +15,7 @@ function ProtectedRoute() {
 }
 
 const App: React.FC = () => {
+ 
   const darkTheme = createTheme({
     palette: {
       mode: 'dark',
@@ -23,16 +25,18 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/profile" element={<Profile />} />
-          </Route>
-          <Route path="*" element={<HomeScreen />} />
-        </Routes>
-      </BrowserRouter>
+        <WalletModalProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<HomeScreen />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/chat" element={<Chat />} />
+                <Route path="/profile" element={<Profile />} />
+              </Route>
+              <Route path="*" element={<HomeScreen />} />
+            </Routes>
+          </BrowserRouter>
+        </WalletModalProvider>
     </ThemeProvider>
   );
 };

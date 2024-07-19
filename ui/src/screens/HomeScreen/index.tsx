@@ -10,21 +10,24 @@ import { useRecoilState } from "recoil";
 import { SolanaConnect } from "@src/components/ConnectButton";
 import { useNavigate } from "react-router-dom";
 import { TransactionsCountErrorIcon } from "@src/components/Icons";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export default function HomeScreen() {
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(true);
-    
-    const [showConnectWallet, setShowConnectWallet] = useState(false);
     const [walletAddress, setWalletAddressState] = useRecoilState(walletAddressState);
-    const [showWalletTransactionsError, setShowWalletTransactionsError] =  useState(false);
+    const [showWalletTransactionsError, setShowWalletTransactionsError] = useState(false);
     const [showVerifying, setShowVerifying] = useState(false);
 
-    const navigate = useNavigate();
+    const wallet = useWallet();
+    // const navigate = useNavigate();
+    const handleConnectButtonClicked = async () => wallet.connected ? console.log('navigate("/chat")') : await wallet.connect()
 
     useEffect(() => {
-        audioRef.current!.play();
+        // audioRef.current!.play();
+
+        console.log({ walletAddress })
 
         const walletAddressFromLocalStorage = localStorage.getItem("walletAddress");
         if (walletAddressFromLocalStorage) {
@@ -51,6 +54,47 @@ export default function HomeScreen() {
             setIsPlaying(!isPlaying);
         }
     };
+
+
+    const connectedWalletComponent = (<></>
+        // <motion.div
+        //     initial={{ y: "100%" }}
+        //     animate={{ y: 0 }}
+        //     exit={{ y: "100%" }}
+        //     transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        //     className={`bg-white ${showVerifying ? "opacity-100" : "opacity-100"
+        //         } coming-soon-shadow text-[#0000FF]  uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full flex flex-col gap-2 ${showWalletTransactionsError &&
+        //         "bg-opacity-0 anti-coming-soon-shadow opacity-100"
+        //         }`}  >
+        //     <div className=" mx-auto">
+        //         {showVerifying ? (
+        //             <>
+        //                 {showWalletTransactionsError ? (
+        //                     <div className=" text-white text-center mt-[-10px] flex flex-col gap-[10px] ">
+        //                         <div className=" flex justify-center">
+        //                             <TransactionsCountErrorIcon />
+        //                         </div>
+        //                         <p>access denied</p>
+        //                         <p className=" lg:w-[1000px]">
+        //                             wallet must have at least 69 transactions in the past
+        //                             to access this universe
+        //                         </p>
+        //                     </div>
+        //                 ) : (
+        //                     <p>verifying...</p>
+        //                 )}
+        //             </>
+        //         ) : (
+        //             <SolanaConnect
+        //                 setShowVerifying={setShowVerifying}
+        //                 setShowWalletTransactionsError={
+        //                     setShowWalletTransactionsError
+        //                 }
+        //             />
+        //         )}
+        //     </div>
+        // </motion.div>
+    )
 
     return (
         <div className="relative w-full h-screen ">
@@ -105,61 +149,16 @@ export default function HomeScreen() {
                     <p className="text-[15px] lg:text-[24px] uppercase font-jbm">
                         autism friendly chat interface from the future
                     </p>
-                    {showConnectWallet ? (
-                        <motion.div
-                            initial={{ y: "100%" }}
-                            animate={{ y: 0 }}
-                            exit={{ y: "100%" }}
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className={`bg-white ${showVerifying ? "opacity-100" : "opacity-100"
-                                } coming-soon-shadow text-[#0000FF]  uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full flex flex-col gap-2 ${showWalletTransactionsError &&
-                                "bg-opacity-0 anti-coming-soon-shadow opacity-100"
-                                }`}
-                        >
-                            <div className=" mx-auto">
-                                {showVerifying ? (
-                                    <>
-                                        {showWalletTransactionsError ? (
-                                            <div className=" text-white text-center mt-[-10px] flex flex-col gap-[10px] ">
-                                                <div className=" flex justify-center">
-                                                    <TransactionsCountErrorIcon />
-                                                </div>
-                                                <p>access denied</p>
-                                                <p className=" lg:w-[1000px]">
-                                                    wallet must have at least 69 transactions in the past
-                                                    to access this universe
-                                                </p>
-                                            </div>
-                                        ) : (
-                                            <p>verifying...</p>
-                                        )}
-                                    </>
-                                ) : (
-                                    <SolanaConnect
-                                        setShowVerifying={setShowVerifying}
-                                        setShowWalletTransactionsError={
-                                            setShowWalletTransactionsError
-                                        }
-                                    />
-                                )}
-                            </div>
-                        </motion.div>
-                    ) : showWalletTransactionsError && showVerifying ? (
+                    {wallet.connected ? connectedWalletComponent : showWalletTransactionsError && showVerifying ? (
                         <></>
                     ) : (
                         <button
                             className="bg-white coming-soon-shadow text-[#0000FF] uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full"
-                            onClick={() => {
-                                if (walletAddress) {
-                                    return navigate("/chat");
-                                } else {
-                                    return setShowConnectWallet(true);
-                                }
-                            }}
-                        >
+                            onClick={handleConnectButtonClicked}>
                             connect n chat
                         </button>
                     )}
+                    <SolanaConnect setShowVerifying={setShowVerifying} setShowWalletTransactionsError={(setShowWalletTransactionsError)} />
                 </div>
             </div>
             <div className="lg:hidden absolute top-0 left-0 w-full h-full bg-black opacity-30 z-0"></div>
