@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body {
+  cursor: url("./assets/cursor.svg"), auto;
+} */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../src/assets/fonts/JetBrainsMono-Bold.ttf") format("opentype");
+}
+
+.coming-soon-shadow {
+  box-shadow: 0 0 20px #ffffff;
+}
+.anti-coming-soon-shadow {
+  box-shadow: none;
+}
+
+.marquee-container {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  display: flex;
+}
+
+.marquee {
+  display: flex;
+  white-space: nowrap;
+  animation: scroll 50s linear infinite;
+}
+
+.marquee-content {
+  display: inline-block;
+}
+
+.marquee-item {
+  display: inline-block;
+  padding: 0 2rem;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee-container.right .marquee {
+  animation-direction: reverse;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
