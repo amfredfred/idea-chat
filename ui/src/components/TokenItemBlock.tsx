@@ -1,5 +1,6 @@
 import { Avatar, Box } from "@mui/material"
 import NFTIcon from '@src/assets/nft-icon.png'
+import FolderIcon from '@mui/icons-material/Folder';
 
 export interface ITokenItemBlock {
   index: number,
@@ -17,8 +18,9 @@ export default function TokenItemBlock(props: ITokenItemBlock) {
           src={NFTIcon}
           sx={{ width: 56, height: 56 }}
         />
-        <div className="">
-          Hello worlds
+        <div className=" flex flex-col">
+          <div className="">sdsd</div>
+          <div className="">dsddsd</div>
         </div>
       </div>
     </Box>
