@@ -13,7 +13,7 @@ export default function TokenExplorer() {
     setNewPools(prevPools => {
       const poolExists = prevPools.some(existingPool => existingPool.Uri === pool.Uri);
       if (!poolExists) {
-        return [...prevPools, pool];
+        return [pool, ...prevPools];
       }
       return prevPools;
     });
