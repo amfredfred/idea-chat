@@ -7,19 +7,27 @@ import Chat from "./Chat.tsx";
 import Profile from "./components/Profile.tsx";
 import { RecoilRoot } from "recoil";
 import { SolanaWalletProvider } from "./components/WalletProvider.tsx";
+
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+
 // import ErrorPage from "./components/Error.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <RecoilRoot>
-    <SolanaWalletProvider>
-      <React.StrictMode>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </BrowserRouter>
-      </React.StrictMode>
-    </SolanaWalletProvider>
+    <QueryClientProvider client={new QueryClient}>
+      <SolanaWalletProvider>
+        <React.StrictMode>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="/chat" element={<Chat />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+          </BrowserRouter>
+        </React.StrictMode>
+      </SolanaWalletProvider>
+    </QueryClientProvider>
   </RecoilRoot>
 );
