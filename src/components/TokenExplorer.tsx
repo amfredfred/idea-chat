@@ -9,7 +9,7 @@ export default function TokenExplorer() {
   const [newPools, setNewPools] = useState<IPumpCard[]>([])
 
   const addNewPool = (pool: IPumpCard) => {
-    console.log({pool})
+    console.log({ pool })
     setNewPools(prevPools => {
       const poolExists = prevPools.some(existingPool => existingPool.Uri === pool.Uri);
       if (!poolExists) {
@@ -46,10 +46,12 @@ export default function TokenExplorer() {
 
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-3 divide-x divide-grey-500 flex-grow bg-black'>
-      <TokensNewlyCreated pools={newPools} />
-      <ToekensAboutToGraduate pools={newPools} />
-      <TokensGraduated pools={newPools} />
+    <div className='flex-grow  '>
+      <div className="container grid grid-cols-1 md:grid-cols-3 divide-x divide-grey-500  mx-auto">
+        <TokensNewlyCreated pools={newPools} />
+        <ToekensAboutToGraduate pools={newPools} />
+        <TokensGraduated pools={newPools} />
+      </div>
     </div>
   )
 }
