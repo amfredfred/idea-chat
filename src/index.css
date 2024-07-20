@@ -54,6 +54,10 @@
   padding: 1.25rem .75rem;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes scroll {
   from {
     transform: translateX(100%);
