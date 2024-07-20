@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './customWalletStyles.css';
+
 /* body {
   cursor: url("./assets/cursor.svg"), auto;
 } */
@@ -38,6 +40,20 @@
 .marquee-item {
   display: inline-block;
   padding: 0 2rem;
+}
+
+.pump-card {
+  position: relative;
+  display: flex;
+  height: 112px;
+  width: 100%;
+  align-items: center;
+  border-top-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(30 32 37/var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(16 16 20/var(--tw-bg-opacity));
+  padding: 1.25rem .75rem;
 }
 
 @keyframes scroll {
