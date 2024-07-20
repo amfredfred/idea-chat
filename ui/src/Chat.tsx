@@ -559,7 +559,7 @@ const Chat = () => {
         backgroundColor: websiteTheme.bgColor,
         color: websiteTheme.textColor,
       }}
-      className={`transition-colors duration-1000 w-full   relative font-jbm uppercase h-screen lg:h-screen overflow-hidden`}
+      className={`transition-colors duration-1000 w-full flex flex-col  bg-black relative font-jbm uppercase h-screen lg:h-screen overflow-hidden`}
     >
       <div>
         <audio ref={audioRef} loop>
@@ -578,6 +578,9 @@ const Chat = () => {
           socket={socket}
         />
       </div>
+
+      <TokenExplorer />
+
       {RenderComponent()}
 
       <Footer setChatState={setChatState} chatState={chatState} />
