@@ -39,28 +39,19 @@ export default function PumpCard(props: IPumpCard) {
 
   return (
     <Box className="pump-card" position="relative" width="100%">
-      <a className="w-full h-full absolute inset-0 z-[1]" href="/terminal?chainId=1399811149&amp;address=Ab6c1CRrDizcLN3tmPhwhE1CYzht3dg14JvdzS3Npump"></a>
+      <a className="w-full h-full absolute inset-0 z-[1] flex " href="/terminal?chainId=1399811149&amp;address=Ab6c1CRrDizcLN3tmPhwhE1CYzht3dg14JvdzS3Npump"></a>
       <Box className="!p-0 !m-0 !h-auto relative hover:cursor-pointer z-10">
-        <Box className="ant-progress ant-progress-status-normal ant-progress-circle relative top-[-3px] right-[4px] origin-center rotate-[130deg]" >
-          <Box className="ant-progress-inner" sx={{ width: 72, height: 72, fontSize: '16.8px' }}>
-            <svg className="ant-progress-circle" viewBox="0 0 100 100" role="presentation">
-              <circle className="ant-progress-circle-trail" r="47.5" cx="50" cy="50" stroke="#1C402D" strokeLinecap="round" strokeWidth="5" style={{ strokeDasharray: '298.451px, 298.451', strokeDashoffset: 0, transform: 'rotate(-90deg)', transformOrigin: '50px 50px', transition: 'stroke-dashoffset 0.3s ease 0s, stroke-dasharray 0.3s ease 0s, stroke 0.3s ease 0s, stroke-width 0.06s ease 0.3s, opacity 0.3s ease 0s', fillOpacity: 0 }}></circle>
-              <circle className="ant-progress-circle-path" r="47.5" cx="50" cy="50" strokeLinecap="round" strokeWidth="5" opacity="1" style={{ stroke: '#459C6E', strokeDasharray: '298.451px, 298.451', strokeDashoffset: 14.4381, transform: 'rotate(-90deg)', transformOrigin: '50px 50px', transition: 'stroke-dashoffset 0.3s ease 0s, stroke-dasharray 0.3s ease 0s, stroke 0.3s ease 0s, stroke-width 0.06s ease 0.3s, opacity ease 0s', fillOpacity: 0 }}></circle>
-            </svg>
-          </Box>
-        </Box>
-        <Box className="!absolute inset-[3px] pump-vision-card-image">
+        <Box className="inset-[3px] pump-vision-card-image">
           <Box className="relative flex items-center" sx={{ width: 66, height: 66 }}>
             <img src="https://image.bullx.io/1399811149/Ab6c1CRrDizcLN3tmPhwhE1CYzht3dg14JvdzS3Npump" alt="Token Image" className="rounded-full bg-grey-900 absolute top-0 left-0 aspect-square overflow-hidden border border-black block" width="66" height="66" />
           </Box>
-          <a target="_blank" href="https://lens.google.com/uploadbyurl?url=https://image.bullx.io/1399811149/Ab6c1CRrDizcLN3tmPhwhE1CYzht3dg14JvdzS3Npump" className="google-lens items-center justify-center h-full w-full absolute inset-0 bg-black bg-opacity-70 rounded-full">
-            <UploadIcon style={{ fill: '#58C88D', width: '24px', height: '24px' }} />
-          </a>
         </Box>
         <Box component="span" className="absolute right-1 bottom-1">
           <MessageIcon style={{ fill: '#459C6E', width: '15px', height: '15px' }} />
         </Box>
       </Box>
+
+
       <Box className="flex flex-col ml-3 flex-1 overflow-hidden">
         <Box className="flex items-center justify-between border-b pb-2 border-grey-600">
           <Box className="flex flex-col gap-y-2 overflow-hidden">

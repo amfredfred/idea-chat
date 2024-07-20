@@ -58,6 +58,7 @@
   align-items: center;
   padding: 1.25rem .75rem;
   backdrop-filter: blur(50px);
+  border-radius: 5px;
 }
 
 .no-scrollbar::-webkit-scrollbar {
