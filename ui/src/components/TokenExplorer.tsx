@@ -23,7 +23,6 @@ export default function TokenExplorer() {
     ws!.onmessage = function ({ data }) {
       try {
         const pool = JSON.parse(data)
-        console.log(pool)
         setNewPools(prev => ([...prev, pool]) as any)
       } catch (error) {
         console.log({ error })

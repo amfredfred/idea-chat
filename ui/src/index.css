@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './customWalletStyles.css';
-
 /* body {
   cursor: url("./assets/cursor.svg"), auto;
 } */
