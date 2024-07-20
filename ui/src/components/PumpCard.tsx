@@ -1,6 +1,15 @@
-export default function PumpCard(props:any) {
+export interface IPumpCard {
+  Name: string;
+  Symbol: string;
+  Uri: string;
+  Mint: string;
+  BondingCurve: string;
+  User: string;
+}
 
-  console.log(props?.Name)
+export default function PumpCard(props: IPumpCard) {
+
+  console.log(props)
 
   return (
     <div className="pump-card">

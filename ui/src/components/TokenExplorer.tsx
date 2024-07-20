@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
-import PumpCard from "./PumpCard";
+import PumpCard, { IPumpCard } from "./PumpCard";
 
 export default function TokenExplorer() {
 
-  const [newPools, setNewPools] = useState([])
+  const [newPools, setNewPools] = useState<IPumpCard[]>([])
+
+  const addNewPool = (pool: IPumpCard) => {
+    setNewPools(prevPools => {
+      const poolExists = prevPools.some(existingPool => existingPool.Uri === pool.Uri);
+      if (!poolExists) {
+        return [...prevPools, pool];
+      }
+      return prevPools;
+    });
+  };
 
   useEffect(() => {
 
@@ -13,7 +23,7 @@ export default function TokenExplorer() {
 
       // Subscribing to new pools
       const payload = {
-        method: "subscribeNewPools", 
+        method: "subscribeNewPools",
         params: []
       }
       ws.send(JSON.stringify(payload));
@@ -23,7 +33,8 @@ export default function TokenExplorer() {
     ws!.onmessage = function ({ data }) {
       try {
         const pool = JSON.parse(data)
-        setNewPools(prev => ([...prev, pool]) as any)
+        setNewPools(prev => ([...prev, pool]))
+        addNewPool(pool)
       } catch (error) {
         console.log({ error })
       }
