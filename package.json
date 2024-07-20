@@ -10,6 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.16.4",
+    "@mui/material": "^5.16.4",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@solana/spl-token": "^0.2.0",
     "@solana/wallet-adapter-base": "^0.9.7",
     "@solana/wallet-adapter-react": "^0.15.6",
@@ -27,7 +32,7 @@
     "react-router-dom": "^6.23.1",
     "recoil": "^0.7.7",
     "socket.io-client": "^4.7.5",
-    "styled-components": "^6.1.11",
+    "styled-components": "^6.1.12",
     "vite-plugin-checker": "^0.6.4"
   },
   "devDependencies": {
