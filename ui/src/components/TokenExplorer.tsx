@@ -13,7 +13,7 @@ export default function TokenExplorer() {
 
       // Subscribing to new pools
       const payload = {
-        method: "subscribeNewPools",
+        method: "subscribeNewPools", 
         params: []
       }
       ws.send(JSON.stringify(payload));
