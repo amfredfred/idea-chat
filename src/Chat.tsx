@@ -56,7 +56,6 @@ interface Settings {
 const totalWidth = window.innerWidth;
 const totalHeight = window.innerHeight;
 
-
 const musics = [
   {
     source: winMusic,
@@ -167,6 +166,7 @@ const Chat = () => {
   const [websiteAudio, setWebsiteAudio] = useRecoilState(websiteAudioState);
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement>(null);
+  
 
   useEffect(() => {
     audioRef.current!.play();
