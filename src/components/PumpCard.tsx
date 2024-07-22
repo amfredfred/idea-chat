@@ -38,13 +38,14 @@ export default function PumpCard(pump: IPumpCoin) {
             </Box>
             <Box className="flex items-center gap-x-1 px-1 border-l ml-1 h-3 border-grey-500 z-10">
               <MessageIcon style={{ fill: '#686A6D', width: '12px', height: '12px' }} />
-              <Typography variant="body2" className="text-grey-100 font-medium text-xs leading-none">112</Typography>
+              <Typography variant="body2" className="text-grey-100 font-medium text-xs leading-none">{pump.reply_count}</Typography>
             </Box>
           </Box>
         </Box>
         <Box className="flex items-center z-10">
           <Typography variant="body2" className="break-keep ml-1 md:ml-0 text-xs leading-none border-r border-grey-500 pr-1">
-            <span className="!text-xs !leading-none inline-flex text-grey-200 font-medium">1h</span>
+            <span className="!text-xs !leading-none inline-flex text-grey-200 font-medium">MC</span>&nbsp;
+            <span className="!text-xs !leading-none inline-flex text-grey-200 font-medium">${ pump.usd_market_cap}</span>
           </Typography>
           <Box className="flex items-center gap-x-1 border-r border-grey-500 px-1 text-xs leading-none text-red-700">
             <ThumbDownIcon style={{ width: '12px', height: '12px' }} />
