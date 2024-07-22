@@ -12,7 +12,9 @@ export default function PumpCard(pump: IPumpCoin) {
   return (
     <Box className="pump-card" position="relative" width="100%">
       <NavLink
-        to={`/terminal?mint=${pump.address}`}
+        to={`https://pump.fun/${pump.address}`}
+        target="_blank"
+        // /terminal?mint=${pump.address}
         className="w-full h-full absolute inset-0 z-[1] flex "
       />
       <Box className="!p-0 !m-0 !h-auto relative hover:cursor-pointer z-10">
