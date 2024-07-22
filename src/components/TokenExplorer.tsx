@@ -16,7 +16,7 @@ export default function TokenExplorer() {
   })
 
   useEffect(() => {
-    if (pumpListQuery.data) setNewPools(pumpListQuery.data)
+    if (pumpListQuery.data) setNewPools(pumpListQuery.data.reverse())
   }, [pumpListQuery.data])
 
   return (

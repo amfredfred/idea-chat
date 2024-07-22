@@ -6,7 +6,7 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { IPumpCoin } from "../types";
 
 
-export default function PumpCard(props: IPumpCoin) {
+export default function PumpCard(pump: IPumpCoin) {
 
   return (
     <Box className="pump-card" position="relative" width="100%">
@@ -14,7 +14,7 @@ export default function PumpCard(props: IPumpCoin) {
       <Box className="!p-0 !m-0 !h-auto relative hover:cursor-pointer z-10">
         <Box className="inset-[3px] pump-vision-card-image">
           <Box className="relative flex items-center" sx={{ width: 66, height: 66 }}>
-            <img src="https://image.bullx.io/1399811149/Ab6c1CRrDizcLN3tmPhwhE1CYzht3dg14JvdzS3Npump" alt="Token Image" className="rounded-full bg-grey-900 absolute top-0 left-0 aspect-square overflow-hidden border border-black block" width="66" height="66" />
+            <img src={pump.logo} alt="Token Image" className="rounded-full bg-grey-900 absolute top-0 left-0 aspect-square overflow-hidden border border-black block" width="66" height="66" />
           </Box>
         </Box>
         <Box component="span" className="absolute right-1 bottom-1">
@@ -27,8 +27,8 @@ export default function PumpCard(props: IPumpCoin) {
         <Box className="flex items-center justify-between border-b pb-2 border-grey-600">
           <Box className="flex flex-col gap-y-2 overflow-hidden">
             <Box className="flex">
-              <Typography variant="body2" className="font-medium text-grey-50 whitespace-nowrap min-w-max overflow-ellipsis line-clamp-1 !leading-[14px]">{props?.symbol}</Typography>
-              <Typography variant="body2" className="font-normal text-grey-200 overflow-ellipsis line-clamp-1 text-xs !leading-[12px]">{props?.name}</Typography>
+              <Typography variant="body2" className="font-medium text-grey-50 whitespace-nowrap min-w-max overflow-ellipsis line-clamp-1 !leading-[14px]">{pump?.symbol}</Typography>
+              <Typography variant="body2" className="font-normal text-grey-200 overflow-ellipsis line-clamp-1 text-xs !leading-[12px]">{pump?.name}</Typography>
             </Box>
             <Box className="flex items-center gap-x-1 px-1 border-l ml-1 h-3 border-grey-500 z-10">
               <MessageIcon style={{ fill: '#686A6D', width: '12px', height: '12px' }} />
