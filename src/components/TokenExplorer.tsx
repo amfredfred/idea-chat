@@ -3,10 +3,20 @@ import { IPumpCard } from "./PumpCard";
 import TokensNewlyCreated from "./TokensNewlyCreated";
 import ToekensAboutToGraduate from "./ToekensAboutToGraduate";
 import TokensGraduated from "./TokensGraduated";
+import io from 'socket.io-client'
+import { useQuery } from "@tanstack/react-query";
+import { getPumpList } from "../api";
 
 export default function TokenExplorer() {
 
   const [newPools, setNewPools] = useState<IPumpCard[]>([])
+
+
+   const pumpListQuery = useQuery({
+     queryKey: ['pump-tokens'],
+     queryFn: getPumpList
+   })
+
 
   const addNewPool = (pool: IPumpCard) => {
     console.log({ pool })
@@ -21,28 +31,11 @@ export default function TokenExplorer() {
 
   useEffect(() => {
 
-    const ws = new WebSocket('wss://rpc.api-pump.fun/ws');
+     console.log(pumpListQuery.data)
+      console.log(pumpListQuery.error);
 
-    ws!.onopen = function () {
 
-      // Subscribing to new pools
-      const payload = {
-        method: "subscribeNewPools",
-        params: []
-      }
-      ws.send(JSON.stringify(payload));
-
-    };
-
-    ws!.onmessage = function ({ data }) {
-      try {
-        const pool = JSON.parse(data)
-        addNewPool(pool)
-      } catch (error) {
-        console.log({ error })
-      }
-    };
-  }, [])
+  }, [pumpListQuery.status])
 
 
   return (

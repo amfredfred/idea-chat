@@ -4,7 +4,6 @@ import { AiOutlineSend } from "react-icons/ai";
 import io from "socket.io-client";
 import SettingsIcon from "./components/SettingsIcon";
 import SettingsClosed from "./components/SettingsClosed";
-const socket = io(import.meta.env.VITE_BASE_URI);
 import { motion, AnimatePresence } from "framer-motion";
 import { useRecoilState } from "recoil";
 import { userProfilePicState } from "./atoms/users";
@@ -143,7 +142,9 @@ const motions = [{
 }, {
   name: 'equator',
   motion: "equator"
-}]
+  }]
+
+const socket = io(import.meta.env.VITE_BASE_URI);
 
 const Chat = () => {
   const [currentUserMessage, setCurrentUserMessage] = useState("");
