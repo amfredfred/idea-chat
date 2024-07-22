@@ -12,7 +12,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import TokenTerminal from "./components/TokenTerminal.tsx";
+import PumpDetails from "./PumpDetails.tsx";
 
 // import ErrorPage from "./components/Error.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Routes>
               <Route path="/" element={<App />} />
               <Route path="/chat" element={<Chat />} />
-              <Route path="/terminal" element={<TokenTerminal />} />
+              <Route path="/terminal" element={<PumpDetails />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </BrowserRouter>

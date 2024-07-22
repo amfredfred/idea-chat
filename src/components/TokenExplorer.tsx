@@ -3,7 +3,7 @@ import TokensNewlyCreated from "./TokensNewlyCreated";
 import ToekensAboutToGraduate from "./ToekensAboutToGraduate";
 import TokensGraduated from "./TokensGraduated";
 import { useQuery } from "@tanstack/react-query";
-import { getPumpList } from "../api";
+import { getPumpList } from "../common/api";
 import { IPumpCoin } from "../types";
 
 export default function TokenExplorer() {
@@ -23,7 +23,7 @@ export default function TokenExplorer() {
     <div className='flex-grow  '>
       <div className="container grid grid-cols-1 md:grid-cols-3 divide-x divide-grey-500  mx-auto">
         <TokensNewlyCreated pools={newPools} />
-        <ToekensAboutToGraduate pools={newPools.filter(pool => Number(pool.usd_market_cap) >= 40e3)} />
+        <ToekensAboutToGraduate pools={newPools.filter(pool => Number(pool.usd_market_cap) >= 40e3 && Number(pool.usd_market_cap) <= 59e3)} />
         <TokensGraduated pools={newPools.filter(pool => Number(pool.usd_market_cap) >= 59e3)} />
       </div>
     </div>
