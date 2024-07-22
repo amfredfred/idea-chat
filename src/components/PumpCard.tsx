@@ -1,27 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import MessageIcon from '@mui/icons-material/Message';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { IPumpCoin } from "../types";
 
 
 export default function PumpCard(props: IPumpCoin) {
-
-  const tokenInfoQuery = useQuery({
-    queryKey: [`token-${props.Mint}`],
-    queryFn: async () => await axios.get(`https://pumpapi.fun/api/get_metadata/9QUYvUGiqCALxrMCyJrVYXtJSpt4BYzPRv5ZRjsdqzkh`)
-  });
-
-  const [tokenInfo, setTokenInfo] = useState()
-
-
-  useEffect(() => {
-    console.log(String(tokenInfoQuery.error))
-  }, [tokenInfoQuery.status])
-
 
   return (
     <Box className="pump-card" position="relative" width="100%">
@@ -42,8 +27,8 @@ export default function PumpCard(props: IPumpCoin) {
         <Box className="flex items-center justify-between border-b pb-2 border-grey-600">
           <Box className="flex flex-col gap-y-2 overflow-hidden">
             <Box className="flex">
-              <Typography variant="body2" className="font-medium text-grey-50 whitespace-nowrap min-w-max overflow-ellipsis line-clamp-1 !leading-[14px]">{props?.Symbol}</Typography>
-              <Typography variant="body2" className="font-normal text-grey-200 overflow-ellipsis line-clamp-1 text-xs !leading-[12px]">{props?.Name}</Typography>
+              <Typography variant="body2" className="font-medium text-grey-50 whitespace-nowrap min-w-max overflow-ellipsis line-clamp-1 !leading-[14px]">{props?.symbol}</Typography>
+              <Typography variant="body2" className="font-normal text-grey-200 overflow-ellipsis line-clamp-1 text-xs !leading-[12px]">{props?.name}</Typography>
             </Box>
             <Box className="flex items-center gap-x-1 px-1 border-l ml-1 h-3 border-grey-500 z-10">
               <MessageIcon style={{ fill: '#686A6D', width: '12px', height: '12px' }} />

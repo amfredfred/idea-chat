@@ -12,21 +12,20 @@ export default function TokenExplorer() {
 
   const pumpListQuery = useQuery({
     queryKey: ['pump-tokens'],
-    queryFn: getPumpList
+    queryFn: getPumpList,
+    refetchInterval: 1000
   })
-
 
   useEffect(() => {
     if (pumpListQuery.data) setNewPools(pumpListQuery.data)
-  }, [pumpListQuery.status])
-
+  }, [pumpListQuery.data])
 
   return (
     <div className='flex-grow  '>
       <div className="container grid grid-cols-1 md:grid-cols-3 divide-x divide-grey-500  mx-auto">
         <TokensNewlyCreated pools={newPools} />
-        <ToekensAboutToGraduate pools={newPools} />
-        <TokensGraduated pools={newPools} />
+        <ToekensAboutToGraduate pools={newPools.filter(pool => pool.raydium_pool)} />
+        <TokensGraduated pools={newPools.filter(pool => pool.raydium_pool)} />
       </div>
     </div>
   )
