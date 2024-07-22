@@ -9,7 +9,6 @@ import { IPumpCoin } from "../types";
 export default function TokenExplorer() {
 
   const [newPools, setNewPools] = useState<IPumpCoin[]>([])
-
   const pumpListQuery = useQuery({
     queryKey: ['pump-tokens'],
     queryFn: getPumpList,
