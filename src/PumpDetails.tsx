@@ -6,11 +6,12 @@ import { useEffect, useState } from 'react';
 export default function PumpDetails() {
   const [searchParams] = useSearchParams();
   const [shouldFetch, setShoutFetch] = useState<boolean>(false)
+  const [mintInfo, setmintInfo] = useState()
 
   // Get the value of the 'mint' query parameter
   const mint = searchParams.get('mint');
 
-  const { data: details, status } = useQuery({
+  const tokenInfoQuery = useQuery({
     queryKey: [`token-${mint}`],
     queryFn: () => getPumpDetail(mint as string),
     enabled: shouldFetch,
@@ -21,13 +22,17 @@ export default function PumpDetails() {
     if (mint) setShoutFetch(true)
   }, [mint])
 
+  useEffect(() => {
+    if (tokenInfoQuery.data) setmintInfo(tokenInfoQuery.data)
+  }, [tokenInfoQuery.data])
+
   return (
     <div>
       <h2>Token Exploration Page</h2>
       <p>Mint query parameter value: {mint}</p>
       <div className="">
-        {status}
-        {JSON.stringify(details)}
+        {tokenInfoQuery.status}
+        {JSON.stringify(mintInfo)}
       </div>
     </div>
   );

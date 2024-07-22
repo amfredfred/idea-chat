@@ -1,4 +1,7 @@
-import { IPumpCoin, PumpDetail } from '../../types'; // Adjust the import path as necessary
+import { IPumpCoin, PumpDetail } from '../../types';
+
+
+const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
 
 export async function getPumpList(): Promise<IPumpCoin[]> {
 
@@ -9,15 +12,9 @@ export async function getPumpList(): Promise<IPumpCoin[]> {
     pump: 'true',
   });
 
-  const url = `https://gmgn.ai/defi/quotation/v1/rank/sol/pump?${params.toString()}`;
-
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {},
-    cache: "no-store"
-  });
-
+  const res = await fetch(`${corsProxyUrl}https://gmgn.ai/defi/quotation/v1/rank/sol/pump?${params.toString()}`, { cache: "no-store" });
   const data = await res.json()
+  console.log({data})
   if (data.code === 0) {
     return data.data.rank
   }
@@ -25,11 +22,8 @@ export async function getPumpList(): Promise<IPumpCoin[]> {
 }
 
 
-export async function getPumpDetail(addr: string): Promise<PumpDetail | []> {
-  const res = await fetch(`https://gmgn.ai/defi/quotation/v1/tokens/sol/${addr}`)
+export async function getPumpDetail(addr: string): Promise<PumpDetail> {
+  const res = await fetch(`${corsProxyUrl}https://gmgn.ai/defi/quotation/v1/rank/sol/${addr}`)
   const data = await res.json()
-  if (data.code === 0) {
-    return data.data.token
-  }
-  return []
+  return (data.code === 0) ? data.data.token : {}
 }
