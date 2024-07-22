@@ -23,8 +23,8 @@ export default function TokenExplorer() {
     <div className='flex-grow  '>
       <div className="container grid grid-cols-1 md:grid-cols-3 divide-x divide-grey-500  mx-auto">
         <TokensNewlyCreated pools={newPools} />
-        <ToekensAboutToGraduate pools={newPools.filter(pool => pool.raydium_pool)} />
-        <TokensGraduated pools={newPools.filter(pool => pool.raydium_pool)} />
+        <ToekensAboutToGraduate pools={newPools.filter(pool => Number(pool.usd_market_cap) >= 30e3)} />
+        <TokensGraduated pools={newPools.filter(pool => Number(pool.usd_market_cap) >= 69e3)} />
       </div>
     </div>
   )

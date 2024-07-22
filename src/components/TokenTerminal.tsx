@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 export default function TokenTerminal() {
   const [searchParams] = useSearchParams();
   const [shouldFetch, setShoutFetch] = useState<boolean>(false)
+  const [mintInfo, setmintInfo] = useState()
 
   // Get the value of the 'mint' query parameter
   const mint = searchParams.get('mint');
@@ -13,15 +14,16 @@ export default function TokenTerminal() {
   const tokenInfoQuery = useQuery({
     queryKey: [`token-${mint}`],
     queryFn: () => getPumpDetail(mint as string),
-    enabled: shouldFetch
+    enabled: shouldFetch,
+    refetchInterval: 1000
   })
 
-  useEffect(() => { if (mint) setShoutFetch(true) }, [mint])
+  useEffect(() => {
+    if (mint) setShoutFetch(true)
+  }, [mint])
 
   useEffect(() => {
-
-    console.log(tokenInfoQuery.data)
-
+    if (tokenInfoQuery.data) setmintInfo(tokenInfoQuery.data)
   }, [tokenInfoQuery.data])
 
   return (
@@ -30,7 +32,7 @@ export default function TokenTerminal() {
       <p>Mint query parameter value: {mint}</p>
       <div className="">
         {tokenInfoQuery.status}
-        {tokenInfoQuery.isFetching ? 'Loading Data...' : JSON.stringify(tokenInfoQuery.data)}
+        {JSON.stringify(mintInfo)}
       </div>
     </div>
   );
