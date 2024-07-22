@@ -24,6 +24,54 @@ export async function getPumpList(): Promise<IPumpCoin[]> {
   return []
 }
 
+export async function getGraduatedList(): Promise<IPumpCoin[]> {
+
+  const params = new URLSearchParams({
+    limit: '50',
+    orderby: 'progress',
+    direction: 'desc',
+    pump: 'true',
+  });
+
+  const url = `https://gmgn.ai/defi/quotation/v1/rank/sol/pump?${params.toString()}`;
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {},
+    cache: "no-store"
+  });
+
+  const data = await res.json()
+  if (data.code === 0) {
+    return data.data.rank
+  }
+  return []
+}
+
+export async function getAboutToGraduateList(): Promise<IPumpCoin[]> {
+
+  const params = new URLSearchParams({
+    limit: '50',
+    orderby: 'progress',
+    direction: 'desc',
+    pump: 'true',
+  });
+
+  const url = `https://gmgn.ai/defi/quotation/v1/rank/sol/pump?${params.toString()}`;
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {},
+    cache: "no-store"
+  });
+
+  const data = await res.json()
+  if (data.code === 0) {
+    return data.data.rank
+  }
+  return []
+}
+
 
 export async function getPumpDetail(addr: string): Promise<PumpDetail> {
   const res = await fetch(`https://gmgn.ai/defi/quotation/v1/tokens/sol/${addr}`)

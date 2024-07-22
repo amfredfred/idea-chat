@@ -4,13 +4,17 @@ import MessageIcon from '@mui/icons-material/Message';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { IPumpCoin } from "../types";
+import { NavLink } from "react-router-dom";
 
 
 export default function PumpCard(pump: IPumpCoin) {
 
   return (
     <Box className="pump-card" position="relative" width="100%">
-      <a className="w-full h-full absolute inset-0 z-[1] flex " href="/terminal?chainId=1399811149&amp;address=Ab6c1CRrDizcLN3tmPhwhE1CYzht3dg14JvdzS3Npump"></a>
+      <NavLink
+        to={`/terminal?mint=${pump.address}`}
+        className="w-full h-full absolute inset-0 z-[1] flex "
+      />
       <Box className="!p-0 !m-0 !h-auto relative hover:cursor-pointer z-10">
         <Box className="inset-[3px] pump-vision-card-image">
           <Box className="relative flex items-center" sx={{ width: 66, height: 66 }}>
