@@ -1,4 +1,4 @@
-export interface PumpCoin {
+export interface IPumpCoin {
   address: string
   associated_bonding_curve: string
   base_reserve: number

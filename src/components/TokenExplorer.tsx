@@ -1,40 +1,23 @@
 import { useEffect, useState } from "react";
-import { IPumpCard } from "./PumpCard";
 import TokensNewlyCreated from "./TokensNewlyCreated";
 import ToekensAboutToGraduate from "./ToekensAboutToGraduate";
 import TokensGraduated from "./TokensGraduated";
-import io from 'socket.io-client'
 import { useQuery } from "@tanstack/react-query";
 import { getPumpList } from "../api";
+import { IPumpCoin } from "../types";
 
 export default function TokenExplorer() {
 
-  const [newPools, setNewPools] = useState<IPumpCard[]>([])
+  const [newPools, setNewPools] = useState<IPumpCoin[]>([])
 
+  const pumpListQuery = useQuery({
+    queryKey: ['pump-tokens'],
+    queryFn: getPumpList
+  })
 
-   const pumpListQuery = useQuery({
-     queryKey: ['pump-tokens'],
-     queryFn: getPumpList
-   })
-
-
-  const addNewPool = (pool: IPumpCard) => {
-    console.log({ pool })
-    setNewPools(prevPools => {
-      const poolExists = prevPools.some(existingPool => existingPool.Uri === pool.Uri);
-      if (!poolExists) {
-        return [pool, ...prevPools];
-      }
-      return prevPools;
-    });
-  };
 
   useEffect(() => {
-
-     console.log(pumpListQuery.data)
-      console.log(pumpListQuery.error);
-
-
+    if (pumpListQuery.data) setNewPools(pumpListQuery.data)
   }, [pumpListQuery.status])
 
 

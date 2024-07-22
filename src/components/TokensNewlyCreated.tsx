@@ -1,6 +1,6 @@
-import PumpCard, { IPumpCard } from './PumpCard'
+import PumpCard, { IPumpCoin } from './PumpCard'
 
-export default function TokensNewlyCreated({ pools }: { pools: IPumpCard[] }) {
+export default function TokensNewlyCreated({ pools }: { pools: IPumpCoin[] }) {
 
   return (
     <div className="flex flex-col gap-y-3 p-0 md:p-3 h-full md:h-auto">

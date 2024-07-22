@@ -1,28 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Avatar from '@mui/material/Avatar';
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import DummAvator from '../assets/bottle.png'
 import MessageIcon from '@mui/icons-material/Message';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import UploadIcon from '@mui/icons-material/Upload';
-
-// import WebSocket from 'ws';
 
 
-export interface IPumpCard {
-  Name: string;
-  Symbol: string;
-  Uri: string;
-  Mint: string;
-  BondingCurve: string;
-  User: string;
-}
-
-export default function PumpCard(props: IPumpCard) {
+export default function PumpCard(props: IPumpCoin) {
 
   const tokenInfoQuery = useQuery({
     queryKey: [`token-${props.Mint}`],

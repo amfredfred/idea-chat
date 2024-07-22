@@ -1,6 +1,6 @@
-import { PumpCoin } from '../types'; // Adjust the import path as necessary
+import { IPumpCoin } from '../types'; // Adjust the import path as necessary
 
-export async function getPumpList(): Promise<PumpCoin[]> {
+export async function getPumpList(): Promise<IPumpCoin[]> {
 
   const params = new URLSearchParams({
     limit: '50',
