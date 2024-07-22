@@ -55,10 +55,17 @@
   position: relative;
   display: flex;
   width: 100%;
+  max-width: 100%;
   align-items: center;
-  padding: 1.25rem .75rem;
   backdrop-filter: blur(50px);
-  border-radius: 5px;
+  border-radius: 20px;
+  height: max-content !important;
+}
+
+.pump-card * {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .no-scrollbar::-webkit-scrollbar {

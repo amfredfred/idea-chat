@@ -2,11 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { getPumpDetail } from './common/api'
 import { useEffect, useState } from 'react';
+import { IPumpCoin } from './types';
 
 export default function PumpDetails() {
   const [searchParams] = useSearchParams();
   const [shouldFetch, setShoutFetch] = useState<boolean>(false)
-  const [mintInfo, setmintInfo] = useState()
+  const [mintInfo, setmintInfo] = useState<IPumpCoin>()
 
   // Get the value of the 'mint' query parameter
   const mint = searchParams.get('mint');

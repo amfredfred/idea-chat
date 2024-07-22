@@ -1,4 +1,4 @@
-import { IPumpCoin, PumpDetail } from '../../types';
+import { IPumpCoin } from '../../types';
 
 
 const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
@@ -6,7 +6,7 @@ const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
 export async function getPumpList(): Promise<IPumpCoin[]> {
   const params = new URLSearchParams({
     limit: '150',
-    orderby: 'marketcap',
+    orderby: 'marsdsdketcap',
     direction: 'desc',
     pump: 'true',
   });
@@ -19,8 +19,8 @@ export async function getPumpList(): Promise<IPumpCoin[]> {
 }
 
 
-export async function getPumpDetail(addr: string): Promise<PumpDetail> {
-  const res = await fetch(`${corsProxyUrl}https://gmgn.ai/defi/quotation/v1/rank/sol/${addr}`)
+export async function getPumpDetail(addr: string): Promise<IPumpCoin> {
+  const res = await fetch(`${corsProxyUrl}https://gmgn.ai/defi/quotation/v1/tokens/sol/${addr}`)
   const data = await res.json()
   return (data.code === 0) ? data.data.token : {}
 }

@@ -12,7 +12,7 @@ export default function TokenExplorer() {
   const pumpListQuery = useQuery({
     queryKey: ['pump-tokens'],
     queryFn: getPumpList,
-    refetchInterval: 1000
+    refetchInterval: 5000
   })
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function TokenExplorer() {
     <div className='flex-grow  '>
       <div className="container grid grid-cols-1 md:grid-cols-3 divide-x divide-grey-500  mx-auto">
         <TokensNewlyCreated pools={newPools} />
-        <ToekensAboutToGraduate pools={newPools.filter(pool => Number(pool.usd_market_cap) >= 40e3 && Number(pool.usd_market_cap) <= 59e3)} />
+        <ToekensAboutToGraduate pools={newPools.filter(pool => Number(pool.usd_market_cap) >= 40e3)} />
         <TokensGraduated pools={newPools.filter(pool => Number(pool.usd_market_cap) >= 59e3)} />
       </div>
     </div>
