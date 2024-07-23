@@ -99,12 +99,12 @@ const useChat = () => {
     }, []);
 
     useEffect(() => {
-        (async () => {
-            if (audioRef.current && audioRef.current.src !== websiteAudio) {
-                audioRef.current.src = websiteAudio
+        (async (source:string) => {
+            if (audioRef.current && audioRef.current.src !== source) {
+                audioRef.current.src = source
                 await audioRef.current.play()
             }
-        })()
+        })(websiteAudio)
     }, [websiteAudio])
 
     const handleSendMessage = () => {

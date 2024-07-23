@@ -15,8 +15,7 @@ export default function TokenExplorer() {
   }, [onEvent]);
 
   useEffect(() => {
-    console.log({ connected })
-    return () => emitEvent('requestPumpDetails');
+    return () => emitEvent('requestPumpList');
   }, [connected, emitEvent])
 
   const newpumps = pumpList.filter(pool => ((pool.created_timestamp * 1000) < Date.now() + 20e3) && (Number(pool.usd_market_cap) <= 40e3))
