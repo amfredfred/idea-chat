@@ -7,34 +7,32 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading.tsx";
 
+const connectWallet = async (wallet: any): Promise<boolean> => {
+  try {
+    if (!wallet.connected) {
+      await wallet.connect();
+    }
+    return wallet.connected;
+  } catch {
+    return false;
+  }
+};
+
 const ProtectedRoute: React.FC = () => {
   const wallet = useWallet();
   const [isLoading, setIsLoading] = useState(true);
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkConnection = async () => {
-      if (!wallet.connected) {
-        try {
-          await wallet.connect();
-          setIsConnected(wallet.connected);
-        } catch (error) {
-          setIsConnected(false);
-        }
-      } else {
-        setIsConnected(true);
-      }
+    connectWallet(wallet).then((connected) => {
+      setIsConnected(connected);
       setIsLoading(false);
-    };
-
-    checkConnection();
+    });
   }, [wallet]);
 
-  if (isLoading || !isConnected) {
-    return <Loading />;
-  }
-
-  return isConnected ? <Outlet /> : <Navigate to="/" />;
+  if (!wallet.wallet) return <Navigate to="/" />
+  if (isLoading || wallet.connecting || !isConnected) return <Loading />;
+  return <Outlet />
 };
 
 export default function RoutesPortal() {

@@ -5,17 +5,16 @@ import winMusic from "./assets/win.mp3";
 import { IoVolumeMuteOutline } from "react-icons/io5";
 import { VscUnmute } from "react-icons/vsc";
 import { motion } from "framer-motion";
-import { walletAddressState } from "./atoms/wallet";
-import { useRecoilState } from "recoil";
 import { SolanaConnect } from "./components/ConnectButton";
 import { useNavigate } from "react-router-dom";
 import { TransactionsCountErrorIcon } from "./components/Icons";
+import { useWallet } from "@solana/wallet-adapter-react";
 const App: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
-  const [walletAddress, setWalletAddressState] =
-    useRecoilState(walletAddressState);
+
+  const wallet = useWallet()
 
   const [showWalletTransactionsError, setShowWalletTransactionsError] =
     useState(false);
@@ -25,14 +24,7 @@ const App: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    audioRef.current!.play();
-
-    const walletAddressFromLocalStorage = localStorage.getItem("walletAddress");
-    if (walletAddressFromLocalStorage) {
-      {
-        setWalletAddressState(walletAddressFromLocalStorage);
-      }
-    }
+    (async () => await audioRef.current!.play())()
   }, []);
 
   const handlePlayForSmallerDevices = () => {
@@ -63,7 +55,7 @@ const App: React.FC = () => {
         muted
       />
       <div>
-        <audio ref={audioRef} loop>
+        <audio ref={audioRef} loop autoPlay>
           <source src={winMusic} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
@@ -112,12 +104,10 @@ const App: React.FC = () => {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className={`bg-white ${
-                showVerifying ? "opacity-100" : "opacity-100"
-              } coming-soon-shadow text-[#0000FF]  uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full flex flex-col gap-2 ${
-                showWalletTransactionsError &&
+              className={`bg-white ${showVerifying ? "opacity-100" : "opacity-100"
+                } coming-soon-shadow text-[#0000FF]  uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full flex flex-col gap-2 ${showWalletTransactionsError &&
                 "bg-opacity-0 anti-coming-soon-shadow opacity-100"
-              }`}
+                }`}
             >
               <div className=" mx-auto">
                 {showVerifying ? (
@@ -153,7 +143,7 @@ const App: React.FC = () => {
             <button
               className="bg-white coming-soon-shadow text-[#0000FF] uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full"
               onClick={() => {
-                if (walletAddress) {
+                if (wallet.connected) {
                   return navigate("/chat");
                 } else {
                   return setShowConnectWallet(true);
