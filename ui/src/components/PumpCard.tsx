@@ -8,8 +8,9 @@ import { NavLink } from "react-router-dom";
 import { formatNumber } from "../utils/format";
 
 export default function PumpCard(pump: IPumpCoin) {
+
   return (
-    <Box className="pump-card   bg-gray-900 rounded-lg  relative  ">
+    <Box key={pump.address} className="pump-card   bg-gray-900 rounded-lg  relative  ">
       <Box className=" flex gap-2 align-middle ">
         <NavLink
           to={`https://pump.fun/${pump.address}`}
@@ -19,10 +20,11 @@ export default function PumpCard(pump: IPumpCoin) {
         <Box className="relative hover:cursor-pointer z-10">
           <Box className="flex items-center">
             <Box className="relative flex items-center" sx={{ width: 66, height: 66 }}>
-              <img src={pump.logo} style={{ aspectRatio: '1/1' }} alt="Token Image" className=" aspect-square " height="100%" />
+              <img src={pump.logo} style={{ aspectRatio: '1/1' }} alt="Token Image" className=" aspect-square rounded " height="100%" />
             </Box>
           </Box>
         </Box>
+
 
         <Box className="flex flex-col ml-3 flex-1 overflow-hidden  ">
           <Box className="flex items-center justify-between border-b pb-2 border-gray-600">
@@ -56,12 +58,12 @@ export default function PumpCard(pump: IPumpCoin) {
         </Box>
       </Box>
 
-      <Box className="flex items-center justify-start mt-2 gap-1">
+      <Box className="flex items-center justify-end mt-2 gap-1">
         <Typography variant="caption" className="text-gray-200">HD: {formatNumber(pump.holder_count)}</Typography>
         &bull;
         <Typography variant="caption" className="text-gray-200">SP: {formatNumber(pump.total_supply)}</Typography>
         &bull;
-        <Typography variant="caption" className="text-gray-200">PGS: {`${pump.progress}/1`}</Typography>
+        <Typography variant="caption" className="text-gray-200">PGS: {`${pump.progress.toFixed(1)} / 1`}</Typography>
       </Box>
     </Box>
   );

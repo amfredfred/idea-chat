@@ -47,8 +47,12 @@ const useChat = () => {
     const [websiteAudio, setWebsiteAudio] = useRecoilState(websiteAudioState);
     const modalRef = useRef<HTMLDivElement>(null);
 
+    const clickAnimation = {
+        scale: 0.9,
+        transition: { type: "spring", stiffness: 400, damping: 10 },
+    };
+
     useEffect(() => {
-        audioRef.current!.play();
         const loadUserProfile = async () => {
             const wAddress = localStorage.getItem("walletAddress");
             try {
@@ -94,6 +98,15 @@ const useChat = () => {
         };
     }, []);
 
+    useEffect(() => {
+        (async () => {
+            if (audioRef.current && audioRef.current.src !== websiteAudio) {
+                audioRef.current.src = websiteAudio
+                await audioRef.current.play()
+            }
+        })()
+    }, [websiteAudio])
+
     const handleSendMessage = () => {
         if (currentUserMessage.length <= 500) {
             if (currentUserMessage.trim()) {
@@ -118,15 +131,9 @@ const useChat = () => {
         }
     };
 
-    const handleMusicPlayPause = () => {
-        if (isMusicPlaying) {
-            audioRef.current?.pause();
-            setMusicIsPlaying(false);
-        } else {
-            audioRef.current?.play();
-            setMusicIsPlaying(true);
-        }
-    };
+    const handleMusicPlayPause = async () => {
+        audioRef.current?.played ? audioRef.current?.pause() : await audioRef.current?.play()
+    }
 
     useEffect(() => {
         function handleClickOutside(event: any) {
@@ -170,6 +177,8 @@ const useChat = () => {
         handleSendMessage,
         handleKeyDown,
         handleMusicPlayPause,
+        socket,
+        clickAnimation
     };
 };
 
