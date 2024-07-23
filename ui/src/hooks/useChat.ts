@@ -6,7 +6,6 @@ import axios from "axios";
 import io from "socket.io-client";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
-const socket = io(BASE_URI);
 
 interface Message {
     _id: any;
@@ -27,6 +26,12 @@ interface Settings {
 }
 
 const useChat = () => {
+
+    const socket = io(BASE_URI, {
+        
+    });
+
+
     const [currentUserMessage, setCurrentUserMessage] = useState("");
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isMusicPlaying, setMusicIsPlaying] = useState(true);
@@ -99,7 +104,7 @@ const useChat = () => {
     }, []);
 
     useEffect(() => {
-        (async (source:string) => {
+        (async (source: string) => {
             if (audioRef.current && audioRef.current.src !== source) {
                 audioRef.current.src = source
                 await audioRef.current.play()
