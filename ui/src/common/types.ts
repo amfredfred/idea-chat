@@ -68,10 +68,14 @@ export interface PumpDetail {
 }
 
 
-export interface SocketEvents {
-  pumpList: 'pumpList';
-  pumpDetails: 'pumpList';
+export interface PumpSocketSend {
+  requestPumpList: 'requestPumpList';
+  requestPumpDetails: 'requestPumpDetails';
   userJoined: { userId: string; userName: string };
+}
+
+export interface PumpSocketReceived {
+  pumpList: 'pumpList';
 }
 
 export type SocketEventCallback<T = any> = (data: T) => void;

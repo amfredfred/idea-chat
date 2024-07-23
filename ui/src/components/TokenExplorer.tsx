@@ -9,7 +9,6 @@ import usePumpScoket from "../hooks/usePumpSocket";
 
 export default function TokenExplorer() {
 
-  const [newPools, setNewPools] = useState<IPumpCoin[]>([])
   // const pumpListQuery = useQuery({
   //   queryKey: ['pump-tokens'],
   //   queryFn: getPumpList,
@@ -19,25 +18,18 @@ export default function TokenExplorer() {
   // useEffect(() => {
   //   if (pumpListQuery.data) setNewPools(pumpListQuery.data.reverse())
   // }, [pumpListQuery.data])
-  
-  const { emitEvent, onEvent } = usePumpScoket('http://localhost:3000');
+
+  const { emitEvent, onEvent, connected } = usePumpScoket('http://localhost:3000');
   const [pumpList, setPumpList] = useState<IPumpCoin[]>([]);
 
   useEffect(() => {
-    const handlePumpList = (data: any[]) => {
-      setPumpList(data);
-    };
-
-    const cleanup = onEvent('pumpList', handlePumpList);
-
-    return cleanup;
+    return onEvent('pumpList', (data) => setPumpList(data));
   }, [onEvent]);
 
   useEffect(() => {
-    const requestPumpList = () => {
-      emitEvent('requestPumpList');
-    };
- })
+    console.log({ connected })
+    return () => emitEvent('requestPumpDetails');
+  }, [connected, emitEvent])
 
   return (
     <div className='flex-grow  '>

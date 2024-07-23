@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import io, { Socket } from 'socket.io-client';
-import { SocketEventCallback, SocketEvents } from '../common/types';
+import { PumpSocketReceived, PumpSocketSend } from '../common/types';
 
 const usePumpScoket = (serverUrl: string) => {
     const [socket, setSocket] = useState<Socket | null>(null);
@@ -9,7 +9,7 @@ const usePumpScoket = (serverUrl: string) => {
     useEffect(() => {
         const socketInstance = io(serverUrl, {
             transports: ['websocket'],
-            autoConnect: false,
+            autoConnect: true,
         });
 
         socketInstance.on('connect', () => {
@@ -27,21 +27,21 @@ const usePumpScoket = (serverUrl: string) => {
         };
     }, [serverUrl]);
 
-    const emitEvent = useCallback(<K extends keyof SocketEvents>(event: K, data?: SocketEvents[K]) => {
+    const emitEvent = useCallback(<K extends keyof PumpSocketSend>(event: K, data?: any) => {
         if (socket) {
             socket.emit(event, data);
         }
     }, [socket]);
 
-    const onEvent = useCallback(<K extends keyof SocketEvents>(event: K, callback: (data: SocketEvents[K]) => void) => {
+    const onEvent = useCallback(<K extends keyof PumpSocketReceived>(event: K, callback: (data: PumpSocketReceived[K]) => void) => {
         if (socket) {
-            const typedCallback: (data: any) => void = (data) => callback(data as SocketEvents[K]);
+            const typedCallback: (data: any) => void = (data) => callback(data as PumpSocketReceived[K]);
             socket.on(event, typedCallback as any);
             return () => {
                 socket.off(event, typedCallback as any);
             };
         }
-        return () => { }; // Return a no-op function if socket is not available
+        return () => { };
     }, [socket]);
 
     return { socket, connected, emitEvent, onEvent };
