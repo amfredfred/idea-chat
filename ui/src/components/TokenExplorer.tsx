@@ -7,7 +7,9 @@ import usePumpScoket from "../hooks/usePumpSocket";
 
 export default function TokenExplorer() {
 
-  const { emitEvent, onEvent, connected } = usePumpScoket('http://localhost:3000');
+  const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
+
+  const { emitEvent, onEvent, connected } = usePumpScoket(API_URL);
   const [pumpList, setPumpList] = useState<IPumpCoin[]>([]);
 
   useEffect(() => {
