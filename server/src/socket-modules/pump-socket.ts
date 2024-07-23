@@ -17,6 +17,8 @@ class PumpSocket {
         console.log(`User connected: ${socket.id}`);
         socket.join(this.roomName);
 
+        this.sendPumpList()
+
         socket.on('requestPumpList', async () => {
             const pumpList = await getPumpList();
             socket.emit('pumpList', pumpList);
@@ -28,14 +30,18 @@ class PumpSocket {
     }
 
     private async sendPumpList() {
-        const pumpList = await getPumpList();
-        this.io.to(this.roomName).emit('pumpList', pumpList);
+        try {
+            const pumpList = await getPumpList();
+            this.io.to(this.roomName).emit('pumpList', pumpList);
+        } catch (error) {
+            console.log(`Error@PumpSocket -> sendPumpList`)
+        }
     }
 
     private startInterval() {
         this.intervalId = setInterval(async () => {
             await this.sendPumpList();
-        }, 60000); // Sends updates every 60 seconds
+        }, 1000); // Sends updates every 60 seconds
     }
 
     public stopInterval() {

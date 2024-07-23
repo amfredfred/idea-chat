@@ -75,7 +75,7 @@ export interface PumpSocketSend {
 }
 
 export interface PumpSocketReceived {
-  pumpList: 'pumpList';
+  pumpList: IPumpCoin[];
 }
 
 export type SocketEventCallback<T = any> = (data: T) => void;

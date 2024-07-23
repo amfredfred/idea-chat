@@ -7,6 +7,7 @@ export async function getPumpList(): Promise<IPumpCoin[]> {
         orderby: 'usd_market_cap',
         direction: 'desc',
         pump: 'true',
+        usd_market_cap:'20'
     });
     const res = await axios.get(`https://gmgn.ai/defi/quotation/v1/rank/sol/pump?${params.toString()}`, { headers: { 'Cache-Control': 'no-store' } });
     const data = res.data;

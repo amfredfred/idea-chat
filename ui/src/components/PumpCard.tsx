@@ -57,11 +57,11 @@ export default function PumpCard(pump: IPumpCoin) {
       </Box>
 
       <Box className="flex items-center justify-start mt-2 gap-1">
-        <Typography variant="caption" className="text-gray-200">Hold: {formatNumber(pump.holder_count)}</Typography>
+        <Typography variant="caption" className="text-gray-200">HD: {formatNumber(pump.holder_count)}</Typography>
         &bull;
         <Typography variant="caption" className="text-gray-200">SP: {formatNumber(pump.total_supply)}</Typography>
         &bull;
-        <Typography variant="caption" className="text-gray-200">Progress: {`${pump.progress}/1`}</Typography>
+        <Typography variant="caption" className="text-gray-200">PGS: {`${pump.progress}/1`}</Typography>
       </Box>
     </Box>
   );
