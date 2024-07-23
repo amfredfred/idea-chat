@@ -1,4 +1,4 @@
-import { IPumpCoin } from '../types'
+import { IPumpCoin } from '../common/types'
 import PumpCard from './PumpCard'
 
 export default function TokensNewlyCreated({ pools }: { pools: IPumpCoin[] }) {

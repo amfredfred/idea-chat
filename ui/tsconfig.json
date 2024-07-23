@@ -20,6 +20,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/setupproxy.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { getPumpDetail } from './common/api'
 import { useEffect, useState } from 'react';
-import { IPumpCoin } from './types';
+import { IPumpCoin } from './common/types';
 
 export default function PumpDetails() {
   const [searchParams] = useSearchParams();

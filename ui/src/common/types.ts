@@ -66,3 +66,21 @@ export interface PumpDetail {
   holder_rugged_num?: number
   holder_token_num?: number
 }
+
+
+export interface SocketEvents {
+  pumpList: 'pumpList';
+  pumpDetails: 'pumpList';
+  userJoined: { userId: string; userName: string };
+}
+
+export type SocketEventCallback<T = any> = (data: T) => void;
+
+import { Socket } from 'socket.io-client';
+
+export interface UseSocketReturn<T = any> {
+  socket: Socket | null;
+  connected: boolean;
+  emitEvent: (event: string, data?: any) => void;
+  onEvent: (event: string, callback: SocketEventCallback<T>) => () => void;
+}

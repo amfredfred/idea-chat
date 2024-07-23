@@ -1,12 +1,12 @@
-import { IPumpCoin } from '../../types';
+import { IPumpCoin } from '../types';
 
 
 const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
 
 export async function getPumpList(): Promise<IPumpCoin[]> {
   const params = new URLSearchParams({
-    limit: '150',
-    orderby: 'marsdsdketcap',
+    limit: '200',
+    orderby: 'usd_market_cap',
     direction: 'desc',
     pump: 'true',
   });
