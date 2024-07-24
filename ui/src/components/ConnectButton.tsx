@@ -36,7 +36,6 @@ export const SolanaConnect: React.FC<SolanaConnectProps> = ({
           const transactionsCount = confirmedSignatures.length;
 
           if (transactionsCount >= 0) {
-            localStorage.setItem("walletAddress", publicKey.toString());
 
             return navigate("/chat");
           } else {

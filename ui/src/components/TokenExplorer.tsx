@@ -11,14 +11,21 @@ export default function TokenExplorer() {
 
   const { emitEvent, onEvent, connected } = usePumpScoket(API_URL);
   const [pumpList, setPumpList] = useState<IPumpCoin[]>([]);
+  const [searchParams, setearchParams] = useState<Record<string, string>>({
+    limit: '10',
+    orderby: 'progress',
+    direction: 'desc',
+    pump: 'true',
+  })
+
 
   useEffect(() => {
     return onEvent('pumpList', (data) => setPumpList(data));
   }, [onEvent]);
 
   useEffect(() => {
-    return () => emitEvent('requestPumpList');
-  }, [connected, emitEvent])
+    return () => emitEvent('requestPumpList', searchParams);
+  }, [connected, emitEvent, searchParams])
 
   const newpumps = pumpList.filter(pool => ((pool.created_timestamp * 1000) < Date.now() + 20e3) && (Number(pool.usd_market_cap) <= 40e3))
   const abouttograduate = pumpList.filter(pool => (Number(pool.usd_market_cap) >= 40e3) && (Number(pool.usd_market_cap) < 59e3))

@@ -13,14 +13,9 @@ const App: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
-
   const wallet = useWallet()
-
-  const [showWalletTransactionsError, setShowWalletTransactionsError] =
-    useState(false);
-
+  const [showWalletTransactionsError, setShowWalletTransactionsError] = useState(false);
   const [showVerifying, setShowVerifying] = useState(false);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +39,31 @@ const App: React.FC = () => {
       setIsPlaying(!isPlaying);
     }
   };
+
+  const handleWalletConnect = () => {
+    if (wallet.connected) {
+      return navigate("/chat");
+    } else {
+      return setShowConnectWallet(true);
+    }
+  }
+
+  const message = <div className=" mx-auto">
+    {showWalletTransactionsError ? (
+      <div className=" text-white text-center mt-[-10px] flex flex-col gap-[10px] ">
+        <div className=" flex justify-center">
+          <TransactionsCountErrorIcon />
+        </div>
+        <p>access denied</p>
+        <p className=" lg:w-[1000px]">
+          wallet must have at least 69 transactions in the past
+          to access this universe
+        </p>
+      </div>
+    ) : (
+      <p>verifying...</p>
+    )}
+  </div>
 
   return (
     <div className="relative w-full h-screen ">
@@ -109,47 +129,21 @@ const App: React.FC = () => {
                 "bg-opacity-0 anti-coming-soon-shadow opacity-100"
                 }`}
             >
-              <div className=" mx-auto">
-                {showVerifying ? (
-                  <>
-                    {showWalletTransactionsError ? (
-                      <div className=" text-white text-center mt-[-10px] flex flex-col gap-[10px] ">
-                        <div className=" flex justify-center">
-                          <TransactionsCountErrorIcon />
-                        </div>
-                        <p>access denied</p>
-                        <p className=" lg:w-[1000px]">
-                          wallet must have at least 69 transactions in the past
-                          to access this universe
-                        </p>
-                      </div>
-                    ) : (
-                      <p>verifying...</p>
-                    )}
-                  </>
-                ) : (
-                  <SolanaConnect
-                    setShowVerifying={setShowVerifying}
-                    setShowWalletTransactionsError={
-                      setShowWalletTransactionsError
-                    }
-                  />
-                )}
-              </div>
+              {showVerifying ? message : (
+                <SolanaConnect
+                  setShowVerifying={setShowVerifying}
+                  setShowWalletTransactionsError={
+                    setShowWalletTransactionsError
+                  }
+                />
+              )}
             </motion.div>
           ) : showWalletTransactionsError && showVerifying ? (
             <></>
           ) : (
             <button
               className="bg-white coming-soon-shadow text-[#0000FF] uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full"
-              onClick={() => {
-                if (wallet.connected) {
-                  return navigate("/chat");
-                } else {
-                  return setShowConnectWallet(true);
-                }
-              }}
-            >
+              onClick={handleWalletConnect}  >
               connect n chat
             </button>
           )}

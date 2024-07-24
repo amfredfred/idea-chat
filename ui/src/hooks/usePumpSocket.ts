@@ -8,8 +8,8 @@ const usePumpScoket = (serverUrl: string) => {
 
     useEffect(() => {
         const socketInstance = io(serverUrl, {
-            transports: ['websocket'],
             autoConnect: true,
+            upgrade: false,
         });
 
         socketInstance.on('connect', () => {
