@@ -28,7 +28,7 @@ interface Settings {
 const useChat = () => {
 
     const socket = io(BASE_URI, {
-        
+        transports:['websocket']
     });
 
 
