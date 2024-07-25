@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { getPumpList } from '../common/api';
+import ScrapingService from '../services/scraping-service';
 
 const defaultParams = {
     limit: '200',
@@ -8,11 +9,12 @@ const defaultParams = {
     pump: 'true',
     usd_market_cap: '20'
 };
- 
+
 class PumpSocket {
     private io: Server;
     private intervalId: NodeJS.Timeout | null = null;
     private searchParams = new Map<string, URLSearchParams>();
+    private isBusy: boolean = false
 
     constructor(io: Server) {
         this.io = io;
@@ -24,8 +26,7 @@ class PumpSocket {
         socket.on('requestPumpList', async (search_params) => {
             const params = new URLSearchParams(search_params || defaultParams);
             this.searchParams.set(socket.id, params);
-            const pumpList = await getPumpList(params);
-            socket.emit('pumpList', pumpList);
+            await this.sendPumpList();
         });
 
         socket.on('disconnect', () => {
@@ -36,6 +37,12 @@ class PumpSocket {
 
     private async sendPumpList() {
         try {
+            this.isBusy = true
+            const scraper = new ScrapingService()
+            // Scrape text content
+            const textData = await scraper.scrapePumpFunBoard('https://pump.fun/board', '.grid');
+            console.log('Text Data:', textData);
+
             for (const [socketId, params] of this.searchParams.entries()) {
                 console.log({ socketId, params })
                 const pumpList = await getPumpList(params);
@@ -43,12 +50,16 @@ class PumpSocket {
             }
         } catch (error) {
             console.log(`Error@PumpSocket -> sendPumpList: ${error}`);
+        } finally {
+            this.isBusy = false
         }
     }
 
     private startInterval() {
         this.intervalId = setInterval(async () => {
-            await this.sendPumpList();
+            console.log({ isBusy: this.isBusy })
+            if (!this.isBusy)
+                await this.sendPumpList();
         }, 5000); // Sends updates every 5 seconds
     }
 
