@@ -38,11 +38,6 @@ class PumpSocket {
     private async sendPumpList() {
         try {
             this.isBusy = true
-            const scraper = new ScrapingService()
-            // Scrape text content
-            const textData = await scraper.scrapePumpFunBoard('https://pump.fun/board', '.grid');
-            console.log('Text Data:', textData);
-
             for (const [socketId, params] of this.searchParams.entries()) {
                 console.log({ socketId, params })
                 const pumpList = await getPumpList(params);

@@ -13,10 +13,9 @@ export default function TokenExplorer() {
   const [pumpList, setPumpList] = useState<IPumpCoin[]>([]);
   const [searchParams, setearchParams] = useState<Record<string, string>>({
     limit: '200',
-    orderby: 'progress',
-    direction: 'desc',
-    pump: 'true',
-    markepCap:'true'
+    orderby: 'mc',
+    direction: 'asc',
+    pump: 'true'
   })
 
   useEffect(() => {

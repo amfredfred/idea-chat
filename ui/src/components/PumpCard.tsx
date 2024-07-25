@@ -9,6 +9,8 @@ import { formatNumber } from "../utils/format";
 
 export default function PumpCard(pump: IPumpCoin) {
 
+  console.log(Boolean(pump.complete), pump.complete)
+
   return (
     <Box key={pump.address} className="pump-card   bg-gray-900 rounded-lg  relative  ">
       <Box className=" flex gap-2 align-middle ">
