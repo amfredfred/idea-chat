@@ -77,12 +77,9 @@ export interface IPumpCoinMigrated {
   showName: boolean;
   telegram: string;
   twitter: string;
-  website?: string; // optional as it may not always be present
-
-
+  website?: string;
   reply_count: number
   usd_market_cap: number
-
   holder_count: number
   total_supply: number
   progress: number
