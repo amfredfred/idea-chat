@@ -3,13 +3,11 @@ import Typography from "@mui/material/Typography";
 import MessageIcon from '@mui/icons-material/Message';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import { IPumpCoin } from "../common/types";
+import { IPumpCoin, IPumpCoinMigrated } from "../common/types";
 import { NavLink } from "react-router-dom";
 import { formatNumber } from "../utils/format";
 
-export default function PumpCard(pump: IPumpCoin) {
-
-  console.log(Boolean(pump.complete), pump.complete)
+export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
 
   return (
     <Box key={pump.address} className="pump-card   bg-gray-900 rounded-lg  relative  ">
@@ -35,19 +33,23 @@ export default function PumpCard(pump: IPumpCoin) {
                 <Typography variant="body2" className="font-medium text-orange-100 whitespace-nowrap overflow-ellipsis line-clamp-1 !leading-[14px] mr-2">{pump.symbol}</Typography>
                 <Typography variant="body2" className="font-normal text-gray-200 overflow-ellipsis line-clamp-1 text-xs !leading-[12px]">{pump.name}</Typography>
               </Box>
-              <Box className="flex items-center gap-x-1 px-1 border-l ml-1 h-3 border-gray-500 z-10">
-                <MessageIcon style={{ fill: '#686A6D', width: '12px', height: '12px' }} />
-                <Typography variant="body2" className="text-gray-100 font-medium text-xs leading-none">{formatNumber(pump.reply_count)}</Typography>
-              </Box>
+              {pump.reply_count &&
+                <Box className="flex items-center gap-x-1 px-1 border-l ml-1 h-3 border-gray-500 z-10">
+                  <MessageIcon style={{ fill: '#686A6D', width: '12px', height: '12px' }} />
+                  <Typography variant="body2" className="text-gray-100 font-medium text-xs leading-none">{formatNumber(pump.reply_count)}</Typography>
+                </Box>
+              }
             </Box>
           </Box>
           <Typography variant="body2" className="mt-2 text-gray-400 line-clamp-3">{pump.description}</Typography>
 
           <Box className="flex items-center z-10 mt-2">
-            <Typography variant="body2" className="break-keep ml-1 md:ml-0 text-xs leading-none border-r border-gray-500 pr-1">
-              <span className="!text-xs !leading-none inline-flex text-gray-200 font-medium">MC</span>&nbsp;
-              <span className="!text-xs !leading-none inline-flex text-gray-200 font-medium">${formatNumber(pump.usd_market_cap)}</span>
-            </Typography>
+            {pump.usd_market_cap &&
+              <Typography variant="body2" className="break-keep ml-1 md:ml-0 text-xs leading-none border-r border-gray-500 pr-1">
+                <span className="!text-xs !leading-none inline-flex text-gray-200 font-medium">MC</span>&nbsp;
+                <span className="!text-xs !leading-none inline-flex text-gray-200 font-medium">${formatNumber(pump.usd_market_cap)}</span>
+              </Typography>
+            }
             <Box className="flex items-center gap-x-1 border-r border-gray-500 px-1 text-xs leading-none text-red-700">
               <ThumbDownIcon style={{ width: '12px', height: '12px' }} />
               <Typography variant="body2" className="text-red-700">29%</Typography>
@@ -61,11 +63,11 @@ export default function PumpCard(pump: IPumpCoin) {
       </Box>
 
       <Box className="flex items-center justify-end mt-2 gap-1">
-        <Typography variant="caption" className="text-gray-200">HD: {formatNumber(pump.holder_count)}</Typography>
+        {pump?.holder_count && <Typography variant="caption" className="text-gray-200">HD: {formatNumber(pump.holder_count)}</Typography>}
         &bull;
-        <Typography variant="caption" className="text-gray-200">SP: {formatNumber(pump.total_supply)}</Typography>
+        {pump.total_supply && <Typography variant="caption" className="text-gray-200">SP: {formatNumber(pump.total_supply)}</Typography>}
         &bull;
-        <Typography variant="caption" className="text-gray-200">PGS: {`${pump.progress.toFixed(1)} / 1`}</Typography>
+        {pump.progress && <Typography variant="caption" className="text-gray-200">PGS: {`${pump.progress.toFixed(1)} / 1`}</Typography>}
       </Box>
     </Box>
   );

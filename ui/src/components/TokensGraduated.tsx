@@ -1,7 +1,7 @@
-import { IPumpCoin } from "../common/types";
+import { IPumpCoinMigrated } from "../common/types";
 import PumpCard from "./PumpCard";
 
-export default function TokensGraduated({ pools }: { pools: IPumpCoin[] }) {
+export default function TokensGraduated({ pools }: { pools?: IPumpCoinMigrated[] }) {
 
     return (
         <div className="flex flex-col gap-y-3 p-0 md:p-3 h-full md:h-auto">

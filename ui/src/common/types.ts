@@ -57,6 +57,42 @@ export interface IPumpCoin {
   website: string
 }
 
+export interface IPumpCoinMigrated {
+  account: string;
+  decimals: number;
+  supply: string;
+  mintAuthority: string;
+  tokenStandard: string;
+  updateAuthority: string;
+  address: string;
+  name: string;
+  symbol: string;
+  uri: string;
+  sellerFeeBasisPoints: number;
+  primarySaleHappened: boolean;
+  isMutable: boolean;
+  createdOn: string;
+  description: string;
+  logo: string;
+  showName: boolean;
+  telegram: string;
+  twitter: string;
+  website?: string; // optional as it may not always be present
+
+
+  reply_count: number
+  usd_market_cap: number
+
+  holder_count: number
+  total_supply: number
+  progress: number
+}
+
+export interface IPumpRequestParams {
+  filter_listing: Record<string, string>,
+  filter_migrated: Record<string, string>
+}
+
 export interface PumpDetail {
   address: string
   burn_ratio: string
@@ -75,7 +111,10 @@ export interface PumpSocketSend {
 }
 
 export interface PumpSocketReceived {
-  pumpList: IPumpCoin[];
+  pumpList: {
+    pump: IPumpCoin[],
+    migrated: IPumpCoinMigrated[]
+  };
 }
 
 export type SocketEventCallback<T = any> = (data: T) => void;
