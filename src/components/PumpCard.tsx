@@ -67,7 +67,7 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
         &bull;
         {pump?.total_supply && <Typography variant="caption" className="text-gray-200">SP: {formatNumber(pump?.total_supply)}</Typography>}
         &bull;
-        {pump?.progress && <Typography variant="caption" className="text-gray-200">PGS: {`${pump?.progress.toFixed(1)} / 1`}</Typography>}
+        {pump?.progress && <Typography variant="caption" className="text-gray-200">PGS: {`${pump?.progress?.toFixed(1)}`}</Typography>}
       </Box>
     </Box>
   );
