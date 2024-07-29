@@ -28,7 +28,7 @@ export const tokenSwapInitialState: TokenSwapState = {
     selectedTokenB: null,
     loading: false,
     error: null,
-    isVisible: false
+    isVisible: true
 };
 
 export const initialStates = {
