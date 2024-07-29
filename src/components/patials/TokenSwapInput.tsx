@@ -48,7 +48,6 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                         const token = tokens.find(t => t.symbol === e.target.value);
                         if (token) onTokenSelect(token);
                     }}
-
                     displayEmpty
                     variant="standard"
                     disableUnderline
@@ -59,7 +58,7 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                         <MenuItem key={token.symbol} value={token.symbol}  >
                             <Box display='flex' alignItems='center' flexDirection='row'>
                                 <img
-                                    className="w-6 h-6 mr-2"
+                                    className="w-6 h-6 mr-2 rounded-full aspect-square"
                                     src={token.logo}
                                     alt={`${token.symbol} token`}
                                 />

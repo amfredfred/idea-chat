@@ -4,10 +4,9 @@ export interface TokenSwapState {
     tokenA: IPumpCoin | undefined;
     tokenB: IPumpCoin | undefined;
     amountToSwap: number;
-    selectedTokenA: string | null;
-    selectedTokenB: string | null;
     loading: boolean;
     error: string | null;
+    tokensList:IPumpCoin[],
     isVisible: boolean
 }
 
@@ -15,10 +14,9 @@ export const tokenSwapInitialState: TokenSwapState = {
     tokenA: undefined,
     tokenB: undefined,
     amountToSwap: 0,
-    selectedTokenA: null,
-    selectedTokenB: null,
     loading: false,
     error: null,
+    tokensList: [],
     isVisible: true
 };
 

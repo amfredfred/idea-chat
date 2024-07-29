@@ -14,12 +14,14 @@ const tokenSwapSlice = createSlice({
             state.amountToSwap = action.payload;
         },
         setSelectedTokenA: (state, action) => {
-            state.selectedTokenA = action.payload;
+            state.tokenA = action.payload;
+            state.tokensList = [action.payload]
             state.isVisible = true
         },
         setSelectedTokenB: (state, action) => {
-            state.selectedTokenB = action.payload;
-            // state.isVisible = true
+            state.tokenB = action.payload;
+            state.tokensList = [action.payload]
+            state.isVisible = true
         },
         setLoading: (state, action) => {
             state.loading = action.payload;

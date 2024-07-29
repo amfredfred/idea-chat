@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setLoading, setIsVisible } from '../../libs/redux/slices/token-swap-slice';
+import { setLoading, setIsVisible, setSelectedTokenA, setSelectedTokenB } from '../../libs/redux/slices/token-swap-slice';
 import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error, isVisible, tokenA, tokenB } = useAppSelector(state => state.tokenSwap);
+  const { error, isVisible, tokenA, tokenB, tokensList } = useAppSelector(state => state.tokenSwap);
 
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -64,8 +64,6 @@ const TokenswapStack: React.FC = () => {
     console.log({ token_selected })
   }
 
-  console.log({ tokenB, tokenA})
-
   return (
     <Draggable handle=".draggable-handle"  >
       <Box
@@ -109,18 +107,18 @@ const TokenswapStack: React.FC = () => {
               <TokenSwapInput
                 side="pay"
                 onChange={handleInputChange}
-                tokens={tokens}
+                tokens={tokensList}
                 selectedToken={tokenA}
-                onTokenSelect={handleTokenSelect}
+                onTokenSelect={(pump) => dispatch(setSelectedTokenA(pump))}
               // amount="~$3.3K"
               />
 
               <TokenSwapInput
                 side="receive"
                 onChange={handleInputChange}
-                tokens={tokens}
+                tokens={tokensList}
                 selectedToken={tokenB}
-                onTokenSelect={handleTokenSelect}
+                onTokenSelect={(pump) => dispatch(setSelectedTokenB(pump))}
               // amount="~$3.3K"
               />
 
