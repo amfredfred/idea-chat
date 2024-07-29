@@ -124,3 +124,12 @@ export interface UseSocketReturn<T = any> {
   emitEvent: (event: string, data?: any) => void;
   onEvent: (event: string, callback: SocketEventCallback<T>) => () => void;
 }
+
+export interface ITokenSwapInputProps {
+  side: 'receive' | 'pay';
+  onChange: (value: number | string) => void;
+  tokens: IPumpCoin[];
+  selectedToken: IPumpCoin | undefined;
+  onTokenSelect: (token: IPumpCoin) => void;
+  amount?: string;
+}

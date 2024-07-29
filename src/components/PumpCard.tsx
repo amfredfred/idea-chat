@@ -7,16 +7,13 @@ import { IPumpCoin, IPumpCoinMigrated } from "../common/types";
 import { NavLink } from "react-router-dom";
 import { formatNumber } from "../utils/format";
 import { useAppDispatch } from "../libs/redux/hooks";
-import { setIsVisible } from "../libs/redux/slices/token-swap-slice";
+import { setSelectedTokenB } from "../libs/redux/slices/token-swap-slice";
 
 export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
 
   const pumpProgress = pump?.progress?.toFixed?.(1)
   const dispatch = useAppDispatch()
-
-  const onClickCard = () => {
-    dispatch(setIsVisible(true))
-  }
+  const onClickCard = () => dispatch(setSelectedTokenB(pump))
 
   return (
     <Box key={pump?.address} className="pump-card   bg-gray-900 rounded-lg  relative  ">

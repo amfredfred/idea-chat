@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import Draggable from 'react-draggable';
-import { TextField, Button, MenuItem, Box, Container, IconButton } from '@mui/material';
+import { Button, Box, IconButton } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setAmountToSwap, setSelectedTokenA, setSelectedTokenB, setLoading, setIsVisible } from '../../libs/redux/slices/token-swap-slice';
+import { setLoading, setIsVisible } from '../../libs/redux/slices/token-swap-slice';
 import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
-import PayComponent from './PayComponent';
+import TokenSwapInput from './TokenSwapInput';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { amountToSwap, error, isVisible } = useAppSelector(state => state.tokenSwap);
+  const { error, isVisible, tokenA, tokenB } = useAppSelector(state => state.tokenSwap);
 
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -54,19 +54,17 @@ const TokenswapStack: React.FC = () => {
     ],
   };
 
+  const tokens = Array.from({ length: 10 }).fill({ symbol: 'Token Symbol', logo: 'https://img.icons8.com/?size=48&id=IhWBOFHtv6vx&format=png' }) as any
 
-  const currencies = [
-    {
-      value: 'BTC',
-      label: 'Bitcoin',
-    },
-    {
-      value: 'ETH',
-      label: 'Ethereum',
-    },
-    // Add more currencies as needed
-  ];
+  const handleInputChange = (value: any) => {
+    console.log({ value })
+  }
 
+  const handleTokenSelect = (token_selected: any) => {
+    console.log({ token_selected })
+  }
+
+  console.log({ tokenB, tokenA})
 
   return (
     <Draggable handle=".draggable-handle"  >
@@ -76,18 +74,17 @@ const TokenswapStack: React.FC = () => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: isFullscreen ? '80vw' : 'auto',
+          width: isFullscreen ? '80vw' : '400px',
           height: isFullscreen ? '80vh' : 'auto',
           maxWidth: '100%',
           maxHeight: '100%',
           zIndex: 1000,
-          border: '1px solid #ccc',
           borderRadius: '8px',
-          // padding: isMinimized ? '0' : '16px',
           overflow: isMinimized ? 'hidden' : 'auto',
           display: isVisible ? 'flex' : 'none',
           flexDirection: 'column',
-          background: 'red'
+          backdropFilter: 'blur(50px)',
+          background: 'rgba(0,0,0,0.4)'
         }}
       >
         <div className="draggable-handle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'move', padding: '8px', backgroundColor: '#f0f0f0', borderBottom: '1px solid #ccc' }}>
@@ -106,63 +103,37 @@ const TokenswapStack: React.FC = () => {
         </div>
 
         {!isMinimized && (
-          <Box display='flex' gap='1rem'>
+          <Box padding={'1rem'}>
             {isFullscreen && <Box sx={{ flexGrow: 1 }}><Line data={chartData} /></Box>}
-            <Container className="p-6 bg-white rounded-lg shadow-lg">
+            <Box gap='.6rem' display='flex' flexDirection='column'>
+              <TokenSwapInput
+                side="pay"
+                onChange={handleInputChange}
+                tokens={tokens}
+                selectedToken={tokenA}
+                onTokenSelect={handleTokenSelect}
+              // amount="~$3.3K"
+              />
 
-              <Box className="space-y-4">
+              <TokenSwapInput
+                side="receive"
+                onChange={handleInputChange}
+                tokens={tokens}
+                selectedToken={tokenB}
+                onTokenSelect={handleTokenSelect}
+              // amount="~$3.3K"
+              />
 
-                <PayComponent />
-
-                <TextField
-                  fullWidth
-                  label="Amount"
-                  variant="outlined"
-                  value={amountToSwap}
-                  onChange={(e) => dispatch(setAmountToSwap(Number(e.target.value)))}
-                  className="mb-4"
-                />
-                <TextField
-                  select
-                  fullWidth
-                  label="From"
-                  value={amountToSwap}
-                  onChange={(e) => dispatch(setSelectedTokenA(e.target.value))}
-                  variant="outlined"
-                  className="mb-4"
-                >
-                  {currencies.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  select
-                  fullWidth
-                  label="To"
-                  value={amountToSwap}
-                  onChange={(e) => dispatch(setSelectedTokenB(e.target.value))}
-                  variant="outlined"
-                  className="mb-4"
-                >
-                  {currencies.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSwap}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Swap
-                </Button>
-              </Box>
-            </Container>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleSwap}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Swap
+              </Button>
+            </Box>
             {error && <p>Error: {error}</p>}
           </Box>
         )}

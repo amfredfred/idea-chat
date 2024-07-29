@@ -1,11 +1,8 @@
-export interface TokenState {
-    symbol: string;
-    balance: number;
-}
+import { IPumpCoin } from "../../common/types";
 
 export interface TokenSwapState {
-    tokenA: TokenState;
-    tokenB: TokenState;
+    tokenA: IPumpCoin | undefined;
+    tokenB: IPumpCoin | undefined;
     amountToSwap: number;
     selectedTokenA: string | null;
     selectedTokenB: string | null;
@@ -15,14 +12,8 @@ export interface TokenSwapState {
 }
 
 export const tokenSwapInitialState: TokenSwapState = {
-    tokenA: {
-        symbol: 'TOKEN_A',
-        balance: 0,
-    },
-    tokenB: {
-        symbol: 'TOKEN_B',
-        balance: 0,
-    },
+    tokenA: undefined,
+    tokenB: undefined,
     amountToSwap: 0,
     selectedTokenA: null,
     selectedTokenB: null,
