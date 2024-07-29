@@ -9,6 +9,8 @@ import { formatNumber } from "../utils/format";
 
 export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
 
+  const pumpProgress = pump?.progress?.toFixed?.(1)
+
   return (
     <Box key={pump?.address} className="pump-card   bg-gray-900 rounded-lg  relative  ">
       <Box className=" flex gap-2 align-middle ">
@@ -64,10 +66,8 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
 
       <Box className="flex items-center justify-end mt-2 gap-1">
         {pump?.holder_count && <Typography variant="caption" className="text-gray-200">HD: {formatNumber(pump?.holder_count)}</Typography>}
-        &bull;
-        {pump?.total_supply && <Typography variant="caption" className="text-gray-200">SP: {formatNumber(pump?.total_supply)}</Typography>}
-        &bull;
-        {pump?.progress && <Typography variant="caption" className="text-gray-200">PGS: {`${pump?.progress?.toFixed(1)}`}</Typography>}
+        {pump?.total_supply && <Typography variant="caption" className="text-gray-200"> &bull; SP: {formatNumber(pump?.total_supply)}</Typography>}
+        {pumpProgress && <Typography variant="caption" className="text-gray-200"> &bull; PSG: {pumpProgress}</Typography>}
       </Box>
     </Box>
   );

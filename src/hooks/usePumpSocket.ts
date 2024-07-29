@@ -20,7 +20,6 @@ const usePumpScoket = (serverUrl: string) => {
         socketInstance.on('disconnect', () => {
             setConnected(false);
             console.log('disconnect COnnected  ')
-
         });
 
         setSocket(socketInstance);
