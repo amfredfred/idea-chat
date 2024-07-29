@@ -13,7 +13,7 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
     <Box key={pump.address} className="pump-card   bg-gray-900 rounded-lg  relative  ">
       <Box className=" flex gap-2 align-middle ">
         <NavLink
-          to={`https://pump.fun/${pump.address}`}
+          to={`/terminal?mint=${pump.address}`}
           target="_blank"
           className="absolute inset-0 z-[1] flex"
         />
