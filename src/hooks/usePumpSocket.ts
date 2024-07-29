@@ -9,15 +9,18 @@ const usePumpScoket = (serverUrl: string) => {
     useEffect(() => {
         const socketInstance = io(serverUrl, {
             autoConnect: true,
-            upgrade: false,
+            upgrade: true,
         });
 
         socketInstance.on('connect', () => {
             setConnected(true);
+            console.log('COnnected  ')
         });
 
         socketInstance.on('disconnect', () => {
             setConnected(false);
+            console.log('disconnect COnnected  ')
+
         });
 
         setSocket(socketInstance);
