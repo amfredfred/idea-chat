@@ -15,8 +15,6 @@ export default function PumpDetails() {
       <h2>Token Exploration Page</h2>
       <p>Mint query parameter value: {mint}</p>
       <div className="">
-        MINT: {mint}
-
         <iframe src={`https://pump.fun/${mintParam}`} style={{width:'100%', height:'100vh'}}></iframe>
       </div>
     </div>
