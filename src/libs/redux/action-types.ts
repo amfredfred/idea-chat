@@ -1,0 +1,7 @@
+export const SET_BALANCE = 'SET_BALANCE';
+export const SET_AMOUNT_TO_SWAP = 'SET_AMOUNT_TO_SWAP';
+export const SET_SELECTED_TOKEN_A = 'SET_SELECTED_TOKEN_A';
+export const SET_SELECTED_TOKEN_B = 'SET_SELECTED_TOKEN_B';
+export const SET_LOADING = 'SET_LOADING';
+export const SET_ERROR = 'SET_ERROR';
+

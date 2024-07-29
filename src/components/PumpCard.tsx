@@ -6,18 +6,26 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { IPumpCoin, IPumpCoinMigrated } from "../common/types";
 import { NavLink } from "react-router-dom";
 import { formatNumber } from "../utils/format";
+import { useAppDispatch } from "../libs/redux/hooks";
+import { setIsVisible } from "../libs/redux/slices/token-swap-slice";
 
 export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
 
   const pumpProgress = pump?.progress?.toFixed?.(1)
+  const dispatch = useAppDispatch()
+
+  const onClickCard = () => {
+    dispatch(setIsVisible(true))
+  }
 
   return (
     <Box key={pump?.address} className="pump-card   bg-gray-900 rounded-lg  relative  ">
       <Box className=" flex gap-2 align-middle ">
         <NavLink
-          to={`/terminal?mint=${pump?.address}`}
-          target="_blank"
+          to={`#`} //terminal?mint=${pump?.address}
+          // target="_blank"
           className="absolute inset-0 z-[1] flex"
+          onClick={onClickCard}
         />
         <Box className="relative hover:cursor-pointer z-10">
           <Box className="flex items-center">

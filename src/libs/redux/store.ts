@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
+import tokenSwapReducer from './slices/token-swap-slice'
 
 export const makeStore = () => {
     return configureStore({
-        reducer: {}
+        reducer: {
+            tokenSwap: tokenSwapReducer,
+        }
     })
 }
 
