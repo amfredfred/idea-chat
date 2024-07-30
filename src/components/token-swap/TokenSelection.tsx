@@ -2,17 +2,35 @@ import { Box, Grid, Typography, InputBase, MenuItem } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { ITokenSwapInputProps } from '../../common/types';
 import { useAppSelector } from '../../libs/redux/hooks';
+import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion'
 
 const TokenSelection: React.FC<{
     onTokenSelect: ITokenSwapInputProps['onTokenSelect'],
     isOpen: boolean,
-}> = ({ onTokenSelect, isOpen }) => {
+    onRequestClose: (state: boolean) => void
+}> = ({ onTokenSelect, isOpen, onRequestClose }) => {
 
     const tokensList = useAppSelector(state => state.tokenSwap.tokensList)
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        document.addEventListener('mousedown', (event) => {
+            if (event.target !== containerRef.current && !containerRef.current?.contains(event.target as any)) {
+                onRequestClose(false)
+            }
+        })
+        return document.removeEventListener('mousedown', () => { })
+    }, [onRequestClose, isOpen])
+
     if (!isOpen) return
 
     return (
-        <Box className="active rounded-lg   mt-4 flex text-yellow-100" maxHeight='40vh'  >
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            ref={containerRef} className="active rounded-lg   mt-4 flex text-yellow-100" style={{ maxHeight: '30vh' }} >
             <Box flexDirection="column" display='flex' overflow='hidden' width='100%' >
                 <Grid item>
                     <InputBase
@@ -40,7 +58,7 @@ const TokenSelection: React.FC<{
                     ))}
                 </Box>
             </Box>
-        </Box>
+        </motion.div>
     );
 };
 

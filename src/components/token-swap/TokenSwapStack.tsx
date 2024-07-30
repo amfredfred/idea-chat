@@ -112,7 +112,7 @@ const TokenswapStack: React.FC = () => {
           display: isVisible ? 'flex' : 'none',
           flexDirection: 'column',
           backdropFilter: 'blur(50px)',
-          background: 'rgba(0,0,0,.9)',
+          background: 'linear-gradient(rgb(4, 36, 65) 0%, rgb(42, 36, 60) 100%) no-repeat;',
           boxShadow: isMinimized ? '' : '0 10px 4px rgba(0,0,0,0.8)',
 
         }}
@@ -122,7 +122,7 @@ const TokenswapStack: React.FC = () => {
           alignItems: 'center',
           cursor: 'move',
           padding: '8px',
-          backgroundColor: 'black',
+          // backgroundColor: 'black',
           // borderBottom: '1px solid #ccc'
         }}>
           <h1 style={{ margin: '0', padding: '0 8px' }}>Token Swap</h1>

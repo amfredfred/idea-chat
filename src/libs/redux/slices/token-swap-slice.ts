@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { initialStates, NativeToken } from "../initial-states"
-import { promise } from "../../../utils";
+import { initialStates, NativeToken, FetchTokenRateParams, TokenRate } from "../initial-states"
+import axios from "axios";
 
 
 const handleTokenSelection = (state: typeof initialStates['tokenSwapInitialState'], action: any, tokenKey: 'tokenToSend' | 'tokenToReceive') => {
@@ -16,11 +16,22 @@ const handleTokenSelection = (state: typeof initialStates['tokenSwapInitialState
     state.isVisible = true;
 };
 
-const fetchTokenRate = createAsyncThunk('', async () => {
-    await promise(30)
-    throw new Error("HELLO WORLD");
-})
 
+export const fetchTokenRate = createAsyncThunk(
+    'token/fetchRate',
+    async ({ fromMint, toMint }: FetchTokenRateParams, thunkAPI) => {
+        try {
+            if (!fromMint) return thunkAPI.rejectWithValue({ error: "Invalid from address" })
+            if (!toMint) return thunkAPI.rejectWithValue({ error: "Invalid to address" })
+            console.log('Fetching token rate with params:', { fromMint, toMint });
+            const response = await axios.get<{ data: { [key: string]: TokenRate } }>(`https://price.jup.ag/v6/price?ids=${fromMint}&vsToken=${toMint}`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch token rate:', error);
+            return thunkAPI.rejectWithValue({ error: (error as Error).message });
+        }
+    }
+);
 
 const tokenSwapSlice = createSlice({
     name: 'token_swap_slice',
@@ -61,14 +72,14 @@ const tokenSwapSlice = createSlice({
         builder.addCase(fetchTokenRate.fulfilled, (state, { payload }) => {
             state.isFetchingRate = false
             state.isFetchingRateError = false
-            console.log({ payload })
-        }).addCase(fetchTokenRate.pending, (state, action) => {
+            state.conversionRate = payload?.data[state.tokenToSend?.address as string].price
+        }).addCase(fetchTokenRate.pending, (state,) => {
             state.isFetchingRate = true
             state.isFetchingRateError = false
-            console.log(action.payload)
         }).addCase(fetchTokenRate.rejected, (state, { payload, error }) => {
             state.isFetchingRate = false
             state.isFetchingRateError = true
+            state.error = error?.message || 'Failed to fetch token rate';
             console.log({ payload, error })
         })
     },

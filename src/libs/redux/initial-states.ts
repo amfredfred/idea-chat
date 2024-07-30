@@ -6,6 +6,19 @@ export interface IApp {
     isLoading: boolean,
 }
 
+export interface TokenRate {
+    id: string;
+    mintSymbol: string;
+    vsToken: string;
+    vsTokenSymbol: string;
+    price: number;
+}
+
+export interface FetchTokenRateParams {
+    fromMint?: string;
+    toMint?: string;
+}
+
 export interface TokenSwapState {
     tokenToSend: IPumpCoin | undefined;
     tokenToReceive: IPumpCoin | undefined;
@@ -22,7 +35,9 @@ export interface TokenSwapState {
 
 export const NativeToken = {
     symbol: 'SOL',
-    logo: SolanaLogo
+    logo: SolanaLogo,
+    address: 'So11111111111111111111111111111111111111112',
+    mint: 'So11111111111111111111111111111111111111112'
 }
 
 export const appInitialState: IApp = {

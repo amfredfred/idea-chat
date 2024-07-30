@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Grid, Button, Collapse } from '@mui/material';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import MoneyIcon from '@mui/icons-material/Money';
-import { useAppSelector } from '../../libs/redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { SwipeDown } from '@mui/icons-material';
+import { fetchTokenRate } from '../../libs/redux/slices/token-swap-slice';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
+    const tsacref = useRef<HTMLDivElement>(null)
+    const dispatch = useAppDispatch()
 
     const {
         amountToSend,
@@ -20,15 +23,36 @@ const TokenSwapAnalytic = () => {
         conversionRate
     } = useAppSelector(state => state.tokenSwap)
 
+
+    const takeOutFee = () => {
+        return conversionRate
+    }
+
+
+    useEffect(() => {
+        document.addEventListener('mousedown', (event) => {
+            if (event.target !== tsacref.current && !tsacref.current?.contains(event.target as any)) {
+                setOpen(false)
+            }
+        })
+        return document.removeEventListener('mousedown', () => { })
+    }, [open])
+
+    useEffect(() => {
+        dispatch(fetchTokenRate({ fromMint: tokenToSend?.address, toMint: tokenToReceive?.address }));
+    }, [dispatch, tokenToSend?.address, tokenToReceive?.address]);
+
+    console.log({ isFetchingRate, isFetchingRateError, conversionRate })
+
     return (
-        <div className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
+        <div ref={tsacref} className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
             <Button
                 onClick={() => setOpen(!open)}
                 className="border-b pb-2 mb-2 cursor-pointer w-full text-white">
                 <Grid container item alignItems="center" justifyContent="space-between" direction='row' display='flex'>
                     <Grid item >
                         <Grid container alignItems="center">
-                            <span>1 DAI = 0.0002990434 WETH</span>
+                            <span>1 {tokenToSend?.symbol} = {takeOutFee()} {tokenToReceive?.symbol}</span>
                         </Grid>
                     </Grid>
                     <Grid item>

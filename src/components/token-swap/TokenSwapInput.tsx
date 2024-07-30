@@ -6,11 +6,14 @@ import TokenSelection from './TokenSelection';
 
 const StyledPaper = styled(Paper)(() => ({
     boxShadow: 'none',
+    background: 'rgba(0, 0, 0, 0.45)'
 }));
 
 const StyledInput = styled(InputBase)(({ theme }) => ({
     padding: theme.spacing(1),
     width: '100%',
+    color: 'white',
+    fontWeight: 900
 }));
 
 const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
@@ -32,7 +35,7 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
             <Grid container alignItems="flex-end" justifyContent="space-between" style={{ marginBottom: '8px' }}>
                 <Typography variant="body2" className='text-white' style={{ textTransform: 'capitalize' }}>{side}</Typography>
             </Grid>
-            <StyledPaper style={{ borderRadius: '.5rem' }}>
+            <StyledPaper style={{ borderRadius: '.5rem' }} className='bg-slate-700'>
                 <Box display='flex' flexDirection='row' gap='1rem' paddingInline='.6rem' >
                     <StyledInput
                         placeholder="0"
@@ -47,7 +50,6 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                         display='flex'
                         alignItems='center'
                         paddingInline='.4rem'
-
                         borderRadius='50px'
                         margin='auto'
                         style={{ background: 'whitesmoke', maxHeight: '40px' }}
@@ -70,6 +72,7 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
             </StyledPaper >
 
             <TokenSelection
+                onRequestClose={setIsTokensListOpen}
                 onTokenSelect={handleOnTokenSelect}
                 isOpen={isTokensListOpen} />
 
