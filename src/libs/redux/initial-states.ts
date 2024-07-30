@@ -6,8 +6,13 @@ export interface TokenSwapState {
     amountToSwap: number;
     loading: boolean;
     error: string | null;
-    tokensList:IPumpCoin[],
+    tokensList: IPumpCoin[],
     isVisible: boolean
+}
+
+
+export const NativeToken = {
+    symbol: 'SOL'
 }
 
 export const tokenSwapInitialState: TokenSwapState = {

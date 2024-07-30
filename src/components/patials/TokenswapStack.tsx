@@ -6,6 +6,7 @@ import { setLoading, setIsVisible, setSelectedTokenA, setSelectedTokenB } from '
 import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
+import TokenSwapAnalytic from './TokenSwapAnalytic';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -54,15 +55,10 @@ const TokenswapStack: React.FC = () => {
     ],
   };
 
-  const tokens = Array.from({ length: 10 }).fill({ symbol: 'Token Symbol', logo: 'https://img.icons8.com/?size=48&id=IhWBOFHtv6vx&format=png' }) as any
-
   const handleInputChange = (value: any) => {
     console.log({ value })
   }
 
-  const handleTokenSelect = (token_selected: any) => {
-    console.log({ token_selected })
-  }
 
   return (
     <Draggable handle=".draggable-handle"  >
@@ -82,7 +78,7 @@ const TokenswapStack: React.FC = () => {
           display: isVisible ? 'flex' : 'none',
           flexDirection: 'column',
           backdropFilter: 'blur(50px)',
-          background: 'rgba(0,0,0,0.4)'
+          background: 'rgba(0,0,0,0.8)'
         }}
       >
         <div className="draggable-handle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'move', padding: '8px', backgroundColor: '#f0f0f0', borderBottom: '1px solid #ccc' }}>
@@ -113,21 +109,24 @@ const TokenswapStack: React.FC = () => {
               // amount="~$3.3K"
               />
 
-              <TokenSwapInput
+              {/* <TokenSwapInput
                 side="receive"
                 onChange={handleInputChange}
                 tokens={tokensList}
                 selectedToken={tokenB}
                 onTokenSelect={(pump) => dispatch(setSelectedTokenB(pump))}
               // amount="~$3.3K"
-              />
+              /> */}
+
+              <TokenSwapAnalytic />
 
               <Button
                 fullWidth
                 variant="contained"
                 color="primary"
                 onClick={handleSwap}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4   rounded-full"
+                style={{ borderRadius: '50px', padding: '.6rem' }}
               >
                 Swap
               </Button>

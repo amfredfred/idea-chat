@@ -3,15 +3,13 @@ import { Box, Grid, Typography, Paper, InputBase, MenuItem, Select, SelectChange
 import { styled } from '@mui/system';
 import { ITokenSwapInputProps } from '../../common/types';
 
-// Styled components using MUI's system
 const StyledPaper = styled(Paper)(() => ({
-    borderRadius: '10px',
+    borderRadius: '50px',
     boxShadow: 'none',
     display: 'flex',
     alignItems: 'center',
     gap: '.5rem',
     paddingInline: '.6rem',
-    paddingBlock: '1rem'
 }));
 
 const StyledInput = styled(InputBase)(({ theme }) => ({
@@ -27,12 +25,10 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
     onTokenSelect,
     amount
 }) => {
-
-    console.log({ selectedToken })
     return (
         <Box className="w-full" width={'100%'}>
             <Grid container alignItems="flex-end" justifyContent="space-between" style={{ marginBottom: '8px' }}>
-                <Typography variant="body2" style={{ textTransform: 'capitalize' }}>{side}</Typography>
+                <Typography variant="body2" className='text-white' style={{ textTransform: 'capitalize' }}>{side}</Typography>
             </Grid>
             <StyledPaper>
                 <StyledInput

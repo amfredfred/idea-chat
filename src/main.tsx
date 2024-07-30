@@ -6,7 +6,7 @@ import { RecoilRoot } from "recoil";
 import { SolanaWalletProvider } from "./components/WalletProvider.tsx";
 import RoutesPortal from "./routes/index.tsx";
 import StoreProvider from "./providers/StoreProvider/index.tsx";
-import TokenswapStack from "./components/patials/TokenswapStack.tsx";
+import TokenswapStack from "./components/patials/TokenSwapStack.tsx";
 import { Stack } from "@mui/material";
 
 // import ErrorPage from "./components/Error.tsx";
