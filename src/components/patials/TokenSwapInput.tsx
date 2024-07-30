@@ -4,11 +4,10 @@ import { styled } from '@mui/system';
 import { ITokenSwapInputProps } from '../../common/types';
 
 const StyledPaper = styled(Paper)(() => ({
-    borderRadius: '50px',
     boxShadow: 'none',
     display: 'flex',
     alignItems: 'center',
-    gap: '.5rem',
+    gap: '1rem',
     paddingInline: '.6rem',
 }));
 
@@ -26,11 +25,11 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
     amount
 }) => {
     return (
-        <Box className="w-full" width={'100%'}>
+        <Box className="w-full" width={'100%'} >
             <Grid container alignItems="flex-end" justifyContent="space-between" style={{ marginBottom: '8px' }}>
                 <Typography variant="body2" className='text-white' style={{ textTransform: 'capitalize' }}>{side}</Typography>
             </Grid>
-            <StyledPaper>
+            <StyledPaper style={{borderRadius:'.5rem'}}>
                 <StyledInput
                     placeholder="0"
                     type="text"

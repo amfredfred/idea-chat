@@ -6,10 +6,10 @@ import InfoIcon from '@mui/icons-material/Info';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import MoneyIcon from '@mui/icons-material/Money';
 import { useAppSelector } from '../../libs/redux/hooks';
+import { ArrowDownward } from '@mui/icons-material';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
@@ -18,41 +18,31 @@ const TokenSwapAnalytic = () => {
     const tokenFrom = useAppSelector(state => state.tokenSwap.tokenA)
     const tokenTo = useAppSelector(state => state.tokenSwap.tokenB)
 
-
     return (
-        <div className="p-4 text-white">
-            <div
-                className="cursor-pointer"
+        <div className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
+            <Button
                 onClick={() => setOpen(!open)}
-            >
-                <Grid container alignItems="center" className="border-b pb-2 mb-2">
-                    <Grid item xs={11}>
-                        <Grid container alignItems="center" justifyContent="space-between">
-                            <Grid item>
-                                <Grid container alignItems="center">
-                                    <InfoIcon className="mr-2" />
-                                    <span>1 DAI = 0.0002990434 WETH</span>
-                                    <Button>
-                                        <ArrowForwardIcon />
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                            <Grid item>
-                                <Grid container alignItems="center">
-                                    <TrendingDownIcon className="mr-2" />
-                                    <span>0.19%</span>
-                                </Grid>
-                            </Grid>
+                className="border-b pb-2 mb-2 cursor-pointer w-full">
+                <Grid container item alignItems="center" justifyContent="space-between" direction='row' display='flex'>
+                    <Grid item >
+                        <Grid container alignItems="center">
+                            <span>1 DAI = 0.0002990434 WETH</span>
                         </Grid>
                     </Grid>
-                    <Grid item xs={1}>
-                        <ArrowForwardIcon className={`transform transition-transform ${open ? 'rotate-180' : ''}`} />
+                    <Grid item>
+                        <Grid container alignItems="center">
+                            <TrendingDownIcon className="mr-2" />
+                            <span>0.19%</span>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </div>
+                <Grid item xs={1}>
+                    <ArrowDownward className={`transform transition-transform ${open ? 'rotate-180' : ''}`} />
+                </Grid>
+            </Button>
 
             <Collapse in={open}>
-                <div className="space-y-4">
+                <div className="space-y-4 p-2">
                     <Grid container justifyContent="space-between">
                         <Grid item>
                             <Grid container alignItems="center">
