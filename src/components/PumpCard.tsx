@@ -39,7 +39,7 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
             </div>
           </div>
 
-          <LinearProgress variant="determinate" style={{ color: '#00FF00', height: '1rem', borderRadius: '50px' }} value={Number(pumpProgress ?? 1) * 100} />
+          <LinearProgress variant="determinate" style={{ color: '#00FF00', height: '1rem', borderRadius: '50px' }} value={Number(pump?.progress ?? 1) * 100} />
 
           <div className=" flex justify-between w-[100%] mx-auto">
             <div className=" flex flex-col  text-center">
@@ -72,8 +72,8 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
               style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden' }} >
               Chart  <CandlestickChartRounded className='text-yellow-100' />
             </Button>
-            <Button onClick={Number(pumpProgress) >= 1 ? atClickBuy : atClickApeBlindly} title="Hello wolr" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none' }} >
-              {Number(pumpProgress) >= 1 ? 'APE BLINDLY' : 'Buy'}
+            <Button onClick={Number(pump?.progress ?? 1) >= 1 ? atClickBuy : atClickApeBlindly} title="Hello wolr" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none' }} >
+              {Number(pump?.progress ?? 1) >= 1 ? 'Buy' : 'APE BLINDLY'}
             </Button>
           </Box>
         </div>

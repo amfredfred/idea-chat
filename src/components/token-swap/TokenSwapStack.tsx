@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
@@ -39,6 +39,10 @@ const TokenswapStack: React.FC = () => {
     setIsMinimized(false)
     dispatch(setIsVisible(false))
   };
+
+  useEffect(() => {
+    return setIsMinimized(false);
+  }, [tokenToSend, tokenToReceive])
 
   const Loading = <Box display='flex' padding='5rem' overflow='hidden' alignItems='center' justifyContent='center'>
     <CircularProgress />
