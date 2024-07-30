@@ -1,79 +1,89 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import MessageIcon from '@mui/icons-material/Message';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { DegenPill, JokerIcon } from "./Icons";
+import { websiteThemeState } from "../atoms/website-theme";
+import { useRecoilValue } from "recoil";
 import { IPumpCoin, IPumpCoinMigrated } from "../common/types";
-import { NavLink } from "react-router-dom";
-import { formatNumber } from "../utils/format";
 import { useAppDispatch } from "../libs/redux/hooks";
 import { setSelectedtokenToReceive } from "../libs/redux/slices/token-swap-slice";
+import { formatNumber } from "../utils/format";
 
 export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
+  const websiteTheme = useRecoilValue(websiteThemeState);
 
   const pumpProgress = pump?.progress?.toFixed?.(1)
   const dispatch = useAppDispatch()
   const onClickCard = () => dispatch(setSelectedtokenToReceive(pump))
 
   return (
-    <Box key={pump?.address} className="pump-card   bg-gray-900 rounded-lg  relative  ">
-      <Box className=" flex gap-2 align-middle ">
-        <NavLink
-          to={`#`} //terminal?mint=${pump?.address}
-          // target="_blank"
-          className="absolute inset-0 z-[1] flex"
-          onClick={onClickCard}
-        />
-        <Box className="relative hover:cursor-pointer z-10">
-          <Box className="flex items-center">
-            <Box className="relative flex items-center" sx={{ width: 66, height: 66 }}>
-              <img src={pump?.logo} style={{ aspectRatio: '1/1' }} alt="Token Image" className=" aspect-square rounded " height="100%" />
-            </Box>
-          </Box>
-        </Box>
+    <div className=" w-full h-[75%] normal-case  pt-[100px] flex flex-col gap-[40px]">
+      <div
+        className=" border-[1px] rounded-[4px] border-white font-jbm w-[90%] mx-auto "
+        style={{
+          borderColor: websiteTheme.textColor,
+          color: websiteTheme.textColor,
+        }}
+      >
+        <div className=" flex flex-col gap-[20px] p-[10px] ">
+          <div className="flex items-center gap-2">
+            <JokerIcon />
+            <div className=" flex flex-col gap-1">
+              <p className=" text-[16px]">fuck tate</p>
+              <p className=" text-[12px]">22 mins ago</p>
+            </div>
+          </div>
+          <div className=" bg-white rounded-[200px] h-[20px]  w-[100%]   mx-auto ">
+            <div className=" bg-[#00FF00] w-[70%] h-full  rounded-[200px]" />
+          </div>
 
+          <div className=" flex justify-between w-[100%] mx-auto">
+            <div className=" flex flex-col  text-center">
+              <p className=" text-[12px] ">mcap</p>
+              <p className=" text-[16px] ">${formatNumber(pump?.usd_market_cap)}</p>
+            </div>
+            <div className=" flex flex-col  text-center">
+              <p className=" text-[12px] ">holders</p>
+              <p className=" text-[16px] ">420</p>
+            </div>
+            <div className=" flex flex-col  text-center">
+              <p className=" text-[12px] ">volume</p>
+              <p className=" text-[16px] ">$240K</p>
+            </div>
+            <div className=" flex flex-col  text-center">
+              <p className=" text-[12px] ">dev</p>
+              <p className=" text-[16px] ">sold</p>
+            </div>
+          </div>
 
-        <Box className="flex flex-col ml-3 flex-1 overflow-hidden  ">
-          <Box className="flex items-center justify-between border-b pb-2 border-gray-600">
-            <Box className="flex flex-col gap-y-2 overflow-hidden">
-              <Box className="flex items-center gap-1">
-                <Typography variant="body2" className="font-medium text-orange-100 whitespace-nowrap overflow-ellipsis line-clamp-1 !leading-[14px] mr-2">{pump?.symbol}</Typography>
-                <Typography variant="body2" className="font-normal text-gray-200 overflow-ellipsis line-clamp-1 text-xs !leading-[12px]">{pump?.name}</Typography>
-              </Box>
-              {pump?.reply_count &&
-                <Box className="flex items-center gap-x-1 px-1 border-l ml-1 h-3 border-gray-500 z-10">
-                  <MessageIcon style={{ fill: '#686A6D', width: '12px', height: '12px' }} />
-                  <Typography variant="body2" className="text-gray-100 font-medium text-xs leading-none">{formatNumber(pump?.reply_count)}</Typography>
-                </Box>
-              }
-            </Box>
-          </Box>
-          <Typography variant="body2" className="mt-2 text-gray-400 line-clamp-3">{pump?.description}</Typography>
-
-          <Box className="flex items-center z-10 mt-2">
-            {pump?.usd_market_cap &&
-              <Typography variant="body2" className="break-keep ml-1 md:ml-0 text-xs leading-none border-r border-gray-500 pr-1">
-                <span className="!text-xs !leading-none inline-flex text-gray-200 font-medium">MC</span>&nbsp;
-                <span className="!text-xs !leading-none inline-flex text-gray-200 font-medium">${formatNumber(pump?.usd_market_cap)}</span>
-              </Typography>
-            }
-            <Box className="flex items-center gap-x-1 border-r border-gray-500 px-1 text-xs leading-none text-red-700">
-              <ThumbDownIcon style={{ width: '12px', height: '12px' }} />
-              <Typography variant="body2" className="text-red-700">29%</Typography>
-            </Box>
-            <Box className="flex items-center gap-x-1 px-1 text-xs leading-none text-green-700">
-              <ThumbUpIcon style={{ width: '12px', height: '12px' }} />
-              <Typography variant="body2" className="text-green-700">71%</Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-
-      <Box className="flex items-center justify-end mt-2 gap-1">
-        {pump?.holder_count && <Typography variant="caption" className="text-gray-200">HD: {formatNumber(pump?.holder_count)}</Typography>}
-        {pump?.total_supply && <Typography variant="caption" className="text-gray-200"> &bull; SP: {formatNumber(pump?.total_supply)}</Typography>}
-        {pumpProgress && <Typography variant="caption" className="text-gray-200"> &bull; PSG: {pumpProgress}</Typography>}
-      </Box>
-    </Box>
+          <div
+            className=" h-[1px] w-[100%] mx-auto"
+            style={{
+              background: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.textColor}, ${websiteTheme.bgColor})`,
+            }}
+          />
+          <div
+            className="w-[100%] mx-auto flex items-center justify-center p-[8px] cursor-pointer"
+            style={{
+              backgroundColor: websiteTheme.textColor,
+              color: websiteTheme.bgColor,
+            }}
+          >
+            APE BLINDLY
+          </div>
+        </div>
+      </div>
+      <div
+        className=" flex flex-col gap-[10px]"
+        style={{
+          color: websiteTheme.textColor,
+        }}
+      >
+        <p className=" uppercase  text-center w-[60%] mx-auto">
+          buy high-quality retarded tokens from pumpfun
+        </p>
+        <div className=" w-full flex justify-center">
+          <DegenPill />
+        </div>
+        <p className=" text-center uppercase opacity-80">cuming soon</p>
+      </div>
+    </div>
   );
 }

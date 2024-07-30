@@ -1,33 +1,37 @@
 import React, { useState } from 'react';
 import Draggable from 'react-draggable';
-import { Button, Box, IconButton, Divider } from '@mui/material';
+import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive } from '../../libs/redux/slices/token-swap-slice';
 import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
+import { promise } from '../../utils';
+import { motion } from 'framer-motion'
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error, isVisible, tokenToSend, tokenToReceive } = useAppSelector(state => state.tokenSwap);
+  const { error, isVisible, tokenToSend, tokenToReceive, loading } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const handleSwap = () => {
+  const handleSwap = async () => {
     dispatch(setLoading(true));
     // Add logic to perform the swap here
     // After performing the swap, update the state accordingly
+    await promise(10)
     dispatch(setLoading(false));
   };
 
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
+    setIsFullscreen(false);
   };
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
-    setIsMinimized(!isMinimized)
+    setIsMinimized(false)
   };
 
   const closeWindow = () => {
@@ -36,7 +40,14 @@ const TokenswapStack: React.FC = () => {
     dispatch(setIsVisible(false))
   };
 
+  const Loading = <Box display='flex' padding='5rem' overflow='hidden' alignItems='center' justifyContent='center'>
+    <CircularProgress />
+  </Box>
+
+
   const buttonText = () => {
+    if (loading)
+      return <CircularProgress size={25} />
     if (tokenToReceive?.symbol?.toUpperCase?.() == 'SOL') {
       return "SELL"
     }
@@ -46,15 +57,14 @@ const TokenswapStack: React.FC = () => {
   }
 
   const buttonStyle = () => {
-    if (tokenToReceive?.symbol?.toUpperCase?.() == 'SOL') {
-      return {
-        backgroundColor: "#FF0000"
-      }
+    if (loading) return {
+      backgroundColor: "black"
     }
-    if (tokenToSend?.symbol?.toUpperCase?.() == 'SOL') {
-      return {
-        backgroundColor: "green"
-      }
+    if (tokenToReceive?.symbol?.toUpperCase?.() == 'SOL') return {
+      backgroundColor: "#FF0000"
+    }
+    if (tokenToSend?.symbol?.toUpperCase?.() == 'SOL') return {
+      backgroundColor: "green"
     }
   }
 
@@ -81,7 +91,7 @@ const TokenswapStack: React.FC = () => {
   }
 
   return (
-    <Draggable handle=".draggable-handle"   >
+    <Draggable   >
       <Box
         sx={{
           position: isFullscreen ? 'fixed' : 'absolute',
@@ -93,15 +103,16 @@ const TokenswapStack: React.FC = () => {
           maxWidth: '100%',
           maxHeight: '100%',
           zIndex: 1000,
-          borderRadius: '20px',
+          borderRadius: isMinimized ? '10px' : '20px',
           overflow: isMinimized ? 'hidden' : 'auto',
           display: isVisible ? 'flex' : 'none',
           flexDirection: 'column',
           backdropFilter: 'blur(50px)',
-          background: 'rgba(0,0,0,0.8)',
+          background: 'rgba(0,0,0,1)',
+          boxShadow: isMinimized ? '' : '0 10px 4px rgba(0,0,0,0.8)'
         }}
       >
-        <div className="draggable-handle text-yellow-100 flex w-full  " style={{
+        <div className=" text-yellow-100 flex w-full  " style={{
           justifyContent: 'space-between',
           alignItems: 'center',
           cursor: 'move',
@@ -111,7 +122,7 @@ const TokenswapStack: React.FC = () => {
         }}>
           <h1 style={{ margin: '0', padding: '0 8px' }}>Token Swap</h1>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton size="small" onClick={toggleMinimize}>
+            <IconButton className=' bg-red-400' size="small" onClick={toggleMinimize}>
               <Minimize className='text-yellow-100' />
             </IconButton>
             <IconButton size="small" onClick={toggleFullscreen}>
@@ -123,10 +134,14 @@ const TokenswapStack: React.FC = () => {
           </div>
         </div>
 
-        <Divider orientation='horizontal' className=' bg-gray-300 w-11/12 rounded-full' style={{ marginInline: 'auto' }} />
+        {!isMinimized && <Divider orientation='horizontal' className=' bg-gray-300 w-11/12 rounded-full' style={{ marginInline: 'auto' }} />}
 
-        {!isMinimized && (
-          <Box padding={'1rem'}>
+        {!isMinimized && ((!tokenToReceive?.symbol || !tokenToSend?.symbol) ? Loading : (
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            style={{ padding: '1rem' }}>
             {isFullscreen && <Box sx={{ flexGrow: 1 }}><Line data={chartData} /></Box>}
             <Box gap='1rem' display='flex' flexDirection='column'>
               <TokenSwapInput
@@ -159,10 +174,10 @@ const TokenswapStack: React.FC = () => {
               </Button>
             </Box>
             {error && <p>Error: {error}</p>}
-          </Box>
-        )}
+          </motion.div>
+        ))}
       </Box>
-    </Draggable>
+    </Draggable >
   );
 };
 

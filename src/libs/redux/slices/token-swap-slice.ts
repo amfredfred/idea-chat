@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { initialStates, NativeToken } from "../initial-states"
+import { promise } from "../../../utils";
 
 
 const handleTokenSelection = (state: typeof initialStates['tokenSwapInitialState'], action: any, tokenKey: 'tokenToSend' | 'tokenToReceive') => {
@@ -15,17 +16,25 @@ const handleTokenSelection = (state: typeof initialStates['tokenSwapInitialState
     state.isVisible = true;
 };
 
+const fetchTokenRate = createAsyncThunk('', async () => {
+    await promise(30)
+    throw new Error("HELLO WORLD");
+})
+
 
 const tokenSwapSlice = createSlice({
-    name: 'token_swap',
+    name: 'token_swap_slice',
     initialState: initialStates['tokenSwapInitialState'],
     reducers: {
         setBalance: (state, action) => {
             const { token, balance } = action.payload;
             (state as any)[token].balance = balance;
         },
-        setAmountToSwap: (state, action) => {
-            state.amountToSwap = action.payload;
+        setAmountToReceive: (state, action) => {
+            state.amountToReceive = action.payload;
+        },
+        setAmountToSend: (state, action) => {
+            state.amountToSend = action.payload;
         },
         setSelectedtokenToSend: (state, action) => {
             handleTokenSelection(state, action, 'tokenToSend');
@@ -48,17 +57,33 @@ const tokenSwapSlice = createSlice({
             state.tokensList = action.payload
         },
     },
+    extraReducers(builder) {
+        builder.addCase(fetchTokenRate.fulfilled, (state, { payload }) => {
+            state.isFetchingRate = false
+            state.isFetchingRateError = false
+            console.log({ payload })
+        }).addCase(fetchTokenRate.pending, (state, action) => {
+            state.isFetchingRate = true
+            state.isFetchingRateError = false
+            console.log(action.payload)
+        }).addCase(fetchTokenRate.rejected, (state, { payload, error }) => {
+            state.isFetchingRate = false
+            state.isFetchingRateError = true
+            console.log({ payload, error })
+        })
+    },
 });
 
 export const {
     setBalance,
-    setAmountToSwap,
+    setAmountToSend,
+    setAmountToReceive,
     setSelectedtokenToSend,
     setSelectedtokenToReceive,
     setLoading,
     setError,
     setIsVisible,
-    setTokensList
+    setTokensList,
 } = tokenSwapSlice.actions;
 
 export default tokenSwapSlice.reducer;

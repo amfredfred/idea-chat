@@ -30,9 +30,8 @@ export default function TokenExplorer() {
     return () => emitEvent('requestPumpList', searchParams);
   }, [connected, emitEvent, searchParams, setearchParams])
 
-  const newpumps = pumpList?.pump.filter(pool => ((pool.created_timestamp * 1000) < Date.now() + 20e3) && (Number(pool.usd_market_cap) <= 40e3))
-  const abouttograduate = pumpList?.pump.filter(pool => (Number(pool.usd_market_cap) >= 40e3) && (Number(pool.usd_market_cap) < 59e3))
-  // const graduatedpumps = pumpList.filter(pool => ((Number(pool.usd_market_cap) >= 59e3) || (pool.complete >= 0.8)))
+  const newpumps = pumpList?.pump?.filter?.(pool => ((pool.created_timestamp * 1000) < Date.now() + 20e3) && (Number(pool.usd_market_cap) <= 40e3))
+  const abouttograduate = pumpList?.pump?.filter?.(pool => (Number(pool.usd_market_cap) >= 40e3) && (Number(pool.usd_market_cap) < 59e3))
 
   return (
     <div className='flex-grow  '>

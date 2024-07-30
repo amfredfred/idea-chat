@@ -14,12 +14,10 @@ const usePumpScoket = (serverUrl: string) => {
 
         socketInstance.on('connect', () => {
             setConnected(true);
-            console.log('COnnected  ')
         });
 
         socketInstance.on('disconnect', () => {
             setConnected(false);
-            console.log('disconnect COnnected  ')
         });
 
         setSocket(socketInstance);
