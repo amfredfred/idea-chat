@@ -104,12 +104,13 @@ const TokenswapStack: React.FC = () => {
           maxHeight: '100%',
           zIndex: 1000,
           borderRadius: isMinimized ? '10px' : '20px',
-          overflow: isMinimized ? 'hidden' : 'auto',
+          overflow: 'hidden',
           display: isVisible ? 'flex' : 'none',
           flexDirection: 'column',
           backdropFilter: 'blur(50px)',
           background: 'rgba(0,0,0,1)',
-          boxShadow: isMinimized ? '' : '0 10px 4px rgba(0,0,0,0.8)'
+          boxShadow: isMinimized ? '' : '0 10px 4px rgba(0,0,0,0.8)',
+
         }}
       >
         <div className=" text-yellow-100 flex w-full  " style={{
