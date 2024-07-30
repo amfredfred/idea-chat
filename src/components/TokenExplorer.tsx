@@ -4,10 +4,13 @@ import ToekensAboutToGraduate from "./ToekensAboutToGraduate";
 import TokensGraduated from "./TokensGraduated";
 import { IPumpRequestParams, PumpSocketReceived } from "../common/types";
 import usePumpScoket from "../hooks/usePumpSocket";
+import { useAppDispatch } from "../libs/redux/hooks";
+import { setTokensList } from "../libs/redux/slices/token-swap-slice";
 
 export default function TokenExplorer() {
 
   const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
+  const dispatch = useAppDispatch()
 
   const { emitEvent, onEvent, connected } = usePumpScoket(API_URL);
   const [pumpList, setPumpList] = useState<PumpSocketReceived['pumpList']>();
@@ -17,8 +20,11 @@ export default function TokenExplorer() {
   })
 
   useEffect(() => {
-    return onEvent('pumpList', (data) => setPumpList(data));
-  }, [onEvent]);
+    return onEvent('pumpList', (data) => {
+      setPumpList(data)
+      dispatch(setTokensList(data?.migrated))
+    });
+  }, [onEvent, dispatch]);
 
   useEffect(() => {
     return () => emitEvent('requestPumpList', searchParams);

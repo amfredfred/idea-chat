@@ -15,12 +15,10 @@ const tokenSwapSlice = createSlice({
         },
         setSelectedTokenA: (state, action) => {
             state.tokenA = action.payload;
-            state.tokensList = [action.payload]
             state.isVisible = true
         },
         setSelectedTokenB: (state, action) => {
             state.tokenB = action.payload;
-            state.tokensList = [action.payload]
             state.isVisible = true
         },
         setLoading: (state, action) => {
@@ -32,6 +30,9 @@ const tokenSwapSlice = createSlice({
         setError: (state, action) => {
             state.error = action.payload;
         },
+        setTokensList: (state, action) => {
+            state.tokensList = action.payload
+        },
     },
 });
 
@@ -42,7 +43,8 @@ export const {
     setSelectedTokenB,
     setLoading,
     setError,
-    setIsVisible
+    setIsVisible,
+    setTokensList
 } = tokenSwapSlice.actions;
 
 export default tokenSwapSlice.reducer;

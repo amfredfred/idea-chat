@@ -2,14 +2,12 @@
 
 import React from 'react';
 import { Grid, Button, Collapse } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import MoneyIcon from '@mui/icons-material/Money';
 import { useAppSelector } from '../../libs/redux/hooks';
-import { ArrowDownward } from '@mui/icons-material';
+import { SwipeDown } from '@mui/icons-material';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
@@ -22,7 +20,7 @@ const TokenSwapAnalytic = () => {
         <div className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
             <Button
                 onClick={() => setOpen(!open)}
-                className="border-b pb-2 mb-2 cursor-pointer w-full">
+                className="border-b pb-2 mb-2 cursor-pointer w-full text-white">
                 <Grid container item alignItems="center" justifyContent="space-between" direction='row' display='flex'>
                     <Grid item >
                         <Grid container alignItems="center">
@@ -31,13 +29,13 @@ const TokenSwapAnalytic = () => {
                     </Grid>
                     <Grid item>
                         <Grid container alignItems="center">
-                            <TrendingDownIcon className="mr-2" />
+                            <TrendingDownIcon fontSize='small' className="mr-2" />
                             <span>0.19%</span>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs={1}>
-                    <ArrowDownward className={`transform transition-transform ${open ? 'rotate-180' : ''}`} />
+                    <SwipeDown fontSize='small' className={`transform transition-transform ${open ? 'rotate-180' : ''}`} />
                 </Grid>
             </Button>
 
@@ -46,7 +44,7 @@ const TokenSwapAnalytic = () => {
                     <Grid container justifyContent="space-between">
                         <Grid item>
                             <Grid container alignItems="center">
-                                <AltRouteIcon className="mr-2" />
+                                <AltRouteIcon fontSize='small' className="mr-2" />
                                 <span>Order Routing</span>
                             </Grid>
                         </Grid>
@@ -58,7 +56,7 @@ const TokenSwapAnalytic = () => {
                     <Grid container justifyContent="space-between">
                         <Grid item>
                             <Grid container alignItems="center">
-                                <TrendingDownIcon className="mr-2" />
+                                <TrendingDownIcon fontSize='small' className="mr-2" />
                                 <span>Price Impact</span>
                             </Grid>
                         </Grid>
@@ -70,7 +68,7 @@ const TokenSwapAnalytic = () => {
                     <Grid container justifyContent="space-between">
                         <Grid item>
                             <Grid container alignItems="center">
-                                <AttachMoneyIcon className="mr-2" />
+                                <AttachMoneyIcon fontSize='small' className="mr-2" />
                                 <span>Max to pay</span>
                             </Grid>
                         </Grid>
@@ -82,7 +80,7 @@ const TokenSwapAnalytic = () => {
                     <Grid container justifyContent="space-between">
                         <Grid item>
                             <Grid container alignItems="center">
-                                <MoneyIcon className="mr-2" />
+                                <MoneyIcon fontSize='small' className="mr-2" />
                                 <span>Network Fees</span>
                             </Grid>
                         </Grid>

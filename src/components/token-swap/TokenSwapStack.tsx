@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Draggable from 'react-draggable';
-import { Button, Box, IconButton } from '@mui/material';
+import { Button, Box, IconButton, Divider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setLoading, setIsVisible, setSelectedTokenA, setSelectedTokenB } from '../../libs/redux/slices/token-swap-slice';
+import { setLoading, setIsVisible, setSelectedTokenA } from '../../libs/redux/slices/token-swap-slice';
 import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
@@ -10,7 +10,7 @@ import TokenSwapAnalytic from './TokenSwapAnalytic';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error, isVisible, tokenA, tokenB, tokensList } = useAppSelector(state => state.tokenSwap);
+  const { error, isVisible, tokenA, tokensList } = useAppSelector(state => state.tokenSwap);
 
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -59,9 +59,8 @@ const TokenswapStack: React.FC = () => {
     console.log({ value })
   }
 
-
   return (
-    <Draggable handle=".draggable-handle"  >
+    <Draggable handle=".draggable-handle"   >
       <Box
         sx={{
           position: isFullscreen ? 'fixed' : 'absolute',
@@ -73,33 +72,42 @@ const TokenswapStack: React.FC = () => {
           maxWidth: '100%',
           maxHeight: '100%',
           zIndex: 1000,
-          borderRadius: '8px',
+          borderRadius: '20px',
           overflow: isMinimized ? 'hidden' : 'auto',
           display: isVisible ? 'flex' : 'none',
           flexDirection: 'column',
           backdropFilter: 'blur(50px)',
-          background: 'rgba(0,0,0,0.8)'
+          background: 'rgba(0,0,0,0.8)',
         }}
       >
-        <div className="draggable-handle" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'move', padding: '8px', backgroundColor: '#f0f0f0', borderBottom: '1px solid #ccc' }}>
+        <div className="draggable-handle text-yellow-100 flex w-full  " style={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          cursor: 'move',
+          padding: '8px',
+          backgroundColor: 'black',
+          // borderBottom: '1px solid #ccc'
+        }}>
           <h1 style={{ margin: '0', padding: '0 8px' }}>Token Swap</h1>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <IconButton size="small" onClick={toggleMinimize}>
-              <Minimize />
+              <Minimize className='text-yellow-100' />
             </IconButton>
             <IconButton size="small" onClick={toggleFullscreen}>
-              {isFullscreen ? <FullscreenExit /> : <Fullscreen />}
+              {isFullscreen ? <FullscreenExit className='text-yellow-100' /> : <Fullscreen className='text-yellow-100' />}
             </IconButton>
             <IconButton size="small" onClick={closeWindow}>
-              <Close />
+              <Close className='text-yellow-100' />
             </IconButton>
           </div>
         </div>
 
+        <Divider orientation='horizontal' className=' bg-gray-300 w-11/12 rounded-full' style={{ marginInline: 'auto' }} />
+
         {!isMinimized && (
           <Box padding={'1rem'}>
             {isFullscreen && <Box sx={{ flexGrow: 1 }}><Line data={chartData} /></Box>}
-            <Box gap='.6rem' display='flex' flexDirection='column'>
+            <Box gap='1rem' display='flex' flexDirection='column'>
               <TokenSwapInput
                 side="pay"
                 onChange={handleInputChange}
