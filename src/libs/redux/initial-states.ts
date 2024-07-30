@@ -1,4 +1,4 @@
-import { IPumpCoin } from "../../common/types";
+import { IPumpCoinMigrated } from "../../common/types";
 import SolanaLogo from '../../assets/solana-sol-logo.png'
 
 export interface IApp {
@@ -18,26 +18,37 @@ export interface FetchTokenRateParams {
     fromMint?: string;
     toMint?: string;
 }
+export interface QuoteSwapPrams {
+    fromMint?: string;
+    toMint?: string;
+    amount: number
+}
+
 
 export interface TokenSwapState {
-    tokenToSend: IPumpCoin | undefined;
-    tokenToReceive: IPumpCoin | undefined;
+    tokenToSend: IPumpCoinMigrated | undefined;
+    tokenToReceive: IPumpCoinMigrated | undefined;
     amountToSend: number;
     amountToReceive: number;
     loading: boolean;
     error: string | null;
-    tokensList: IPumpCoin[],
+    tokensList: IPumpCoinMigrated[],
     isVisible: boolean
     isFetchingRate: boolean
     isFetchingRateError: boolean
     conversionRate: number | null
+
+    isFetchingQuoteSwap: boolean
+    isFetchingQuoteSwapError: boolean
+    quoteResponse: any
 }
 
 export const NativeToken = {
     symbol: 'SOL',
     logo: SolanaLogo,
     address: 'So11111111111111111111111111111111111111112',
-    mint: 'So11111111111111111111111111111111111111112'
+    mint: 'So11111111111111111111111111111111111111112',
+    decimals: 6
 }
 
 export const appInitialState: IApp = {
@@ -55,7 +66,10 @@ export const tokenSwapInitialState: TokenSwapState = {
     isVisible: false,
     isFetchingRate: false,
     isFetchingRateError: false,
-    conversionRate: null
+    conversionRate: null,
+    isFetchingQuoteSwap: false,
+    isFetchingQuoteSwapError: false,
+    quoteResponse: false,
 };
 
 export const initialStates = {

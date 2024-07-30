@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { Grid, Button, Collapse } from '@mui/material';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { Grid, Button, Collapse, Typography, CircularProgress } from '@mui/material';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -7,6 +7,7 @@ import MoneyIcon from '@mui/icons-material/Money';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { SwipeDown } from '@mui/icons-material';
 import { fetchTokenRate } from '../../libs/redux/slices/token-swap-slice';
+import { formatNumber } from '../../utils/format';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
@@ -24,11 +25,6 @@ const TokenSwapAnalytic = () => {
     } = useAppSelector(state => state.tokenSwap)
 
 
-    const takeOutFee = () => {
-        return conversionRate
-    }
-
-
     useEffect(() => {
         document.addEventListener('mousedown', (event) => {
             if (event.target !== tsacref.current && !tsacref.current?.contains(event.target as any)) {
@@ -36,13 +32,17 @@ const TokenSwapAnalytic = () => {
             }
         })
         return document.removeEventListener('mousedown', () => { })
-    }, [open])
+    }, [open, tsacref])
 
-    useEffect(() => {
-        dispatch(fetchTokenRate({ fromMint: tokenToSend?.address, toMint: tokenToReceive?.address }));
+    const fetchRate = useCallback(() => {
+        if (tokenToSend?.address && tokenToReceive?.address) {
+            dispatch(fetchTokenRate({ fromMint: tokenToSend.address, toMint: tokenToReceive.address }));
+        }
     }, [dispatch, tokenToSend?.address, tokenToReceive?.address]);
 
-    console.log({ isFetchingRate, isFetchingRateError, conversionRate })
+    useEffect(() => {
+        fetchRate();
+    }, [fetchRate]);
 
     return (
         <div ref={tsacref} className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
@@ -52,13 +52,7 @@ const TokenSwapAnalytic = () => {
                 <Grid container item alignItems="center" justifyContent="space-between" direction='row' display='flex'>
                     <Grid item >
                         <Grid container alignItems="center">
-                            <span>1 {tokenToSend?.symbol} = {takeOutFee()} {tokenToReceive?.symbol}</span>
-                        </Grid>
-                    </Grid>
-                    <Grid item>
-                        <Grid container alignItems="center">
-                            <TrendingDownIcon fontSize='small' className="mr-2" />
-                            <span>0.19%</span>
+                            <Typography variant='body2'>1 {tokenToSend?.symbol} = {isFetchingRate ? <CircularProgress size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -109,7 +103,7 @@ const TokenSwapAnalytic = () => {
                         <Grid item>
                             <Grid container alignItems="center">
                                 <MoneyIcon fontSize='small' className="mr-2" />
-                                <span>Network Fees</span>
+                                <span>Platform Fees</span>
                             </Grid>
                         </Grid>
                         <Grid item>

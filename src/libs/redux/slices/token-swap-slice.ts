@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { initialStates, NativeToken, FetchTokenRateParams, TokenRate } from "../initial-states"
+import { initialStates, NativeToken, FetchTokenRateParams, TokenRate, QuoteSwapPrams } from "../initial-states"
 import axios from "axios";
 
 
@@ -32,6 +32,29 @@ export const fetchTokenRate = createAsyncThunk(
         }
     }
 );
+
+export const fetchQuoteSwap = createAsyncThunk(
+    'token/fetchQuoteSwap',
+    async ({ fromMint, toMint, amount }: QuoteSwapPrams, thunkAPI) => {
+        try {
+            if (!fromMint) return thunkAPI.rejectWithValue({ error: "Invalid from address" })
+            if (!toMint) return thunkAPI.rejectWithValue({ error: "Invalid to address" })
+            const url = new URL('https://quote-api.jup.ag/v6/quote');
+            url.searchParams.append('inputMint', fromMint);
+            url.searchParams.append('outputMint', toMint);
+            url.searchParams.append('amount', String(amount));
+            // url.searchParams.append('slippageBps', '1');
+            // url.searchParams.append('platformFeeBps', '1');
+            console.log(url.toString(), amount)
+            const response = await axios.get<{ data: { [key: string]: TokenRate } }>(`https://price.jup.ag/v6/price?ids=${fromMint}&vsToken=${toMint}`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch token rate:', error);
+            return thunkAPI.rejectWithValue({ error: (error as Error).message });
+        }
+    }
+);
+
 
 const tokenSwapSlice = createSlice({
     name: 'token_swap_slice',
@@ -81,7 +104,22 @@ const tokenSwapSlice = createSlice({
             state.isFetchingRateError = true
             state.error = error?.message || 'Failed to fetch token rate';
             console.log({ payload, error })
-        })
+        });
+
+        builder.addCase(fetchQuoteSwap.fulfilled, (state, { payload }) => {
+            state.isFetchingQuoteSwap = false
+            state.isFetchingQuoteSwapError = false
+            console.log({ payload })
+            // state.quoteResponse = payload?.data[state.tokenToSend?.address as string].price
+        }).addCase(fetchQuoteSwap.pending, (state,) => {
+            state.isFetchingQuoteSwap = true
+            state.isFetchingQuoteSwapError = false
+        }).addCase(fetchQuoteSwap.rejected, (state, { payload, error }) => {
+            state.isFetchingQuoteSwap = false
+            state.isFetchingQuoteSwapError = true
+            state.error = error?.message || 'Failed to fetch token rate';
+            console.log({ payload, error })
+        });
     },
 });
 

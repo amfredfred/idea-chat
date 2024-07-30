@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive } from '../../libs/redux/slices/token-swap-slice';
+import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, fetchQuoteSwap, setAmountToSend } from '../../libs/redux/slices/token-swap-slice';
 import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
@@ -12,7 +12,7 @@ import { motion } from 'framer-motion'
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error, isVisible, tokenToSend, tokenToReceive, loading } = useAppSelector(state => state.tokenSwap);
+  const { error, isVisible, tokenToSend, tokenToReceive, loading, amountToReceive, amountToSend } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -90,9 +90,17 @@ const TokenswapStack: React.FC = () => {
     ],
   };
 
-  const handleInputChange = (value: any) => {
-    console.log({ value })
-  }
+  const parseAmount = amountToSend * 10 ** Number(tokenToSend?.decimals);
+
+  const fetchRate = useCallback(() => {
+    if (tokenToSend?.address && tokenToReceive?.address && parseAmount) {
+      dispatch(fetchQuoteSwap({ fromMint: tokenToSend.address, toMint: tokenToReceive.address, amount: parseAmount }));
+    }
+  }, [dispatch, tokenToSend, tokenToReceive, parseAmount]);
+
+  useEffect(() => {
+    fetchRate();
+  }, [fetchRate]);
 
   return (
     <Draggable   >
@@ -151,16 +159,19 @@ const TokenswapStack: React.FC = () => {
             <Box gap='1rem' display='flex' flexDirection='column'>
               <TokenSwapInput
                 side="pay"
-                onChange={handleInputChange}
+                onChange={value => dispatch(setAmountToSend(value))}
                 selectedToken={tokenToSend}
+                value={amountToSend}
                 onTokenSelect={(pump) => dispatch(setSelectedtokenToSend(pump))}
               // amount="~$3.3K"
               />
 
               <TokenSwapInput
                 side="receive"
-                onChange={handleInputChange}
+                readonly
+                onChange={() => null}
                 selectedToken={tokenToReceive}
+                value={amountToReceive}
                 onTokenSelect={(pump) => dispatch(setSelectedtokenToReceive(pump))}
               // amount="~$3.3K"
               />

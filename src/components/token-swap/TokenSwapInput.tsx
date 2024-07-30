@@ -21,7 +21,9 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
     onChange,
     selectedToken,
     onTokenSelect,
-    amount
+    amount,
+    readonly,
+    value
 }) => {
 
     const [isTokensListOpen, setIsTokensListOpen] = useState(false)
@@ -41,7 +43,9 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                         placeholder="0"
                         type="text"
                         inputMode="decimal"
+                        readOnly={readonly}
                         // pattern="^\d*[.,]?\d*$"
+                        value={value}
                         onChange={({ target: { value } }) => onChange(value)}
                     />
 
