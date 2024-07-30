@@ -128,7 +128,6 @@ export interface UseSocketReturn<T = any> {
 export interface ITokenSwapInputProps {
   side: 'receive' | 'pay';
   onChange: (value: number | string) => void;
-  tokens: IPumpCoin[];
   selectedToken: IPumpCoin | undefined;
   onTokenSelect: (token: IPumpCoin) => void;
   amount?: string;

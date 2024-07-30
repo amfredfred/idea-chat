@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setLoading, setIsVisible, setSelectedTokenA } from '../../libs/redux/slices/token-swap-slice';
+import { setLoading, setIsVisible, setSelectedTokenA, setSelectedTokenB } from '../../libs/redux/slices/token-swap-slice';
 import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error, isVisible, tokenA, tokensList } = useAppSelector(state => state.tokenSwap);
+  const { error, isVisible, tokenA, tokenB } = useAppSelector(state => state.tokenSwap);
+  const wallet = useWallet()
+
+  console.log({ wallet })
 
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -111,20 +115,18 @@ const TokenswapStack: React.FC = () => {
               <TokenSwapInput
                 side="pay"
                 onChange={handleInputChange}
-                tokens={tokensList}
                 selectedToken={tokenA}
                 onTokenSelect={(pump) => dispatch(setSelectedTokenA(pump))}
               // amount="~$3.3K"
               />
 
-              {/* <TokenSwapInput
+              <TokenSwapInput
                 side="receive"
                 onChange={handleInputChange}
-                tokens={tokensList}
                 selectedToken={tokenB}
                 onTokenSelect={(pump) => dispatch(setSelectedTokenB(pump))}
               // amount="~$3.3K"
-              /> */}
+              />
 
               <TokenSwapAnalytic />
 
