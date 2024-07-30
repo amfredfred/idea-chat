@@ -37,7 +37,7 @@ export const tokenSwapInitialState: TokenSwapState = {
     amountToReceive: 0, loading: false,
     error: null,
     tokensList: [],
-    isVisible: true,
+    isVisible: false,
     isFetchingRate: false,
     isFetchingRateError: false,
     conversionRate: null

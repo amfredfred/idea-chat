@@ -112,7 +112,7 @@ const TokenswapStack: React.FC = () => {
           display: isVisible ? 'flex' : 'none',
           flexDirection: 'column',
           backdropFilter: 'blur(50px)',
-          background: 'rgba(0,0,0,1)',
+          background: 'rgba(0,0,0,.9)',
           boxShadow: isMinimized ? '' : '0 10px 4px rgba(0,0,0,0.8)',
 
         }}

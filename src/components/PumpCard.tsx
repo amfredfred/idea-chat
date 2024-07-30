@@ -10,7 +10,7 @@ import { CandlestickChartRounded } from "@mui/icons-material";
 export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
   const websiteTheme = useRecoilValue(websiteThemeState);
 
-  const pumpProgress = pump?.progress?.toFixed?.(1)
+  // const pumpProgress = pump?.progress?.toFixed?.(1)
   const dispatch = useAppDispatch()
   const atClickBuy = () => dispatch(setSelectedtokenToReceive(pump))
   const atClickApeBlindly = () => { console.log('atApeBlindly') }
