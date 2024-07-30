@@ -2,15 +2,15 @@ import { IPumpCoin } from "../../common/types";
 import SolanaLogo from '../../assets/solana-sol-logo.png'
 
 export interface TokenSwapState {
-    tokenA: IPumpCoin | undefined;
-    tokenB: IPumpCoin | undefined;
-    amountToSwap: number;
+    tokenToSend: IPumpCoin | undefined;
+    tokenToReceive: IPumpCoin | undefined;
+    amountToSend: number;
+    amountToReceive: number;
     loading: boolean;
     error: string | null;
     tokensList: IPumpCoin[],
     isVisible: boolean
 }
-
 
 export const NativeToken = {
     symbol: 'SOL',
@@ -18,10 +18,11 @@ export const NativeToken = {
 }
 
 export const tokenSwapInitialState: TokenSwapState = {
-    tokenA: undefined,
-    tokenB: undefined,
-    amountToSwap: 0,
-    loading: false,
+    tokenToSend: undefined,
+    tokenToReceive: undefined,
+    amountToSend: 0,
+
+    amountToReceive: 0, loading: false,
     error: null,
     tokensList: [],
     isVisible: true

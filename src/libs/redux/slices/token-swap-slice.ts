@@ -2,15 +2,15 @@ import { createSlice } from "@reduxjs/toolkit"
 import { initialStates, NativeToken } from "../initial-states"
 
 
-const handleTokenSelection = (state: typeof initialStates['tokenSwapInitialState'], action: any, tokenKey: 'tokenA' | 'tokenB') => {
+const handleTokenSelection = (state: typeof initialStates['tokenSwapInitialState'], action: any, tokenKey: 'tokenToSend' | 'tokenToReceive') => {
     if (action?.payload?.symbol?.toUpperCase?.() === 'SOL') {
         if (state[tokenKey]?.symbol?.toUpperCase?.() == 'SOL') {
-            state[tokenKey === 'tokenA' ? 'tokenB' : 'tokenA'] = action.payload;
+            state[tokenKey === 'tokenToSend' ? 'tokenToReceive' : 'tokenToSend'] = action.payload;
             state[tokenKey] = NativeToken as any;
         }
     } else {
         state[tokenKey] = action.payload;
-        state[tokenKey === 'tokenA' ? 'tokenB' : 'tokenA'] = NativeToken as any;
+        state[tokenKey === 'tokenToSend' ? 'tokenToReceive' : 'tokenToSend'] = NativeToken as any;
     }
     state.isVisible = true;
 };
@@ -22,16 +22,16 @@ const tokenSwapSlice = createSlice({
     reducers: {
         setBalance: (state, action) => {
             const { token, balance } = action.payload;
-            state[token].balance = balance;
+            (state as any)[token].balance = balance;
         },
         setAmountToSwap: (state, action) => {
             state.amountToSwap = action.payload;
         },
-        setSelectedTokenA: (state, action) => {
-            handleTokenSelection(state, action, 'tokenA');
+        setSelectedtokenToSend: (state, action) => {
+            handleTokenSelection(state, action, 'tokenToSend');
         },
-        setSelectedTokenB: (state, action) => {
-            handleTokenSelection(state, action, 'tokenB');
+        setSelectedtokenToReceive: (state, action) => {
+            handleTokenSelection(state, action, 'tokenToReceive');
         },
         setLoading: (state, action) => {
             state.loading = action.payload;
@@ -43,8 +43,8 @@ const tokenSwapSlice = createSlice({
             state.error = action.payload;
         },
         setTokensList: (state, action) => {
-            if (!state.tokenA) state.tokenA = NativeToken as any
-            if (!state.tokenB) state.tokenB = action.payload?.[0]
+            if (!state.tokenToSend) state.tokenToSend = NativeToken as any
+            if (!state.tokenToReceive) state.tokenToReceive = action.payload?.[0]
             state.tokensList = action.payload
         },
     },
@@ -53,8 +53,8 @@ const tokenSwapSlice = createSlice({
 export const {
     setBalance,
     setAmountToSwap,
-    setSelectedTokenA,
-    setSelectedTokenB,
+    setSelectedtokenToSend,
+    setSelectedtokenToReceive,
     setLoading,
     setError,
     setIsVisible,

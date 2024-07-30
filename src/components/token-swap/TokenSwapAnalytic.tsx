@@ -1,5 +1,3 @@
-// TokenSwapAnalytic.js
-
 import React from 'react';
 import { Grid, Button, Collapse } from '@mui/material';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
@@ -12,9 +10,10 @@ import { SwipeDown } from '@mui/icons-material';
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
 
-    const amountToSwap = useAppSelector(state => state.tokenSwap.amountToSwap)
-    const tokenFrom = useAppSelector(state => state.tokenSwap.tokenA)
-    const tokenTo = useAppSelector(state => state.tokenSwap.tokenB)
+    const amountToSend = useAppSelector(state => state.tokenSwap.amountToSend)
+    const amountToReceive = useAppSelector(state => state.tokenSwap.amountToReceive)
+    const tokenToSend = useAppSelector(state => state.tokenSwap.tokenToSend)
+    const tokenToReceive = useAppSelector(state => state.tokenSwap.tokenToReceive)
 
     return (
         <div className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
