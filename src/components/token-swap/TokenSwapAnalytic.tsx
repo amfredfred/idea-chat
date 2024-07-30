@@ -10,10 +10,7 @@ import { SwipeDown } from '@mui/icons-material';
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
 
-    const amountToSend = useAppSelector(state => state.tokenSwap.amountToSend)
-    const amountToReceive = useAppSelector(state => state.tokenSwap.amountToReceive)
-    const tokenToSend = useAppSelector(state => state.tokenSwap.tokenToSend)
-    const tokenToReceive = useAppSelector(state => state.tokenSwap.tokenToReceive)
+    const { amountToSend, amountToReceive, tokenToSend, tokenToReceive } = useAppSelector(state => state.tokenSwap)
 
     return (
         <div className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">

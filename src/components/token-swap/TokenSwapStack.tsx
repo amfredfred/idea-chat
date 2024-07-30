@@ -7,15 +7,10 @@ import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
-import { useWallet } from '@solana/wallet-adapter-react';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
   const { error, isVisible, tokenToSend, tokenToReceive } = useAppSelector(state => state.tokenSwap);
-  const wallet = useWallet()
-
-  console.log({ wallet })
-
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -40,6 +35,28 @@ const TokenswapStack: React.FC = () => {
     setIsMinimized(false)
     dispatch(setIsVisible(false))
   };
+
+  const buttonText = () => {
+    if (tokenToReceive?.symbol?.toUpperCase?.() == 'SOL') {
+      return "SELL"
+    }
+    if (tokenToSend?.symbol?.toUpperCase?.() == 'SOL') {
+      return "BUY"
+    }
+  }
+
+  const buttonStyle = () => {
+    if (tokenToReceive?.symbol?.toUpperCase?.() == 'SOL') {
+      return {
+        backgroundColor: "#FF0000"
+      }
+    }
+    if (tokenToSend?.symbol?.toUpperCase?.() == 'SOL') {
+      return {
+        backgroundColor: "green"
+      }
+    }
+  }
 
   const chartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], // Added 'Jul'
@@ -136,9 +153,9 @@ const TokenswapStack: React.FC = () => {
                 color="primary"
                 onClick={handleSwap}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4   rounded-full"
-                style={{ borderRadius: '50px', padding: '.6rem' }}
+                style={{ borderRadius: '50px', padding: '.6rem', ...buttonStyle() }}
               >
-                Swap
+                {buttonText()}
               </Button>
             </Box>
             {error && <p>Error: {error}</p>}
