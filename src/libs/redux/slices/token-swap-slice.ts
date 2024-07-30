@@ -1,5 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { initialStates } from "../initial-states"
+import { initialStates, NativeToken } from "../initial-states"
+
+
+const handleTokenSelection = (state: typeof initialStates['tokenSwapInitialState'], action: any, tokenKey: 'tokenA' | 'tokenB') => {
+    if (action?.payload?.symbol?.toUpperCase?.() === 'SOL') {
+        if (state[tokenKey]?.symbol?.toUpperCase?.() == 'SOL') {
+            state[tokenKey === 'tokenA' ? 'tokenB' : 'tokenA'] = action.payload;
+            state[tokenKey] = NativeToken as any;
+        }
+    } else {
+        state[tokenKey] = action.payload;
+        state[tokenKey === 'tokenA' ? 'tokenB' : 'tokenA'] = NativeToken as any;
+    }
+    state.isVisible = true;
+};
 
 
 const tokenSwapSlice = createSlice({
@@ -14,12 +28,10 @@ const tokenSwapSlice = createSlice({
             state.amountToSwap = action.payload;
         },
         setSelectedTokenA: (state, action) => {
-            state.tokenA = action.payload;
-            state.isVisible = true
+            handleTokenSelection(state, action, 'tokenA');
         },
         setSelectedTokenB: (state, action) => {
-            state.tokenB = action.payload;
-            state.isVisible = true
+            handleTokenSelection(state, action, 'tokenB');
         },
         setLoading: (state, action) => {
             state.loading = action.payload;
@@ -31,6 +43,8 @@ const tokenSwapSlice = createSlice({
             state.error = action.payload;
         },
         setTokensList: (state, action) => {
+            if (!state.tokenA) state.tokenA = NativeToken as any
+            if (!state.tokenB) state.tokenB = action.payload?.[0]
             state.tokensList = action.payload
         },
     },

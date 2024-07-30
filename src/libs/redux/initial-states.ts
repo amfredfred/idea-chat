@@ -1,4 +1,5 @@
 import { IPumpCoin } from "../../common/types";
+import SolanaLogo from '../../assets/solana-sol-logo.png'
 
 export interface TokenSwapState {
     tokenA: IPumpCoin | undefined;
@@ -12,7 +13,8 @@ export interface TokenSwapState {
 
 
 export const NativeToken = {
-    symbol: 'SOL'
+    symbol: 'SOL',
+    logo: SolanaLogo
 }
 
 export const tokenSwapInitialState: TokenSwapState = {
