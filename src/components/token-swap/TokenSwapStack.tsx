@@ -8,8 +8,8 @@ import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { parseAmount } from '../../utils';
 import { motion } from 'framer-motion'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { VersionedTransaction } from '@solana/web3.js';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection, VersionedTransaction } from '@solana/web3.js';
 import { Buffer } from 'buffer';
 import { toast } from 'react-toastify';
 
@@ -29,7 +29,9 @@ const TokenswapStack: React.FC = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const wallet = useWallet()
-  const { connection } = useConnection()
+
+  const RPC_URL = import.meta.env.VITE_RPC_URL;
+  const connection = new Connection(RPC_URL, 'confirmed')
 
   const handleSwap = async () => {
     dispatch(setLoading(true));
@@ -50,23 +52,25 @@ const TokenswapStack: React.FC = () => {
         })
       ).json();
 
-      console.log({ swapTransaction }, wallet.publicKey,wallet.connected);
+      console.log({ swapTransaction }, wallet.publicKey, wallet.connected);
 
       // Deserialize the transaction
       const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
       const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
       console.log({ transaction });
 
-      // Sign the transaction using the wallet's signTransaction method
-      const signedTransaction = await wallet.signTransaction?.(transaction);
-      console.log({ signedTransaction });
-
       // Get the latest block hash
       const latestBlockHash = await connection.getLatestBlockhash();
       console.log({ latestBlockHash });
 
+      // Sign the transaction using the wallet's signTransaction method
+      const signedTransaction = await wallet.signTransaction?.(transaction);
+      console.log({ signedTransaction });
+
+
+      const deSerializedTransaction = signedTransaction?.serialize?.() as any
       // Send the signed transaction to the Solana network
-      const txid = await connection.sendRawTransaction(signedTransaction?.serialize?.() as any, {
+      const txid = await connection.sendRawTransaction(deSerializedTransaction, {
         skipPreflight: true,
         maxRetries: 2
       });
@@ -232,8 +236,9 @@ const TokenswapStack: React.FC = () => {
                 variant="contained"
                 color="primary"
                 onClick={handleSwap}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4   rounded-full"
+                className=" text-white font-bold py-2 px-4 rounded-full"
                 style={{ borderRadius: '50px', padding: '.6rem', ...buttonStyle() }}
+                disableElevation
               >
                 {buttonText()}
               </Button>

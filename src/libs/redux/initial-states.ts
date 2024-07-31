@@ -33,7 +33,7 @@ export interface QuoteSwapResponse {
     platformFee: {
         amount: string,
         feeBps: number
-    }; 
+    };
     priceImpactPct: string;
     routePlan: RoutePlan[];
     contextSlot: number;
@@ -74,7 +74,7 @@ export interface TokenSwapState {
 
     isFetchingQuoteSwap: boolean
     isFetchingQuoteSwapError: boolean
-    quoteResponse: QuoteSwapResponse
+    quoteResponse: QuoteSwapResponse | object
 }
 
 export const NativeToken = {
@@ -103,7 +103,7 @@ export const tokenSwapInitialState: TokenSwapState = {
     conversionRate: null,
     isFetchingQuoteSwap: false,
     isFetchingQuoteSwapError: false,
-    quoteResponse: false,
+    quoteResponse: {},
 };
 
 export const initialStates = {
