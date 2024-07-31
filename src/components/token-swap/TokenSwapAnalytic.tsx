@@ -15,10 +15,10 @@ const TokenSwapAnalytic = () => {
     const {
         tokenToSend,
         tokenToReceive,
-        isFetchingRate,
+        fetchTokenRateState,
         conversionRate,
         quoteResponse,
-        isFetchingQuoteSwap
+        fetchQuoteState
     } = useAppSelector(state => state.tokenSwap);
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -53,7 +53,7 @@ const TokenSwapAnalytic = () => {
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                         <Typography variant='body2'>
-                            1 {tokenToSend?.symbol} = {isFetchingRate ? <CircularProgress size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}
+                            1 {tokenToSend?.symbol} = {fetchTokenRateState == 'pending' ? <CircularProgress size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}
                         </Typography>
                     </Grid>
                     <Grid item xs={1}>
@@ -72,7 +72,7 @@ const TokenSwapAnalytic = () => {
                             </Grid>
                         </Grid>
                         <Grid item style={{ color: priceImpactColor(), fontWeight: 'bolder' }} display='flex'>
-                            <strong>{(!quoteResponse?.priceImpactPct || isFetchingQuoteSwap) ? skeletonLoading : formatNumber(quoteResponse.priceImpactPct)}</strong><strong>%</strong>
+                            <strong>{(!quoteResponse?.priceImpactPct || fetchQuoteState == 'pending') ? skeletonLoading : formatNumber(quoteResponse.priceImpactPct)}</strong><strong>%</strong>
                         </Grid>
                     </Grid>
 
@@ -84,7 +84,7 @@ const TokenSwapAnalytic = () => {
                             </Grid>
                         </Grid>
                         <Grid item display='flex'>
-                            <strong>{(!maxToPay || isFetchingQuoteSwap) ? skeletonLoading : maxToPay} </strong>&nbsp;<strong>{tokenToSend?.symbol}</strong>
+                            <strong>{(!maxToPay || fetchQuoteState == 'pending') ? skeletonLoading : maxToPay} </strong>&nbsp;<strong>{tokenToSend?.symbol}</strong>
                         </Grid>
                     </Grid>
 
@@ -96,7 +96,7 @@ const TokenSwapAnalytic = () => {
                             </Grid>
                         </Grid>
                         <Grid item display='flex' >
-                            <span>{(!quoteResponse?.platformFee?.amount || isFetchingQuoteSwap) ? skeletonLoading : platformFee}</span>&nbsp;{tokenToReceive?.symbol}
+                            <span>{(!quoteResponse?.platformFee?.amount || fetchQuoteState == 'pending') ? skeletonLoading : platformFee}</span>&nbsp;{tokenToReceive?.symbol}
                         </Grid>
                     </Grid>
                 </div>

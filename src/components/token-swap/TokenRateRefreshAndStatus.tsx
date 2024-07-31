@@ -7,10 +7,14 @@ import { Box, CircularProgress } from "@mui/material";
 export default function TokenRateRefreshAndStatus() {
   const [initCountdown,] = useState(20) //setInitCountdown
   const [timeTillRefetch, setTimeTillRefetch] = useState<number>(initCountdown);
-
   const dispatch = useAppDispatch();
 
-  const { tokenToSend, tokenToReceive, amountToSend, settings } = useAppSelector(state => state.tokenSwap);
+  const {
+    tokenToSend,
+    tokenToReceive,
+    amountToSend,
+    settings
+  } = useAppSelector(state => state.tokenSwap);
 
 
   const fetchQuote = useCallback(() => {
@@ -45,8 +49,7 @@ export default function TokenRateRefreshAndStatus() {
           fetchQuote();
           return initCountdown;
         }
-        const count = prev > 0 ? prev - 1 : 0
-        return count;
+        return prev > 0 ? prev - 1 : 0;
       });
     }, 1000);
 

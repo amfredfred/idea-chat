@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError } from '../../libs/redux/slices/token-swap-slice';
+import { setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError, handleTokenSwap } from '../../libs/redux/slices/token-swap-slice';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { motion } from 'framer-motion'
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js';
-import { Buffer } from 'buffer';
+import { Connection } from '@solana/web3.js';
 import { toast } from 'react-toastify';
-import { NativeToken } from '../../libs/redux/initial-states';
 import TokenRateRefreshAndStatus from './TokenRateRefreshAndStatus';
 
 const TokenswapStack: React.FC = () => {
@@ -24,72 +22,26 @@ const TokenswapStack: React.FC = () => {
     loading,
     amountToReceive,
     amountToSend,
-    isFetchingQuoteSwap,
+    fetchQuoteState,
     quoteResponse,
-    isFetchingRate,
-    isFetchingQuoteSwapError,
-    isFetchingRateError,
+    fetchTokenRateState,
+    tokenSwapState
   } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const wallet = useWallet()
 
   const RPC_URL = import.meta.env.VITE_RPC_URL;
-  const FEE_ACCOUNT = import.meta.env.VITE_FEE_ACCOUNT
   const connection = new Connection(RPC_URL, 'confirmed')
 
   const handleSwap = async () => {
-    dispatch(setLoading(true));
-    try {
-
-      const [feeAccount] = PublicKey.findProgramAddressSync(
-        [
-          Buffer.from("referral_ata"),
-          (new PublicKey(FEE_ACCOUNT)).toBuffer(),
-          (new PublicKey(NativeToken.address)).toBuffer(),
-        ],
-        new PublicKey("REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3")
-      );
-
-      const { swapTransaction } = await (
-        await fetch('https://quote-api.jup.ag/v6/swap', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            quoteResponse,
-            userPublicKey: wallet.publicKey?.toString(),
-            feeAccount,
-            // dynamicComputeUnitLimit: true, // allow dynamic compute limit instead of max 1,400,000
-            // custom priority fee
-            // prioritizationFeeLamports: 'auto' // or custom lamports: 1000
-          })
-        })
-      ).json();
-      const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
-      const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
-      const latestBlockHash = await connection.getLatestBlockhash();
-      const signedTransaction = await wallet.signTransaction?.(transaction);
-      const deSerializedTransaction = signedTransaction?.serialize?.() as any
-      const txid = await connection.sendRawTransaction(deSerializedTransaction, {
-        skipPreflight: true,
-        maxRetries: 2
-      });
-
-      const confirmTransaction = connection.confirmTransaction({
-        blockhash: latestBlockHash.blockhash,
-        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-        signature: txid
-      });
-
-      toast.promise(confirmTransaction, {})
-      await confirmTransaction
-
-      console.log(`https://solscan.io/tx/${txid}`);
-    } catch (error) {
-      dispatch(setError((error as Error)?.message));
-      console.log({ error });
-    } finally {
-      dispatch(setLoading(false));
+    if (tokenSwapState !== 'pending') {
+      console.log('callled')
+      dispatch(handleTokenSwap({
+        connection,
+        wallet,
+        quoteResponse
+      }))
     }
   };
 
@@ -141,6 +93,7 @@ const TokenswapStack: React.FC = () => {
     }
   }
 
+  const isButtonDisabled = loading || fetchQuoteState == 'pending' || fetchTokenRateState == 'pending' || tokenSwapState == 'pending'
 
 
   useEffect(() => {
@@ -219,7 +172,7 @@ const TokenswapStack: React.FC = () => {
                 onChange={() => null}
                 selectedToken={tokenToReceive}
                 value={amountToReceive}
-                loading={isFetchingQuoteSwap}
+                loading={fetchQuoteState == 'pending'}
                 onTokenSelect={(pump) => dispatch(setSelectedtokenToReceive(pump))}
               // amount="~$3.3K"
               />
@@ -228,7 +181,7 @@ const TokenswapStack: React.FC = () => {
               <TokenRateRefreshAndStatus />
 
               <Button
-                disabled={loading || isFetchingQuoteSwap || isFetchingRate || isFetchingQuoteSwapError || isFetchingRateError}
+                disabled={isButtonDisabled}
                 fullWidth
                 variant="contained"
                 color="primary"

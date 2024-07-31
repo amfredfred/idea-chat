@@ -1,5 +1,7 @@
 import { IPumpCoinMigrated } from "../../common/types";
 import SolanaLogo from '../../assets/solana-sol-logo.png'
+import { Connection } from "@solana/web3.js";
+import { WalletContextState } from "@solana/wallet-adapter-react";
 
 export interface IApp {
     isInitLoading: boolean,
@@ -47,7 +49,6 @@ export interface TokenRate {
     vsTokenSymbol: string;
     price: number;
 }
-
 export interface FetchTokenRateParams {
     fromMint?: string;
     toMint?: string;
@@ -59,6 +60,15 @@ export interface QuoteSwapPrams {
     amount: number
 }
 
+export interface TokenRequesSwapPrams {
+    quoteResponse: QuoteSwapResponse
+    connection: Connection,
+    wallet: WalletContextState
+}
+
+export interface TokenSwapResponse {
+    sol_scan: string | null
+}
 
 export interface ISwapSettings {
     slippageBps: string
@@ -74,14 +84,19 @@ export interface TokenSwapState {
     error: string | null;
     tokensList: IPumpCoinMigrated[],
     isVisible: boolean
-    isFetchingRate: boolean
-    isFetchingRateError: boolean
+
+    fetchTokenRateState: 'error' | 'success' | 'pending' | 'idle'
+    fetchTokenRateMessage: string | null
     conversionRate: number | null
 
-    isFetchingQuoteSwap: boolean
-    isFetchingQuoteSwapError: boolean
-    quoteResponse: QuoteSwapResponse 
+    fetchQuoteState: 'error' | 'success' | 'pending' | 'idle'
+    fetchQuoteMessage: string | null
+    quoteResponse: QuoteSwapResponse
     settings: ISwapSettings
+
+    tokenSwapState: 'error' | 'success' | 'pending' | 'idle',
+    tokenSwapMessage: string | null,
+    tokenSwapResponse: TokenSwapResponse
 }
 
 export const NativeToken = {
@@ -105,14 +120,20 @@ export const tokenSwapInitialState: TokenSwapState = {
     error: null,
     tokensList: [],
     isVisible: false,
-    isFetchingRate: false,
-    isFetchingRateError: false,
+    fetchTokenRateState: 'idle',
+    fetchTokenRateMessage: null,
     conversionRate: null,
-    isFetchingQuoteSwap: false,
-    isFetchingQuoteSwapError: false,
+    fetchQuoteState: 'idle',
+    fetchQuoteMessage: null,
     quoteResponse: {} as any,
     settings: {
         slippageBps: '1'
+    },
+
+    tokenSwapState: 'idle',
+    tokenSwapMessage: null,
+    tokenSwapResponse: {
+        sol_scan: null
     }
 };
 
