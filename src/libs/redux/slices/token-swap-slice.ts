@@ -115,6 +115,8 @@ export const handleTokenSwap = createAsyncThunk(
                 maxRetries: 2,
             });
 
+            console.log({ latestBlockHash })
+
             const confirmTransaction = connection.confirmTransaction({
                 blockhash: latestBlockHash.blockhash,
                 lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
@@ -180,7 +182,7 @@ const tokenSwapSlice = createSlice({
             .addCase(fetchTokenRate.fulfilled, (state, { payload }) => {
                 state.fetchTokenRateState = 'success';
                 state.fetchTokenRateMessage = 'success';
-                state.conversionRate = payload?.data[state.tokenToSend?.address as string].price;
+                state.conversionRate = payload?.data[state.tokenToSend?.address as string]?.price;
             })
             .addCase(fetchTokenRate.pending, (state) => {
                 state.fetchTokenRateState = 'pending';

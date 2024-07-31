@@ -3,6 +3,9 @@ import { Box, Grid, Typography, Paper, InputBase, MenuItem, CircularProgress } f
 import { styled } from '@mui/system';
 import { ITokenSwapInputProps } from '../../common/types';
 import TokenSelection from './TokenSelection';
+import TokenBalance from './TokenBalance';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection } from '@solana/web3.js';
 
 const StyledPaper = styled(Paper)(() => ({
     boxShadow: 'none',
@@ -27,6 +30,10 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
     loading
 }) => {
     const [isTokensListOpen, setIsTokensListOpen] = useState(false);
+    const wallet = useWallet()
+
+    const RPC_URL = import.meta.env.VITE_RPC_URL;
+    const connection = new Connection(RPC_URL, 'confirmed')
 
     const handleOnTokenSelect = (token: any) => {
         setIsTokensListOpen(false);
@@ -43,8 +50,13 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
 
     return (
         <Box className="w-full" width={'100%'} >
-            <Grid container alignItems="flex-end" justifyContent="space-between" style={{ marginBottom: '8px' }}>
+            <Grid container alignItems="center" display='flex' justifyContent="space-between" style={{ marginBottom: '8px' }}>
                 <Typography variant="body2" className='text-white' style={{ textTransform: 'capitalize' }}>{side}</Typography>
+                <TokenBalance
+                    walletAddress={String(wallet?.publicKey?.toString?.())}
+                    tokenMintAddress={String(selectedToken?.address)}
+                    connection={connection}
+                />
             </Grid>
             <StyledPaper style={{ borderRadius: '.5rem' }} className='bg-slate-700'>
                 <Box display='flex' flexDirection='row' gap='1rem' paddingInline='.6rem' alignItems='center'>

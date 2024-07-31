@@ -127,7 +127,7 @@ export const tokenSwapInitialState: TokenSwapState = {
     fetchQuoteMessage: null,
     quoteResponse: {} as any,
     settings: {
-        slippageBps: '1'
+        slippageBps: '300'
     },
 
     tokenSwapState: 'idle',
