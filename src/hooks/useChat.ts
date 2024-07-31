@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRecoilState } from "recoil";
 import { userProfilePicState, userNameState } from "../atoms/users";
 import { websiteThemeState, websiteAudioState } from "../atoms/website-theme";
@@ -26,11 +26,9 @@ interface Settings {
 }
 
 const useChat = () => {
-
     const socket = io(BASE_URI, {
-        transports:['websocket']
+        transports: ['websocket']
     });
-
 
     const [currentUserMessage, setCurrentUserMessage] = useState("");
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -45,8 +43,7 @@ const useChat = () => {
     const [newMessage, setNewMessage] = useState<Message[]>([]);
     const [chatState, setChatState] = useState<"DEN" | "PUMP" | "ALPHA">("DEN");
     const [userName, setUserName] = useRecoilState(userNameState);
-    const [profilePicState, setProfilePicState] =
-        useRecoilState(userProfilePicState);
+    const [profilePicState, setProfilePicState] = useRecoilState(userProfilePicState);
     const notificationRef = useRef<HTMLAudioElement | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [websiteAudio, setWebsiteAudio] = useRecoilState(websiteAudioState);
@@ -57,62 +54,55 @@ const useChat = () => {
         transition: { type: "spring", stiffness: 400, damping: 10 },
     };
 
-    useEffect(() => {
-        const loadUserProfile = async () => {
-            const wAddress = localStorage.getItem("walletAddress");
-            try {
-                const response = await axios.get(
-                    `${BASE_URI}/api/user-profile?walletAddress=${wAddress}`
-                );
-                const data = response.data;
-                if (data.username) {
-                    setUserName(data.username);
-                }
-                if (data.profilePic) {
-                    setProfilePicState(data.profilePic);
-                }
-            } catch (err: any) {
-                console.log("profile-error", err.message);
+    const fetchUserProfile = useCallback(async () => {
+        const wAddress = localStorage.getItem("walletAddress");
+        try {
+            const response = await axios.get(
+                `${BASE_URI}/api/user-profile?walletAddress=${wAddress}`
+            );
+            const data = response.data;
+            if (data.username) {
+                setUserName(data.username);
             }
-        };
-        loadUserProfile();
-        const loadInitialMessages = async () => {
-            try {
-                const response = await axios.get(`${BASE_URI}/api/initialMessages`);
-                const messages = response.data;
-                if (messages) {
-                    setInitialMessages(messages);
-                }
-            } catch (err) {
-                console.log("initial-messages-error", err);
+            if (data.profilePic) {
+                setProfilePicState(data.profilePic);
             }
-        };
-        loadInitialMessages();
+        } catch (err: any) {
+            console.log("profile-error", err.message);
+        }
+    }, [setProfilePicState, setUserName]);
 
-        const handleNewMessage = (msg: Message) => {
-            setNewMessage((prevMessages: Message[]) => {
-                notificationRef.current!.play();
-                return [...prevMessages, msg];
-            });
-        };
-        socket.on("newMessage", handleNewMessage);
+    const fetchInitialMessages = useCallback(async () => {
+        try {
+            const response = await axios.get(`${BASE_URI}/api/initialMessages`);
+            const messages = response.data;
+            if (messages) {
+                setInitialMessages(messages);
+            }
+        } catch (err) {
+            console.log("initial-messages-error", err);
+        }
+    }, []);
 
-        return () => {
-            socket.off("initialMessages");
-            socket.off("newMessage", handleNewMessage);
-        };
+    const handleNewMessage = useCallback((msg: Message) => {
+        setNewMessage((prevMessages: Message[]) => {
+            notificationRef.current!.play();
+            return [...prevMessages, msg];
+        });
     }, []);
 
     useEffect(() => {
-        (async (source: string) => {
-            if (audioRef.current && audioRef.current.src !== source) {
-                audioRef.current.src = source
-                await audioRef.current.play()
-            }
-        })(websiteAudio)
-    }, [websiteAudio])
+        fetchUserProfile();
+        fetchInitialMessages();
 
-    const handleSendMessage = () => {
+        socket.on("newMessage", handleNewMessage);
+
+        return () => {
+            socket.off("newMessage", handleNewMessage);
+        };
+    }, [fetchUserProfile, fetchInitialMessages, handleNewMessage, socket]);
+
+    const handleSendMessage = useCallback(() => {
         if (currentUserMessage.length <= 500) {
             if (currentUserMessage.trim()) {
                 socket.emit("sendMessage", {
@@ -125,33 +115,48 @@ const useChat = () => {
         } else {
             alert("Character count exceeds 500");
         }
-    };
+    }, [currentUserMessage, profilePicState, socket, userName]);
 
-    const handleKeyDown = (e: any) => {
+    const handleKeyDown = useCallback((e: any) => {
         if (e.key === "Enter" && e.shiftKey) {
             e.preventDefault();
             setCurrentUserMessage((prevValue) => prevValue + "\n");
         } else if (e.key === "Enter") {
             handleSendMessage();
         }
-    };
+    }, [handleSendMessage]);
 
-    const handleMusicPlayPause = async () => {
-        audioRef.current?.played ? audioRef.current?.pause() : await audioRef.current?.play()
-    }
-
-    useEffect(() => {
-        function handleClickOutside(event: any) {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
-                setIsSettingsOpen(false);
+    const handleMusicPlayPause = useCallback(async () => {
+        if (audioRef.current) {
+            if (audioRef.current.paused) {
+                await audioRef.current.play();
+                setMusicIsPlaying(true);
+            } else {
+                audioRef.current.pause();
+                setMusicIsPlaying(false);
             }
         }
+    }, []);
 
+    useEffect(() => {
+        if (audioRef.current && audioRef.current.src !== websiteAudio) {
+            audioRef.current.src = websiteAudio;
+            audioRef.current.play().catch(() => { });
+        }
+    }, [websiteAudio]);
+
+    const handleClickOutside = useCallback((event: MouseEvent) => {
+        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+            setIsSettingsOpen(false);
+        }
+    }, []);
+
+    useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
+    }, [handleClickOutside]);
 
     return {
         currentUserMessage,

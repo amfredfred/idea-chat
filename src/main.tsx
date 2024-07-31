@@ -1,9 +1,6 @@
 if (process.env.NODE_ENV !== 'production') {
-  console.warn = () => { };
-}
-
-if (process.env.NODE_ENV !== 'production') {
   console.error = () => { };
+  console.warn = () => { };
 }
 
 import React from "react";
