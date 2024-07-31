@@ -1,3 +1,11 @@
+if (process.env.NODE_ENV !== 'production') {
+  console.warn = () => { };
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  console.error = () => { };
+}
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 
