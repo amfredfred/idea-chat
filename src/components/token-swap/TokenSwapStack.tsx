@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, fetchQuoteSwap, setAmountToSend, setError, setAmountToReceive } from '../../libs/redux/slices/token-swap-slice';
+import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError } from '../../libs/redux/slices/token-swap-slice';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
-import { parseAmount } from '../../utils';
 import { motion } from 'framer-motion'
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js';
@@ -29,7 +28,6 @@ const TokenswapStack: React.FC = () => {
     isFetchingRate,
     isFetchingQuoteSwapError,
     isFetchingRateError,
-    settings
   } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -51,8 +49,6 @@ const TokenswapStack: React.FC = () => {
         ],
         new PublicKey("REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3")
       );
-
-      console.log({ feeAccount })
 
       const { swapTransaction } = await (
         await fetch('https://quote-api.jup.ag/v6/swap', {
@@ -144,25 +140,7 @@ const TokenswapStack: React.FC = () => {
     }
   }
 
-  const fetchRate = useCallback(() => {
-    if (tokenToSend?.address && tokenToReceive?.address && amountToSend) {
-      dispatch(fetchQuoteSwap({
-        fromMint: tokenToSend.address,
-        toMint: tokenToReceive.address,
-        amount: parseAmount(amountToSend, tokenToSend.decimals),
-        settings
-      }));
-    } else {
-      dispatch(setAmountToReceive(0))
-    }
-  }, [dispatch, tokenToSend, tokenToReceive, amountToSend, settings]);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      fetchRate();
-    }, 800);
-    return () => clearTimeout(timeoutId);
-  }, [fetchRate, amountToSend]);
 
   useEffect(() => {
     if (error) toast(error, { type: 'error', toastId: "TNX_ERROR" })
@@ -258,7 +236,7 @@ const TokenswapStack: React.FC = () => {
                 disableElevation
               >
                 {buttonText()}
-              </Button>
+              </Button> 
             </Box>
             {error && <p>Error: {error}</p>}
           </motion.div>
