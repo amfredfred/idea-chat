@@ -50,6 +50,7 @@ const TokenSwapAnalytic = () => {
 
     const skeletonLoading = <Skeleton style={{ borderRadius: '50px' }} variant="rectangular" width={50} height={18} />
     const platformFee = formatNumber(parseEther(Number(quoteResponse?.platformFee?.amount), Number(tokenToReceive?.decimals)))
+    const maxToPay = parseEther(Number(quoteResponse.inAmount), Number(tokenToSend?.decimals))
 
     const priceImpactColor = () => {
         if (Number(quoteResponse?.priceImpactPct) > .1) return 'red'
@@ -108,8 +109,8 @@ const TokenSwapAnalytic = () => {
                                     <span>Max to pay</span>
                                 </Grid>
                             </Grid>
-                            <Grid item>
-                                <span>1.0070 WETH</span>
+                            <Grid item display='flex' flexDirection='row' alignItems='center' >
+                                <strong>{(!maxToPay || isFetchingQuoteSwap) ? skeletonLoading : maxToPay} </strong>&nbsp;<strong>{tokenToSend?.symbol}</strong>
                             </Grid>
                         </Grid>
                     }
