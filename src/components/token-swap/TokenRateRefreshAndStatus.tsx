@@ -1,24 +1,30 @@
 import { useCallback, useEffect, useState } from "react";
 import { parseAmount } from '../../utils';
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
-import { fetchQuoteSwap, setAmountToReceive } from '../../libs/redux/slices/token-swap-slice';
+import { fetchQuoteSwap, fetchTokenRate, setAmountToReceive } from '../../libs/redux/slices/token-swap-slice';
 import { Box, CircularProgress } from "@mui/material";
 
 export default function TokenRateRefreshAndStatus() {
-  const [initCountdown,] = useState(10) //setInitCountdown
+  const [initCountdown,] = useState(20) //setInitCountdown
   const [timeTillRefetch, setTimeTillRefetch] = useState<number>(initCountdown);
 
   const dispatch = useAppDispatch();
 
   const { tokenToSend, tokenToReceive, amountToSend, settings } = useAppSelector(state => state.tokenSwap);
 
-  const fetchRate = useCallback(() => {
+
+
+  const fetchQuote = useCallback(() => {
     if (tokenToSend?.address && tokenToReceive?.address && amountToSend) {
       dispatch(fetchQuoteSwap({
         fromMint: tokenToSend.address,
         toMint: tokenToReceive.address,
         amount: parseAmount(amountToSend, tokenToSend.decimals),
         settings
+      }));
+      dispatch(fetchTokenRate({
+        fromMint: tokenToSend.address,
+        toMint: tokenToReceive.address
       }));
     } else {
       dispatch(setAmountToReceive(0));
@@ -27,17 +33,17 @@ export default function TokenRateRefreshAndStatus() {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      fetchRate();
+      fetchQuote();
     }, 800); // Debounce duration
 
     return () => clearTimeout(timeoutId);
-  }, [fetchRate, amountToSend]);
+  }, [fetchQuote, amountToSend]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeTillRefetch(prev => {
         if (prev === 1) {
-          fetchRate();
+          fetchQuote();
           return initCountdown;
         }
         const count = prev > 0 ? prev - 1 : 0
@@ -45,8 +51,11 @@ export default function TokenRateRefreshAndStatus() {
       });
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [fetchRate, initCountdown]);
+    return () => {
+      setTimeTillRefetch(initCountdown)
+      clearInterval(interval)
+    };
+  }, [fetchQuote, initCountdown, amountToSend, tokenToReceive, tokenToSend]);
 
   return (
     <Box display='flex' alignItems='ceter' justifyContent='space-between' paddingInline='1rem'>

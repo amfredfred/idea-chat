@@ -26,12 +26,20 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
     value,
     loading
 }) => {
+    const [isTokensListOpen, setIsTokensListOpen] = useState(false);
 
-    const [isTokensListOpen, setIsTokensListOpen] = useState(false)
     const handleOnTokenSelect = (token: any) => {
-        setIsTokensListOpen(false)
-        onTokenSelect(token)
-    }
+        setIsTokensListOpen(false);
+        onTokenSelect(token);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.value;
+        // Only allow numbers and a single decimal point
+        if (/^\d*\.?\d*$/.test(newValue)) {
+            onChange(newValue);
+        }
+    };
 
     return (
         <Box className="w-full" width={'100%'} >
@@ -45,15 +53,15 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                         type="text"
                         inputMode="decimal"
                         readOnly={readonly}
-                        // pattern="^\d*[.,]?\d*$"
+                        // pattern="^\d*\.?\d*$"
                         value={value}
-                        onChange={({ target: { value } }) => onChange(value)}
+                        onChange={handleInputChange}
                     />
-
-                    {loading && <Box>
-                        <CircularProgress size={20} thickness={10} />
-                    </Box>}
-
+                    {loading && (
+                        <Box>
+                            <CircularProgress size={20} thickness={10} />
+                        </Box>
+                    )}
                     <Box
                         onClick={() => setIsTokensListOpen(state => !state)}
                         display='flex'
@@ -63,7 +71,7 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                         margin='auto'
                         style={{ background: 'whitesmoke', maxHeight: '40px' }}
                     >
-                        <MenuItem key={selectedToken?.symbol} value={selectedToken?.symbol}  >
+                        <MenuItem key={selectedToken?.symbol} value={selectedToken?.symbol}>
                             <Box gap={'.3rem'} display='flex' alignItems='center' flexDirection='row' justifyContent='center'>
                                 <img
                                     className="w-6 h-6 rounded-full aspect-square"
@@ -76,21 +84,19 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                             </Box>
                         </MenuItem>
                     </Box>
-
                 </Box>
-            </StyledPaper >
-
+            </StyledPaper>
             <TokenSelection
                 onRequestClose={setIsTokensListOpen}
                 onTokenSelect={handleOnTokenSelect}
-                isOpen={isTokensListOpen} />
-
+                isOpen={isTokensListOpen}
+            />
             <Grid container alignItems="flex-end" justifyContent="space-between" style={{ marginTop: '1px' }}>
                 <Typography variant="h5" data-testid="destination-usd-amount">
                     {amount}
                 </Typography>
             </Grid>
-        </Box >
+        </Box>
     );
 };
 

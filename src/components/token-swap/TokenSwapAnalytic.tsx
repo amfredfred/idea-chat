@@ -83,7 +83,7 @@ const TokenSwapAnalytic = () => {
                                 <span>Price Impact</span>
                             </Grid>
                         </Grid>
-                        <Grid item style={{ color: priceImpactColor(), fontWeight: 'bolder' }}>
+                        <Grid item style={{ color: priceImpactColor(), fontWeight: 'bolder' }} display='flex'>
                             <strong>{(!quoteResponse?.priceImpactPct || isFetchingQuoteSwap) ? skeletonLoading : formatNumber(quoteResponse.priceImpactPct)}</strong><strong>%</strong>
                         </Grid>
                     </Grid>
@@ -95,7 +95,7 @@ const TokenSwapAnalytic = () => {
                                 <span>Max to pay</span>
                             </Grid>
                         </Grid>
-                        <Grid item>
+                        <Grid item display='flex'>
                             <strong>{(!maxToPay || isFetchingQuoteSwap) ? skeletonLoading : maxToPay} </strong>&nbsp;<strong>{tokenToSend?.symbol}</strong>
                         </Grid>
                     </Grid>
@@ -107,7 +107,7 @@ const TokenSwapAnalytic = () => {
                                 <span>Platform Fees</span>
                             </Grid>
                         </Grid>
-                        <Grid item>
+                        <Grid item display='flex' >
                             <span>{(!quoteResponse?.platformFee?.amount || isFetchingQuoteSwap) ? skeletonLoading : platformFee}</span>&nbsp;{tokenToReceive?.symbol}
                         </Grid>
                     </Grid>
