@@ -31,6 +31,7 @@ const TokenswapStack: React.FC = () => {
   const wallet = useWallet()
 
   const RPC_URL = import.meta.env.VITE_RPC_URL;
+  const FEE_ACCOUNT = import.meta.env.VITE_FEE_ACCOUNT
   const connection = new Connection(RPC_URL, 'confirmed')
 
   const handleSwap = async () => {
@@ -43,43 +44,31 @@ const TokenswapStack: React.FC = () => {
           body: JSON.stringify({
             quoteResponse,
             userPublicKey: wallet.publicKey?.toString(),
-            // feeAccount is optional. Use if you want to charge a fee. feeBps must have been passed in /quote API.
-            // feeAccount: "fee_account_public_key"
+            feeAccount: FEE_ACCOUNT
             // dynamicComputeUnitLimit: true, // allow dynamic compute limit instead of max 1,400,000
             // custom priority fee
             // prioritizationFeeLamports: 'auto' // or custom lamports: 1000
           })
         })
       ).json();
-
-      console.log({ swapTransaction }, wallet.publicKey, wallet.connected);
-
-      // Deserialize the transaction
       const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
       const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
-      console.log({ transaction });
-
-      // Get the latest block hash
       const latestBlockHash = await connection.getLatestBlockhash();
-      console.log({ latestBlockHash });
-
-      // Sign the transaction using the wallet's signTransaction method
       const signedTransaction = await wallet.signTransaction?.(transaction);
-      console.log({ signedTransaction });
-
-
       const deSerializedTransaction = signedTransaction?.serialize?.() as any
-      // Send the signed transaction to the Solana network
       const txid = await connection.sendRawTransaction(deSerializedTransaction, {
         skipPreflight: true,
         maxRetries: 2
       });
 
-      await connection.confirmTransaction({
+      const confirmTransaction = connection.confirmTransaction({
         blockhash: latestBlockHash.blockhash,
         lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
         signature: txid
       });
+
+      toast.promise(confirmTransaction, {})
+      await confirmTransaction
 
       console.log(`https://solscan.io/tx/${txid}`);
     } catch (error) {
@@ -146,13 +135,17 @@ const TokenswapStack: React.FC = () => {
   }, [dispatch, tokenToSend, tokenToReceive, amountToSend]);
 
   useEffect(() => {
-    fetchRate();
-  }, [fetchRate]);
+    const timeoutId = setTimeout(() => {
+      fetchRate();
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  }, [fetchRate, amountToSend]);
 
   useEffect(() => {
-    if (error) toast(error, { type: 'error' })
+    if (error) toast(error, { type: 'error', toastId: "TNX_ERROR" })
     return () => { dispatch(setError('')) }
   }, [error, dispatch])
+
 
   return (
     <Draggable   >
