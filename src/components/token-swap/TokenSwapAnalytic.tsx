@@ -48,8 +48,14 @@ const TokenSwapAnalytic = () => {
     }, [fetchRate]);
 
 
-    const skeletonLoading = <Skeleton style={{ borderRadius: '50px' }} variant="rectangular" width={50} height={25} />
+    const skeletonLoading = <Skeleton style={{ borderRadius: '50px' }} variant="rectangular" width={50} height={18} />
     const platformFee = formatNumber(parseEther(Number(quoteResponse?.platformFee?.amount), Number(tokenToReceive?.decimals)))
+
+    const priceImpactColor = () => {
+        if (Number(quoteResponse?.priceImpactPct) > .1) return 'red'
+        else if (Number(quoteResponse?.priceImpactPct) < .1) return 'grey'
+        else return 'green'
+    }
 
     return (
         <div ref={tsacref} className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
@@ -89,8 +95,8 @@ const TokenSwapAnalytic = () => {
                                 <span>Price Impact</span>
                             </Grid>
                         </Grid>
-                        <Grid item display='flex' flexDirection='row' alignItems='center'>
-                            <span>{(quoteResponse?.priceImpactPct || isFetchingQuoteSwap) ? skeletonLoading : formatNumber(quoteResponse.priceImpactPct)}</span>%
+                        <Grid item display='flex' flexDirection='row' alignItems='center' style={{ color: priceImpactColor(), fontWeight: 'bolder' }}>
+                            <strong>{(!quoteResponse?.priceImpactPct || isFetchingQuoteSwap) ? skeletonLoading : formatNumber(quoteResponse.priceImpactPct)}</strong><strong>%</strong>
                         </Grid>
                     </Grid>
 
