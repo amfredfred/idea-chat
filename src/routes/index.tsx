@@ -5,7 +5,7 @@ import Profile from "../components/Profile.tsx";
 import PumpDetails from "../views/PumpDetails.tsx";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
-import Loading from "../components/Loading.tsx";
+import Loading from "../components/Loading.tsx"; 
 
 const connectWallet = async (wallet: any): Promise<boolean> => {
   try {
@@ -36,6 +36,7 @@ const ProtectedRoute: React.FC = () => {
 };
 
 export default function RoutesPortal() {
+
   return (
     <BrowserRouter>
       <Routes>

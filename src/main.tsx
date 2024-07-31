@@ -8,6 +8,8 @@ import RoutesPortal from "./routes/index.tsx";
 import StoreProvider from "./providers/StoreProvider/index.tsx";
 import TokenswapStack from "./components/token-swap/TokenSwapStack.tsx";
 import { Stack } from "@mui/material";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // import ErrorPage from "./components/Error.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -18,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Stack direction="row" overflow='hidden' position='relative'>
             <RoutesPortal />
             <TokenswapStack />
+            <ToastContainer />
           </Stack>
         </StoreProvider>
       </React.StrictMode>

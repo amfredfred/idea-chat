@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, fetchQuoteSwap, setAmountToSend } from '../../libs/redux/slices/token-swap-slice';
-import { Line } from 'react-chartjs-2';
+import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, fetchQuoteSwap, setAmountToSend, setError } from '../../libs/redux/slices/token-swap-slice';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { parseAmount } from '../../utils';
 import { motion } from 'framer-motion'
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { VersionedTransaction } from '@solana/web3.js';
 import { Buffer } from 'buffer';
+import { toast } from 'react-toastify';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -29,40 +29,61 @@ const TokenswapStack: React.FC = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const wallet = useWallet()
-
-  console.log(wallet?.publicKey)
+  const { connection } = useConnection()
 
   const handleSwap = async () => {
     dispatch(setLoading(true));
-    const { swapTransaction } = await (
-      await fetch('https://quote-api.jup.ag/v6/swap', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          // quoteResponse from /quote api
-          quoteResponse,
-          // user public key to be used for the swap
-          userPublicKey: wallet.publicKey,
-          // auto wrap and unwrap SOL. default is true
-          wrapAndUnwrapSol: true,
-          // feeAccount is optional. Use if you want to charge a fee.  feeBps must have been passed in /quote API.
-          // feeAccount: "fee_account_public_key"
+    try {
+      const { swapTransaction } = await (
+        await fetch('https://quote-api.jup.ag/v6/swap', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            quoteResponse,
+            userPublicKey: wallet.publicKey?.toString(),
+            // feeAccount is optional. Use if you want to charge a fee. feeBps must have been passed in /quote API.
+            // feeAccount: "fee_account_public_key"
+            // dynamicComputeUnitLimit: true, // allow dynamic compute limit instead of max 1,400,000
+            // custom priority fee
+            // prioritizationFeeLamports: 'auto' // or custom lamports: 1000
+          })
         })
-      })
-    ).json();
+      ).json();
 
-    console.log({ swapTransaction })
+      console.log({ swapTransaction }, wallet.publicKey,wallet.connected);
 
-    // deserialize the transaction
-    const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
-    const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
-    console.log({ transaction });
+      // Deserialize the transaction
+      const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
+      const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
+      console.log({ transaction });
 
-    // Sign the transaction using the wallet's signTransaction method
-    const signedTransaction = await wallet?.signTransaction?.(transaction);
-    console.log({ signedTransaction });
+      // Sign the transaction using the wallet's signTransaction method
+      const signedTransaction = await wallet.signTransaction?.(transaction);
+      console.log({ signedTransaction });
 
-    dispatch(setLoading(false));
+      // Get the latest block hash
+      const latestBlockHash = await connection.getLatestBlockhash();
+      console.log({ latestBlockHash });
+
+      // Send the signed transaction to the Solana network
+      const txid = await connection.sendRawTransaction(signedTransaction?.serialize?.() as any, {
+        skipPreflight: true,
+        maxRetries: 2
+      });
+
+      await connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: txid
+      });
+
+      console.log(`https://solscan.io/tx/${txid}`);
+    } catch (error) {
+      dispatch(setError((error as Error)?.message));
+      console.log({ error });
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   const toggleMinimize = () => {
@@ -113,24 +134,6 @@ const TokenswapStack: React.FC = () => {
     }
   }
 
-  const chartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], // Added 'Jul'
-    datasets: [
-      {
-        label: 'Token A',
-        data: [65, 59, 80, 81, 56, 55, 70], // Added data for 'Jul'
-        borderColor: 'rgba(75,192,192,1)',
-        backgroundColor: 'rgba(75,192,192,0.2)',
-      },
-      {
-        label: 'Token B',
-        data: [28, 48, 40, 19, 86, 27, 33], // Added data for 'Jul'
-        borderColor: 'rgba(153,102,255,1)',
-        backgroundColor: 'rgba(153,102,255,0.2)',
-      },
-    ],
-  };
-
 
   const fetchRate = useCallback(() => {
     if (tokenToSend?.address && tokenToReceive?.address && amountToSend) {
@@ -141,6 +144,11 @@ const TokenswapStack: React.FC = () => {
   useEffect(() => {
     fetchRate();
   }, [fetchRate]);
+
+  useEffect(() => {
+    if (error) toast(error, { type: 'error' })
+    return () => { dispatch(setError('')) }
+  }, [error, dispatch])
 
   return (
     <Draggable   >
@@ -195,7 +203,7 @@ const TokenswapStack: React.FC = () => {
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
             style={{ padding: '1rem' }}>
-            {isFullscreen && <Box sx={{ flexGrow: 1 }}><Line data={chartData} /></Box>}
+            {isFullscreen && <Box sx={{ flexGrow: 1 }}>CHART GOES HERE</Box>}
             <Box gap='1rem' display='flex' flexDirection='column'>
               <TokenSwapInput
                 side="pay"
