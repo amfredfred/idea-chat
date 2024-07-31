@@ -16,7 +16,7 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
   const atClickApeBlindly = () => { console.log('atApeBlindly') }
 
   return (
-    <div className=" w-full h-[75%] normal-case  pt-[100px] flex flex-col gap-[40px]">
+    <div key={pump.address} className=" w-full h-[75%] normal-case  pt-[100px] flex flex-col gap-[40px]">
       <div
         className=" border-[1px] rounded-[4px] border-white font-jbm w-[90%] mx-auto "
         style={{

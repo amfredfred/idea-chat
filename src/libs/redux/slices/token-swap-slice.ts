@@ -38,11 +38,9 @@ export const fetchTokenRate = createAsyncThunk(
         try {
             if (!fromMint) return thunkAPI.rejectWithValue({ error: "Invalid from address" });
             if (!toMint) return thunkAPI.rejectWithValue({ error: "Invalid to address" });
-            console.log('Fetching token rate with params:', { fromMint, toMint });
             const response = await axios.get<{ data: { [key: string]: TokenRate } }>(`https://price.jup.ag/v6/price?ids=${fromMint}&vsToken=${toMint}`);
             return response.data;
         } catch (error) {
-            console.error('Failed to fetch token rate:', error);
             return thunkAPI.rejectWithValue({ error: (error as Error).message });
         }
     }
@@ -63,7 +61,6 @@ export const fetchQuoteSwap = createAsyncThunk(
             const response = await axios.get<QuoteSwapResponse>(url.toString());
             return response.data;
         } catch (error) {
-            console.error('Failed to fetch token rate:', error);
             return thunkAPI.rejectWithValue({ error: (error as Error).message });
         }
     }
@@ -138,7 +135,6 @@ export const handleTokenSwap = createAsyncThunk(
 
             return tokenSwapResponse;
         } catch (error) {
-            console.error('Error Swapping Token:', error);
             return thunkAPI.rejectWithValue({ error: (error as Error).message });
         }
     }
@@ -190,11 +186,10 @@ const tokenSwapSlice = createSlice({
                 state.fetchTokenRateState = 'pending';
                 state.fetchTokenRateMessage = 'pending';
             })
-            .addCase(fetchTokenRate.rejected, (state, { payload, error }) => {
+            .addCase(fetchTokenRate.rejected, (state, { payload }) => {
                 state.fetchTokenRateState = 'error';
                 state.fetchTokenRateMessage = 'error';
                 state.error = (payload as any)?.error || 'Failed to fetch token rate';
-                console.log({ payload, error });
             })
             .addCase(fetchQuoteSwap.fulfilled, (state, { payload }) => {
                 state.fetchQuoteState = 'success';
@@ -206,10 +201,9 @@ const tokenSwapSlice = createSlice({
                 state.fetchQuoteState = 'pending';
                 state.fetchQuoteMessage = 'pending';
             })
-            .addCase(fetchQuoteSwap.rejected, (state, { payload, error }) => {
+            .addCase(fetchQuoteSwap.rejected, (state, { payload }) => {
                 state.fetchQuoteState = 'error';
                 state.fetchQuoteMessage = (payload as any)?.error || 'Failed to fetch token rate';
-                console.log({ payload, error });
             })
             .addCase(handleTokenSwap.fulfilled, (state, { payload }) => {
                 state.tokenSwapState = 'success';
@@ -221,11 +215,10 @@ const tokenSwapSlice = createSlice({
                 state.tokenSwapMessage = 'pending';
                 console.log('PENDING TRANSACTION');
             })
-            .addCase(handleTokenSwap.rejected, (state, { payload, error }) => {
+            .addCase(handleTokenSwap.rejected, (state, { payload }) => {
                 state.tokenSwapState = 'error';
                 state.tokenSwapMessage = 'error';
                 state.error = (payload as any)?.error || 'Failed to fetch token rate';
-                console.log({ payload, error });
             });
     }
 });

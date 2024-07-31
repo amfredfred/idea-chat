@@ -37,7 +37,7 @@ const TokenSelection: React.FC<{
                     </Grid>
                     <Box display='flex' flexDirection='column' gap='.5rem' width='100%' className=' no-scrollbar' overflow='auto'>
                         {tokensList?.map?.((token,) => (
-                            <MenuItem onClick={() => onTokenSelect(token)} key={token.symbol} value={token.symbol} style={{ paddingInline: 0, borderRadius: '10px' }}   >
+                            <MenuItem key={token.address} onClick={() => onTokenSelect(token)} value={token.symbol} style={{ paddingInline: 0, borderRadius: '10px' }}   >
                                 <Box display='flex' alignItems='center' flexDirection='row' >
                                     <img
                                         className="w-6 h-6 mr-2 rounded-full aspect-square"

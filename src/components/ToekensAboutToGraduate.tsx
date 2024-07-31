@@ -9,7 +9,7 @@ export default function ToekensAboutToGraduate({ pools }: { pools?: IPumpCoin[] 
                 <div className="text-grey-200 text-xs font-semibold hidden md:inline-flex">Filter</div><div className="hidden md:flex min-w-[18px] h-[18px] px-1 text-xs rounded bg-green-700 text-grey-50 items-center justify-center">9</div></button></div>
             <div className="flex flex-col w-full md:mb-2 no-scrollbar flex-1 md:flex-initial min-h-0 ">
                 <div className="flex flex-col md:gap-y-3 h-[calc(100vh_-_188px)] no-scrollbar overflow-scroll explore-single-item">
-                    {pools?.map(pump => <PumpCard {...pump} />)}
+                    {pools?.map(pump => <PumpCard key={pump.address} {...pump} />)}
                 </div>
             </div>
         </div>
