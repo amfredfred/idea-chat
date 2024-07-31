@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Grid, Button, Collapse, Typography, CircularProgress, Skeleton } from '@mui/material';
+import { Grid, Button, Collapse, CircularProgress, Skeleton, Box } from '@mui/material';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import MoneyIcon from '@mui/icons-material/Money';
@@ -7,6 +7,7 @@ import { useAppSelector } from '../../libs/redux/hooks';
 import { SwipeDown } from '@mui/icons-material';
 import { formatNumber } from '../../utils/format';
 import { parseEther } from '../../utils';
+import TokenRateRefreshAndStatus from './TokenRateRefreshAndStatus';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
@@ -48,17 +49,16 @@ const TokenSwapAnalytic = () => {
         <div ref={tsacref} className="text-white w-full bg-slate-700 p-2 rounded-lg text-xs">
             <Button
                 onClick={() => setOpen(!open)}
-                className="border-b pb-2 mb-2 cursor-pointer w-full text-white"
+                className="border-b pb-2 mb-2 cursor-pointer w-full"
             >
                 <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant='body2'>
-                            1 {tokenToSend?.symbol} = {fetchTokenRateState == 'pending' ? <CircularProgress size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={1}>
+                    <span className=' text-white text-xs '>
+                        1 {tokenToSend?.symbol} = {fetchTokenRateState == 'pending' ? <CircularProgress size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}
+                    </span>
+                    <Box display='flex' alignItems='center' gap='.4rem'>
                         <SwipeDown fontSize='small' className={`transform transition-transform ${open ? 'rotate-180' : ''}`} />
-                    </Grid>
+                        <TokenRateRefreshAndStatus />
+                    </Box>
                 </Grid>
             </Button>
 

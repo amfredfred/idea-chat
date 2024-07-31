@@ -3,14 +3,13 @@ import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError, handleTokenSwap } from '../../libs/redux/slices/token-swap-slice';
-import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
+import { FullscreenExit, Remove, Close, Settings, CandlestickChartRounded } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { motion } from 'framer-motion'
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
-import { toast } from 'react-toastify';
-import TokenRateRefreshAndStatus from './TokenRateRefreshAndStatus';
+import { toast } from 'react-toastify'; 
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +27,7 @@ const TokenswapStack: React.FC = () => {
     tokenSwapState
   } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isShowingChart, setIsShowingChart] = useState(false);
   const wallet = useWallet()
 
   const RPC_URL = import.meta.env.VITE_RPC_URL;
@@ -47,16 +46,16 @@ const TokenswapStack: React.FC = () => {
 
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
-    setIsFullscreen(false);
+    setIsShowingChart(false);
   };
 
   const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
+    setIsShowingChart(!isShowingChart);
     setIsMinimized(false)
   };
 
   const closeWindow = () => {
-    setIsFullscreen(false);
+    setIsShowingChart(false);
     setIsMinimized(false)
     dispatch(setIsVisible(false))
   };
@@ -106,12 +105,12 @@ const TokenswapStack: React.FC = () => {
     <Draggable   >
       <Box
         sx={{
-          position: isFullscreen ? 'fixed' : 'absolute',
+          position: isShowingChart ? 'fixed' : 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: isFullscreen ? '80vw' : '400px',
-          height: isFullscreen ? '80vh' : 'auto',
+          width: isShowingChart ? '80vw' : '400px',
+          height: isShowingChart ? '80vh' : 'auto',
           maxWidth: '100%',
           maxHeight: '100%',
           zIndex: 1000,
@@ -133,14 +132,20 @@ const TokenswapStack: React.FC = () => {
           // backgroundColor: 'black',
           // borderBottom: '1px solid #ccc'
         }}>
-          <h1 style={{ margin: '0', padding: '0 8px' }}>Token Swap</h1>
+          <h1 style={{ margin: '0', padding: '0 8px' }}>Swap</h1>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton className=' bg-red-400' size="small" onClick={toggleMinimize}>
-              <Minimize className='text-yellow-100' />
+            <IconButton className=' bg-red-400' size="small" onClick={() => null}>
+              <Settings className='text-yellow-100' />
             </IconButton>
+
             <IconButton size="small" onClick={toggleFullscreen}>
-              {isFullscreen ? <FullscreenExit className='text-yellow-100' /> : <Fullscreen className='text-yellow-100' />}
+              {isShowingChart ? <FullscreenExit className='text-yellow-100' /> : <CandlestickChartRounded className='text-yellow-100' />}
             </IconButton>
+
+            <IconButton className=' bg-red-400' size="small" onClick={toggleMinimize}>
+              <Remove className='text-yellow-100' />
+            </IconButton>
+
             <IconButton size="small" onClick={closeWindow}>
               <Close className='text-yellow-100' />
             </IconButton>
@@ -155,7 +160,7 @@ const TokenswapStack: React.FC = () => {
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
             style={{ padding: '1rem' }}>
-            {isFullscreen && <Box sx={{ flexGrow: 1 }}>CHART GOES HERE</Box>}
+            {isShowingChart && <Box sx={{ flexGrow: 1 }}>CHART GOES HERE</Box>}
             <Box gap='1rem' display='flex' flexDirection='column'>
               <TokenSwapInput
                 side="pay"
@@ -178,7 +183,6 @@ const TokenswapStack: React.FC = () => {
               />
 
               <TokenSwapAnalytic />
-              <TokenRateRefreshAndStatus />
 
               <Button
                 disabled={isButtonDisabled}
