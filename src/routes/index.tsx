@@ -1,11 +1,10 @@
 import App from "../App.tsx";
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
-import Chat from "../views/Chat.tsx";
 import Profile from "../components/Profile.tsx";
-import PumpDetails from "../views/PumpDetails.tsx";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading.tsx"; 
+import Chat from "../pages/Chat.tsx";
 
 const connectWallet = async (wallet: any): Promise<boolean> => {
   try {
@@ -43,7 +42,6 @@ export default function RoutesPortal() {
         <Route path="/" element={<App />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/chat" element={<Chat />} />
-          <Route path="/terminal" element={<PumpDetails />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>

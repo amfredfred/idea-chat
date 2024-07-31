@@ -3,29 +3,27 @@ import { AiOutlineSend } from "react-icons/ai";
 import SettingsIcon from "../components/SettingsIcon";
 import SettingsClosed from "../components/SettingsClosed";
 import { motion, AnimatePresence } from "framer-motion";
-import messageNotification from "./assets/message_notification.mp3";
+import messageNotification from "../assets/message_notification.mp3";
 import Focused from "../components/message-animations/Focused";
-import synthIcon from "./assets/synth.svg";
-import audioIcon from "./assets/audio.svg";
-import slideIcon from "./assets/slide.svg";
-import onIcon from "./assets/on.svg";
-import ambientIcon from "./assets/ambient.svg";
-import winIcon from "./assets/win.svg";
-import winMusic from "./assets/win.mp3";
-import onMusic from "./assets/on.mp3";
-import slideMusic from "./assets/slide.mp3";
-import synthMusic from "./assets/synth.mp3";
-import ambientMusic from "./assets/ambient.mp3";
+import synthIcon from "../assets/synth.svg";
+import audioIcon from "../assets/audio.svg";
+import slideIcon from "../assets/slide.svg";
+import onIcon from "../assets/on.svg";
+import ambientIcon from "../assets/ambient.svg";
+import winIcon from "../assets/win.svg";
+import winMusic from "../assets/win.mp3";
+import onMusic from "../assets/on.mp3";
+import slideMusic from "../assets/slide.mp3";
+import synthMusic from "../assets/synth.mp3";
+import ambientMusic from "../assets/ambient.mp3";
 import EquatorTest from "../components/message-animations/EquatorTest";
 import { Link, useNavigate } from "react-router-dom";
 import MobileNav from "../components/MobileNav";
 import Footer from "../components/Footer";
-import Pump from "../components/PumpCard";
-import Alpha from "../components/Alpha";
 import Chaos from "../components/message-animations/Chaos";
 import TokenExplorer from "../components/TokenExplorer";
 import useChat from "../hooks/useChat";
-// import { walletAddressState } from "./atoms/wallet"
+// import { walletAddressState } from "../atoms/wallet"
 // import { useNavigate } from "react-router-dom" 
 
 const totalWidth = window.innerWidth;
@@ -395,12 +393,6 @@ const Chat = () => {
             </div>
           </>
         );
-
-      case "ALPHA":
-        return <Alpha />;
-
-      case "PUMP":
-        return <Pump />;
     }
   };
 

@@ -49,11 +49,6 @@ const TokenswapStack: React.FC = () => {
     setIsShowingChart(false);
   };
 
-  const toggleFullscreen = () => {
-    setIsShowingChart(!isShowingChart);
-    setIsMinimized(false)
-  };
-
   const closeWindow = () => {
     setIsShowingChart(false);
     setIsMinimized(false)
