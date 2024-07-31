@@ -9,7 +9,7 @@ import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { motion } from 'framer-motion'
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -138,7 +138,7 @@ const TokenswapStack: React.FC = () => {
               <Settings className='text-yellow-100' />
             </IconButton>
 
-            <IconButton size="small" onClick={toggleFullscreen}>
+            <IconButton size="small" onClick={() => null}>
               {isShowingChart ? <FullscreenExit className='text-yellow-100' /> : <CandlestickChartRounded className='text-yellow-100' />}
             </IconButton>
 

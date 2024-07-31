@@ -53,7 +53,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ walletAddress, tokenMintAdd
 
     return (
         <Box fontStyle={{ color: 'whitesmoke' }} display={'flex'} alignItems={'center'} gap={'.2rem'}>
-            <AccountBalanceWallet style={{ fontSize: 15 }} /> <small>{formatNumber(Number(balance))}</small>
+            <AccountBalanceWallet style={{ fontSize: 13 }} /> <small>{formatNumber(Number(balance))}</small>
         </Box>
     );
 };

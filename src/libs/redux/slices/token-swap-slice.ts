@@ -115,13 +115,11 @@ export const handleTokenSwap = createAsyncThunk(
                 maxRetries: 2,
             });
 
-            console.log({ latestBlockHash })
-
             const confirmTransaction = connection.confirmTransaction({
                 blockhash: latestBlockHash.blockhash,
                 lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
                 signature: txid,
-            });
+            }, 'confirmed');
 
             toast.promise(confirmTransaction, {
                 pending: 'Transaction is being processed...',

@@ -81,12 +81,12 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                         paddingInline='.4rem'
                         borderRadius='50px'
                         margin='auto'
-                        style={{ background: 'whitesmoke', maxHeight: '40px' }}
+                        style={{ background: 'grey', maxHeight: '40px' }}
                     >
                         <MenuItem key={selectedToken?.symbol} value={selectedToken?.symbol}>
                             <Box gap={'.3rem'} display='flex' alignItems='center' flexDirection='row' justifyContent='center'>
                                 <img
-                                    className="w-6 h-6 rounded-full aspect-square"
+                                    className="w-5 h-5 rounded-full aspect-square"
                                     src={selectedToken?.logo}
                                     alt={`${selectedToken?.symbol} selectedToken?`}
                                 />
