@@ -12,6 +12,7 @@ import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js';
 import { Buffer } from 'buffer';
 import { toast } from 'react-toastify';
 import { NativeToken } from '../../libs/redux/initial-states';
+import TokenRateRefreshAndStatus from './TokenRateRefreshAndStatus';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -224,6 +225,7 @@ const TokenswapStack: React.FC = () => {
               />
 
               <TokenSwapAnalytic />
+              <TokenRateRefreshAndStatus />
 
               <Button
                 disabled={loading || isFetchingQuoteSwap || isFetchingRate || isFetchingQuoteSwapError || isFetchingRateError}
@@ -236,7 +238,8 @@ const TokenswapStack: React.FC = () => {
                 disableElevation
               >
                 {buttonText()}
-              </Button> 
+              </Button>
+
             </Box>
             {error && <p>Error: {error}</p>}
           </motion.div>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { parseAmount } from '../../utils';
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { fetchQuoteSwap, setAmountToReceive } from '../../libs/redux/slices/token-swap-slice';
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 
 export default function TokenRateRefreshAndStatus() {
   const [initCountdown,] = useState(10) //setInitCountdown
@@ -49,10 +49,9 @@ export default function TokenRateRefreshAndStatus() {
   }, [fetchRate, initCountdown]);
 
   return (
-    <div>
-      TokenRateRefreshAndStatus
-      <div>Time till refetch: {timeTillRefetch} seconds</div>
-      <CircularProgress variant="determinate" value={((initCountdown - timeTillRefetch) / initCountdown) * 100} />
-    </div>
+    <Box display='flex' alignItems='ceter' justifyContent='space-between' paddingInline='1rem'>
+      <Box>Time till refetch: {timeTillRefetch} seconds</Box>
+      <CircularProgress variant="determinate" size={17} value={((initCountdown - timeTillRefetch) / initCountdown) * 100} />
+    </Box>
   );
 }

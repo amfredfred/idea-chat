@@ -80,7 +80,7 @@ export interface TokenSwapState {
 
     isFetchingQuoteSwap: boolean
     isFetchingQuoteSwapError: boolean
-    quoteResponse: QuoteSwapResponse | object
+    quoteResponse: QuoteSwapResponse 
     settings: ISwapSettings
 }
 
@@ -110,7 +110,7 @@ export const tokenSwapInitialState: TokenSwapState = {
     conversionRate: null,
     isFetchingQuoteSwap: false,
     isFetchingQuoteSwapError: false,
-    quoteResponse: {},
+    quoteResponse: {} as any,
     settings: {
         slippageBps: '1'
     }

@@ -8,7 +8,6 @@ import { SwipeDown } from '@mui/icons-material';
 import { fetchTokenRate } from '../../libs/redux/slices/token-swap-slice';
 import { formatNumber } from '../../utils/format';
 import { parseEther } from '../../utils';
-import TokenRateRefreshAndStatus from './TokenRateRefreshAndStatus';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
@@ -74,8 +73,6 @@ const TokenSwapAnalytic = () => {
                     </Grid>
                 </Grid>
             </Button>
-
-            <TokenRateRefreshAndStatus />
 
             <Collapse in={open}>
                 <div className="space-y-4 p-2">
