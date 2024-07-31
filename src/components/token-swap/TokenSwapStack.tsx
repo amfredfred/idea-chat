@@ -2,16 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, fetchQuoteSwap, setAmountToSend, setError } from '../../libs/redux/slices/token-swap-slice';
+import { setLoading, setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, fetchQuoteSwap, setAmountToSend, setError, setAmountToReceive } from '../../libs/redux/slices/token-swap-slice';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { parseAmount } from '../../utils';
 import { motion } from 'framer-motion'
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection, VersionedTransaction } from '@solana/web3.js';
+import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js';
 import { Buffer } from 'buffer';
 import { toast } from 'react-toastify';
+import { NativeToken } from '../../libs/redux/initial-states';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +25,11 @@ const TokenswapStack: React.FC = () => {
     amountToReceive,
     amountToSend,
     isFetchingQuoteSwap,
-    quoteResponse
+    quoteResponse,
+    isFetchingRate,
+    isFetchingQuoteSwapError,
+    isFetchingRateError,
+    settings
   } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -37,6 +42,18 @@ const TokenswapStack: React.FC = () => {
   const handleSwap = async () => {
     dispatch(setLoading(true));
     try {
+
+      const [feeAccount] = PublicKey.findProgramAddressSync(
+        [
+          Buffer.from("referral_ata"),
+          (new PublicKey(FEE_ACCOUNT)).toBuffer(),
+          (new PublicKey(NativeToken.address)).toBuffer(),
+        ],
+        new PublicKey("REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3")
+      );
+
+      console.log({ feeAccount })
+
       const { swapTransaction } = await (
         await fetch('https://quote-api.jup.ag/v6/swap', {
           method: 'POST',
@@ -44,7 +61,7 @@ const TokenswapStack: React.FC = () => {
           body: JSON.stringify({
             quoteResponse,
             userPublicKey: wallet.publicKey?.toString(),
-            feeAccount: FEE_ACCOUNT
+            feeAccount,
             // dynamicComputeUnitLimit: true, // allow dynamic compute limit instead of max 1,400,000
             // custom priority fee
             // prioritizationFeeLamports: 'auto' // or custom lamports: 1000
@@ -127,17 +144,23 @@ const TokenswapStack: React.FC = () => {
     }
   }
 
-
   const fetchRate = useCallback(() => {
     if (tokenToSend?.address && tokenToReceive?.address && amountToSend) {
-      dispatch(fetchQuoteSwap({ fromMint: tokenToSend.address, toMint: tokenToReceive.address, amount: parseAmount(amountToSend, tokenToSend.decimals) }));
+      dispatch(fetchQuoteSwap({
+        fromMint: tokenToSend.address,
+        toMint: tokenToReceive.address,
+        amount: parseAmount(amountToSend, tokenToSend.decimals),
+        settings
+      }));
+    } else {
+      dispatch(setAmountToReceive(0))
     }
-  }, [dispatch, tokenToSend, tokenToReceive, amountToSend]);
+  }, [dispatch, tokenToSend, tokenToReceive, amountToSend, settings]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       fetchRate();
-    }, 500);
+    }, 800);
     return () => clearTimeout(timeoutId);
   }, [fetchRate, amountToSend]);
 
@@ -225,6 +248,7 @@ const TokenswapStack: React.FC = () => {
               <TokenSwapAnalytic />
 
               <Button
+                disabled={loading || isFetchingQuoteSwap || isFetchingRate || isFetchingQuoteSwapError || isFetchingRateError}
                 fullWidth
                 variant="contained"
                 color="primary"

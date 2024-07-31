@@ -36,7 +36,7 @@ export const fetchTokenRate = createAsyncThunk(
 
 export const fetchQuoteSwap = createAsyncThunk(
     'token/fetchQuoteSwap',
-    async ({ fromMint, toMint, amount }: QuoteSwapPrams, thunkAPI) => {
+    async ({ fromMint, toMint, amount, settings }: QuoteSwapPrams, thunkAPI) => {
         try {
             if (!fromMint) return thunkAPI.rejectWithValue({ error: "Invalid from address" })
             if (!toMint) return thunkAPI.rejectWithValue({ error: "Invalid to address" })
@@ -44,8 +44,8 @@ export const fetchQuoteSwap = createAsyncThunk(
             url.searchParams.append('inputMint', fromMint);
             url.searchParams.append('outputMint', toMint);
             url.searchParams.append('amount', String(amount));
-            url.searchParams.append('slippageBps', '1');
-            url.searchParams.append('platformFeeBps', '1');
+            url.searchParams.append('slippageBps', settings.slippageBps);
+            url.searchParams.append('platformFeeBps', import.meta.env.VITE_FEE_BP);
             const response = await axios.get<QuoteSwapResponse>(url.toString());
             return response.data;
         } catch (error) {

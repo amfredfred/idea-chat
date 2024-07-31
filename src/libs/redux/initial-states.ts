@@ -55,7 +55,13 @@ export interface FetchTokenRateParams {
 export interface QuoteSwapPrams {
     fromMint?: string;
     toMint?: string;
+    settings: ISwapSettings,
     amount: number
+}
+
+
+export interface ISwapSettings {
+    slippageBps: string
 }
 
 
@@ -75,6 +81,7 @@ export interface TokenSwapState {
     isFetchingQuoteSwap: boolean
     isFetchingQuoteSwapError: boolean
     quoteResponse: QuoteSwapResponse | object
+    settings: ISwapSettings
 }
 
 export const NativeToken = {
@@ -93,7 +100,7 @@ export const appInitialState: IApp = {
 export const tokenSwapInitialState: TokenSwapState = {
     tokenToSend: undefined,
     tokenToReceive: undefined,
-    amountToSend: 1,
+    amountToSend: 0.0001,
     amountToReceive: 0, loading: false,
     error: null,
     tokensList: [],
@@ -104,6 +111,9 @@ export const tokenSwapInitialState: TokenSwapState = {
     isFetchingQuoteSwap: false,
     isFetchingQuoteSwapError: false,
     quoteResponse: {},
+    settings: {
+        slippageBps: '1'
+    }
 };
 
 export const initialStates = {
