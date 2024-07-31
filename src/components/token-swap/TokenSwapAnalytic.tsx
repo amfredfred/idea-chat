@@ -1,18 +1,16 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Grid, Button, Collapse, Typography, CircularProgress, Skeleton } from '@mui/material';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import MoneyIcon from '@mui/icons-material/Money';
-import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
+import { useAppSelector } from '../../libs/redux/hooks';
 import { SwipeDown } from '@mui/icons-material';
-import { fetchTokenRate } from '../../libs/redux/slices/token-swap-slice';
 import { formatNumber } from '../../utils/format';
 import { parseEther } from '../../utils';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
     const tsacref = useRef<HTMLDivElement>(null);
-    const dispatch = useAppDispatch();
 
     const {
         tokenToSend,
@@ -35,16 +33,6 @@ const TokenSwapAnalytic = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    const fetchRate = useCallback(() => {
-        if (tokenToSend?.address && tokenToReceive?.address) {
-            dispatch(fetchTokenRate({ fromMint: tokenToSend.address, toMint: tokenToReceive.address }));
-        }
-    }, [dispatch, tokenToSend?.address, tokenToReceive?.address]);
-
-    useEffect(() => {
-        fetchRate();
-    }, [fetchRate]);
 
     const skeletonLoading = <Skeleton style={{ borderRadius: '50px' }} variant="rectangular" width={50} height={18} />;
     const platformFee = formatNumber(parseEther(Number(quoteResponse?.platformFee?.amount || 0), Number(tokenToReceive?.decimals || 0)));

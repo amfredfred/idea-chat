@@ -13,7 +13,6 @@ export default function TokenRateRefreshAndStatus() {
   const { tokenToSend, tokenToReceive, amountToSend, settings } = useAppSelector(state => state.tokenSwap);
 
 
-
   const fetchQuote = useCallback(() => {
     if (tokenToSend?.address && tokenToReceive?.address && amountToSend) {
       dispatch(fetchQuoteSwap({
