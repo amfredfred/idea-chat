@@ -133,4 +133,5 @@ export interface ITokenSwapInputProps {
   amount?: string;
   readonly?: boolean
   value: number | string
+  loading?: boolean
 }

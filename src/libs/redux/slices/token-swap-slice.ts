@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { initialStates, NativeToken, FetchTokenRateParams, TokenRate, QuoteSwapPrams } from "../initial-states"
+import { initialStates, NativeToken, FetchTokenRateParams, TokenRate, QuoteSwapPrams, QuoteSwapResponse } from "../initial-states"
 import axios from "axios";
+import { parseEther } from "../../../utils";
 
 
 const handleTokenSelection = (state: typeof initialStates['tokenSwapInitialState'], action: any, tokenKey: 'tokenToSend' | 'tokenToReceive') => {
@@ -43,10 +44,9 @@ export const fetchQuoteSwap = createAsyncThunk(
             url.searchParams.append('inputMint', fromMint);
             url.searchParams.append('outputMint', toMint);
             url.searchParams.append('amount', String(amount));
-            // url.searchParams.append('slippageBps', '1');
-            // url.searchParams.append('platformFeeBps', '1');
-            console.log(url.toString(), amount)
-            const response = await axios.get<{ data: { [key: string]: TokenRate } }>(`https://price.jup.ag/v6/price?ids=${fromMint}&vsToken=${toMint}`);
+            url.searchParams.append('slippageBps', '1');
+            url.searchParams.append('platformFeeBps', '1');
+            const response = await axios.get<QuoteSwapResponse>(url.toString());
             return response.data;
         } catch (error) {
             console.error('Failed to fetch token rate:', error);
@@ -110,7 +110,8 @@ const tokenSwapSlice = createSlice({
             state.isFetchingQuoteSwap = false
             state.isFetchingQuoteSwapError = false
             console.log({ payload })
-            // state.quoteResponse = payload?.data[state.tokenToSend?.address as string].price
+            state.quoteResponse = payload
+            state.amountToReceive = parseEther(Number(payload.outAmount), Number(state.tokenToReceive?.decimals))
         }).addCase(fetchQuoteSwap.pending, (state,) => {
             state.isFetchingQuoteSwap = true
             state.isFetchingQuoteSwapError = false

@@ -12,7 +12,7 @@ import { motion } from 'framer-motion'
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error, isVisible, tokenToSend, tokenToReceive, loading, amountToReceive, amountToSend } = useAppSelector(state => state.tokenSwap);
+  const { error, isVisible, tokenToSend, tokenToReceive, loading, amountToReceive, amountToSend, isFetchingQuoteSwap } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -172,6 +172,7 @@ const TokenswapStack: React.FC = () => {
                 onChange={() => null}
                 selectedToken={tokenToReceive}
                 value={amountToReceive}
+                loading={isFetchingQuoteSwap}
                 onTokenSelect={(pump) => dispatch(setSelectedtokenToReceive(pump))}
               // amount="~$3.3K"
               />

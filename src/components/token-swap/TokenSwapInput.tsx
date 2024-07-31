@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Grid, Typography, Paper, InputBase, MenuItem } from '@mui/material';
+import { Box, Grid, Typography, Paper, InputBase, MenuItem, CircularProgress } from '@mui/material';
 import { styled } from '@mui/system';
 import { ITokenSwapInputProps } from '../../common/types';
 import TokenSelection from './TokenSelection';
@@ -23,7 +23,8 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
     onTokenSelect,
     amount,
     readonly,
-    value
+    value,
+    loading
 }) => {
 
     const [isTokensListOpen, setIsTokensListOpen] = useState(false)
@@ -38,7 +39,7 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                 <Typography variant="body2" className='text-white' style={{ textTransform: 'capitalize' }}>{side}</Typography>
             </Grid>
             <StyledPaper style={{ borderRadius: '.5rem' }} className='bg-slate-700'>
-                <Box display='flex' flexDirection='row' gap='1rem' paddingInline='.6rem' >
+                <Box display='flex' flexDirection='row' gap='1rem' paddingInline='.6rem' alignItems='center'>
                     <StyledInput
                         placeholder="0"
                         type="text"
@@ -48,6 +49,10 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                         value={value}
                         onChange={({ target: { value } }) => onChange(value)}
                     />
+
+                    {loading && <Box>
+                        <CircularProgress size={20} thickness={10} />
+                    </Box>}
 
                     <Box
                         onClick={() => setIsTokensListOpen(state => !state)}

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Grid, Button, Collapse, Typography, CircularProgress } from '@mui/material';
+import { Grid, Button, Collapse, Typography, CircularProgress, Skeleton } from '@mui/material';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { SwipeDown } from '@mui/icons-material';
 import { fetchTokenRate } from '../../libs/redux/slices/token-swap-slice';
 import { formatNumber } from '../../utils/format';
+import { parseEther } from '../../utils';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
@@ -21,7 +22,9 @@ const TokenSwapAnalytic = () => {
         tokenToReceive,
         isFetchingRate,
         isFetchingRateError,
-        conversionRate
+        conversionRate,
+        quoteResponse,
+        isFetchingQuoteSwap
     } = useAppSelector(state => state.tokenSwap)
 
 
@@ -43,6 +46,10 @@ const TokenSwapAnalytic = () => {
     useEffect(() => {
         fetchRate();
     }, [fetchRate]);
+
+
+    const skeletonLoading = <Skeleton style={{ borderRadius: '50px' }} variant="rectangular" width={50} height={25} />
+    const platformFee = formatNumber(parseEther(Number(quoteResponse?.platformFee?.amount), Number(tokenToReceive?.decimals)))
 
     return (
         <div ref={tsacref} className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
@@ -82,22 +89,24 @@ const TokenSwapAnalytic = () => {
                                 <span>Price Impact</span>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <span>0.19%</span>
+                        <Grid item display='flex' flexDirection='row' alignItems='center'>
+                            <span>{(quoteResponse?.priceImpactPct || isFetchingQuoteSwap) ? skeletonLoading : formatNumber(quoteResponse.priceImpactPct)}</span>%
                         </Grid>
                     </Grid>
 
-                    <Grid container justifyContent="space-between">
-                        <Grid item>
-                            <Grid container alignItems="center">
-                                <AttachMoneyIcon fontSize='small' className="mr-2" />
-                                <span>Max to pay</span>
+                    {
+                        <Grid container justifyContent="space-between">
+                            <Grid item>
+                                <Grid container alignItems="center">
+                                    <AttachMoneyIcon fontSize='small' className="mr-2" />
+                                    <span>Max to pay</span>
+                                </Grid>
+                            </Grid>
+                            <Grid item>
+                                <span>1.0070 WETH</span>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <span>1.0070 WETH</span>
-                        </Grid>
-                    </Grid>
+                    }
 
                     <Grid container justifyContent="space-between">
                         <Grid item>
@@ -106,8 +115,8 @@ const TokenSwapAnalytic = () => {
                                 <span>Platform Fees</span>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <span>0.01 ETH</span>
+                        <Grid item display='flex' flexDirection='row' alignItems='center'>
+                            <span>{(!quoteResponse?.platformFee?.amount || isFetchingQuoteSwap) ? skeletonLoading : platformFee}</span>&nbsp;{tokenToReceive?.symbol}
                         </Grid>
                     </Grid>
                 </div>

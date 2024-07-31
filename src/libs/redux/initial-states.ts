@@ -6,6 +6,40 @@ export interface IApp {
     isLoading: boolean,
 }
 
+export interface SwapInfo {
+    ammKey: string;
+    label: string;
+    inputMint: string;
+    outputMint: string;
+    inAmount: string;
+    outAmount: string;
+    feeAmount: string;
+    feeMint: string;
+}
+
+export interface RoutePlan {
+    swapInfo: SwapInfo;
+    percent: number;
+}
+
+export interface QuoteSwapResponse {
+    inputMint: string;
+    inAmount: string;
+    outputMint: string;
+    outAmount: string;
+    otherAmountThreshold: string;
+    swapMode: string;
+    slippageBps: number;
+    platformFee: {
+        amount: string,
+        feeBps: number
+    }; 
+    priceImpactPct: string;
+    routePlan: RoutePlan[];
+    contextSlot: number;
+    timeTaken: number;
+}
+
 export interface TokenRate {
     id: string;
     mintSymbol: string;
@@ -40,7 +74,7 @@ export interface TokenSwapState {
 
     isFetchingQuoteSwap: boolean
     isFetchingQuoteSwapError: boolean
-    quoteResponse: any
+    quoteResponse: QuoteSwapResponse
 }
 
 export const NativeToken = {
@@ -48,7 +82,7 @@ export const NativeToken = {
     logo: SolanaLogo,
     address: 'So11111111111111111111111111111111111111112',
     mint: 'So11111111111111111111111111111111111111112',
-    decimals: 6
+    decimals: 9
 }
 
 export const appInitialState: IApp = {
@@ -59,7 +93,7 @@ export const appInitialState: IApp = {
 export const tokenSwapInitialState: TokenSwapState = {
     tokenToSend: undefined,
     tokenToReceive: undefined,
-    amountToSend: 0,
+    amountToSend: 1,
     amountToReceive: 0, loading: false,
     error: null,
     tokensList: [],
