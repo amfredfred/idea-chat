@@ -52,7 +52,7 @@ export default function TokenRateRefreshAndStatus() {
     <div>
       TokenRateRefreshAndStatus
       <div>Time till refetch: {timeTillRefetch} seconds</div>
-      <CircularProgress variant="determinate" value={(initCountdown / timeTillRefetch) * 100} />
+      <CircularProgress variant="determinate" value={((initCountdown - timeTillRefetch) / initCountdown) * 100} />
     </div>
   );
 }
