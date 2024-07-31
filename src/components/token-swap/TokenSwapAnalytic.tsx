@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Grid, Button, Collapse, Typography, CircularProgress, Skeleton } from '@mui/material';
-import AltRouteIcon from '@mui/icons-material/AltRoute';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import MoneyIcon from '@mui/icons-material/Money';
@@ -12,30 +11,30 @@ import { parseEther } from '../../utils';
 
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
-    const tsacref = useRef<HTMLDivElement>(null)
-    const dispatch = useAppDispatch()
+    const tsacref = useRef<HTMLDivElement>(null);
+    const dispatch = useAppDispatch();
 
     const {
-        amountToSend,
-        amountToReceive,
         tokenToSend,
         tokenToReceive,
         isFetchingRate,
-        isFetchingRateError,
         conversionRate,
         quoteResponse,
         isFetchingQuoteSwap
-    } = useAppSelector(state => state.tokenSwap)
+    } = useAppSelector(state => state.tokenSwap);
 
+    const handleClickOutside = (event: MouseEvent) => {
+        if (tsacref.current && !tsacref.current.contains(event.target as Node)) {
+            setOpen(false);
+        }
+    };
 
     useEffect(() => {
-        document.addEventListener('mousedown', (event) => {
-            if (event.target !== tsacref.current && !tsacref.current?.contains(event.target as any)) {
-                setOpen(false)
-            }
-        })
-        return document.removeEventListener('mousedown', () => { })
-    }, [open, tsacref])
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const fetchRate = useCallback(() => {
         if (tokenToSend?.address && tokenToReceive?.address) {
@@ -47,31 +46,31 @@ const TokenSwapAnalytic = () => {
         fetchRate();
     }, [fetchRate]);
 
-
-    const skeletonLoading = <Skeleton style={{ borderRadius: '50px' }} variant="rectangular" width={50} height={18} />
-    const platformFee = formatNumber(parseEther(Number(quoteResponse?.platformFee?.amount), Number(tokenToReceive?.decimals)))
-    const maxToPay = parseEther(Number(quoteResponse.inAmount), Number(tokenToSend?.decimals))
+    const skeletonLoading = <Skeleton style={{ borderRadius: '50px' }} variant="rectangular" width={50} height={18} />;
+    const platformFee = formatNumber(parseEther(Number(quoteResponse?.platformFee?.amount || 0), Number(tokenToReceive?.decimals || 0)));
+    const maxToPay = parseEther(Number(quoteResponse?.inAmount || 0), Number(tokenToSend?.decimals || 0));
 
     const priceImpactColor = () => {
-        if (Number(quoteResponse?.priceImpactPct) > .1) return 'red'
-        else if (Number(quoteResponse?.priceImpactPct) < .1) return 'grey'
-        else return 'green'
-    }
+        if (Number(quoteResponse?.priceImpactPct) > 0.1) return 'red';
+        if (Number(quoteResponse?.priceImpactPct) < 0.1) return 'grey';
+        return 'green';
+    };
 
     return (
-        <div ref={tsacref} className="  text-white w-full bg-slate-700 p-2  rounded-lg text-xs">
+        <div ref={tsacref} className="text-white w-full bg-slate-700 p-2 rounded-lg text-xs">
             <Button
                 onClick={() => setOpen(!open)}
-                className="border-b pb-2 mb-2 cursor-pointer w-full text-white">
-                <Grid container item alignItems="center" justifyContent="space-between" direction='row' display='flex'>
-                    <Grid item >
-                        <Grid container alignItems="center">
-                            <Typography variant='body2'>1 {tokenToSend?.symbol} = {isFetchingRate ? <CircularProgress size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}</Typography>
-                        </Grid>
+                className="border-b pb-2 mb-2 cursor-pointer w-full text-white"
+            >
+                <Grid container alignItems="center" justifyContent="space-between">
+                    <Grid item>
+                        <Typography variant='body2'>
+                            1 {tokenToSend?.symbol} = {isFetchingRate ? <CircularProgress size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}
+                        </Typography>
                     </Grid>
-                </Grid>
-                <Grid item xs={1}>
-                    <SwipeDown fontSize='small' className={`transform transition-transform ${open ? 'rotate-180' : ''}`} />
+                    <Grid item xs={1}>
+                        <SwipeDown fontSize='small' className={`transform transition-transform ${open ? 'rotate-180' : ''}`} />
+                    </Grid>
                 </Grid>
             </Button>
 
@@ -80,40 +79,26 @@ const TokenSwapAnalytic = () => {
                     <Grid container justifyContent="space-between">
                         <Grid item>
                             <Grid container alignItems="center">
-                                <AltRouteIcon fontSize='small' className="mr-2" />
-                                <span>Order Routing</span>
+                                <TrendingDownIcon fontSize='small' className="mr-2" />
+                                <span>Price Impact</span>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <span>100% AugustusRFQ</span>
+                        <Grid item style={{ color: priceImpactColor(), fontWeight: 'bolder' }}>
+                            <strong>{(!quoteResponse?.priceImpactPct || isFetchingQuoteSwap) ? skeletonLoading : formatNumber(quoteResponse.priceImpactPct)}</strong><strong>%</strong>
                         </Grid>
                     </Grid>
 
                     <Grid container justifyContent="space-between">
                         <Grid item>
                             <Grid container alignItems="center">
-                                <TrendingDownIcon fontSize='small' className="mr-2" />
-                                <span>Price Impact</span>
+                                <AttachMoneyIcon fontSize='small' className="mr-2" />
+                                <span>Max to pay</span>
                             </Grid>
                         </Grid>
-                        <Grid item display='flex' flexDirection='row' alignItems='center' style={{ color: priceImpactColor(), fontWeight: 'bolder' }}>
-                            <strong>{(!quoteResponse?.priceImpactPct || isFetchingQuoteSwap) ? skeletonLoading : formatNumber(quoteResponse.priceImpactPct)}</strong><strong>%</strong>
+                        <Grid item>
+                            <strong>{(!maxToPay || isFetchingQuoteSwap) ? skeletonLoading : maxToPay} </strong>&nbsp;<strong>{tokenToSend?.symbol}</strong>
                         </Grid>
                     </Grid>
-
-                    {
-                        <Grid container justifyContent="space-between">
-                            <Grid item>
-                                <Grid container alignItems="center">
-                                    <AttachMoneyIcon fontSize='small' className="mr-2" />
-                                    <span>Max to pay</span>
-                                </Grid>
-                            </Grid>
-                            <Grid item display='flex' flexDirection='row' alignItems='center' >
-                                <strong>{(!maxToPay || isFetchingQuoteSwap) ? skeletonLoading : maxToPay} </strong>&nbsp;<strong>{tokenToSend?.symbol}</strong>
-                            </Grid>
-                        </Grid>
-                    }
 
                     <Grid container justifyContent="space-between">
                         <Grid item>
@@ -122,7 +107,7 @@ const TokenSwapAnalytic = () => {
                                 <span>Platform Fees</span>
                             </Grid>
                         </Grid>
-                        <Grid item display='flex' flexDirection='row' alignItems='center'>
+                        <Grid item>
                             <span>{(!quoteResponse?.platformFee?.amount || isFetchingQuoteSwap) ? skeletonLoading : platformFee}</span>&nbsp;{tokenToReceive?.symbol}
                         </Grid>
                     </Grid>

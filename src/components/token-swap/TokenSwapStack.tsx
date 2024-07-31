@@ -7,20 +7,61 @@ import { Line } from 'react-chartjs-2';
 import { Fullscreen, FullscreenExit, Minimize, Close } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
-import { promise } from '../../utils';
+import { parseAmount } from '../../utils';
 import { motion } from 'framer-motion'
+import { useWallet } from '@solana/wallet-adapter-react';
+import { VersionedTransaction } from '@solana/web3.js';
+import { Buffer } from 'buffer';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error, isVisible, tokenToSend, tokenToReceive, loading, amountToReceive, amountToSend, isFetchingQuoteSwap } = useAppSelector(state => state.tokenSwap);
+  const {
+    error,
+    isVisible,
+    tokenToSend,
+    tokenToReceive,
+    loading,
+    amountToReceive,
+    amountToSend,
+    isFetchingQuoteSwap,
+    quoteResponse
+  } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const wallet = useWallet()
+
+  console.log(wallet?.publicKey)
 
   const handleSwap = async () => {
     dispatch(setLoading(true));
-    // Add logic to perform the swap here
-    // After performing the swap, update the state accordingly
-    await promise(10)
+    const { swapTransaction } = await (
+      await fetch('https://quote-api.jup.ag/v6/swap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          // quoteResponse from /quote api
+          quoteResponse,
+          // user public key to be used for the swap
+          userPublicKey: wallet.publicKey,
+          // auto wrap and unwrap SOL. default is true
+          wrapAndUnwrapSol: true,
+          // feeAccount is optional. Use if you want to charge a fee.  feeBps must have been passed in /quote API.
+          // feeAccount: "fee_account_public_key"
+        })
+      })
+    ).json();
+
+    console.log({ swapTransaction })
+
+    // deserialize the transaction
+    const swapTransactionBuf = Buffer.from(swapTransaction, 'base64');
+    const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
+    console.log({ transaction });
+
+    // Sign the transaction using the wallet's signTransaction method
+    const signedTransaction = await wallet?.signTransaction?.(transaction);
+    console.log({ signedTransaction });
+
     dispatch(setLoading(false));
   };
 
@@ -90,13 +131,12 @@ const TokenswapStack: React.FC = () => {
     ],
   };
 
-  const parseAmount = amountToSend * 10 ** Number(tokenToSend?.decimals);
 
   const fetchRate = useCallback(() => {
-    if (tokenToSend?.address && tokenToReceive?.address && parseAmount) {
-      dispatch(fetchQuoteSwap({ fromMint: tokenToSend.address, toMint: tokenToReceive.address, amount: parseAmount }));
+    if (tokenToSend?.address && tokenToReceive?.address && amountToSend) {
+      dispatch(fetchQuoteSwap({ fromMint: tokenToSend.address, toMint: tokenToReceive.address, amount: parseAmount(amountToSend, tokenToSend.decimals) }));
     }
-  }, [dispatch, tokenToSend, tokenToReceive, parseAmount]);
+  }, [dispatch, tokenToSend, tokenToReceive, amountToSend]);
 
   useEffect(() => {
     fetchRate();
