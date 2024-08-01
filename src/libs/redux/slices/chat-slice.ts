@@ -8,7 +8,6 @@ interface Message {
     username: string;
     profilePic: string;
 }
-
 interface Settings {
     visual: string;
     audio: string;
@@ -24,7 +23,8 @@ interface ChatState {
     isChatSettingsOpen: boolean;
     chatAudio: string;
     isMusicPlaying: boolean;
-    state: IChatStates
+    state: IChatStates,
+    typedMessage: string
 }
 
 const initialState: ChatState = {
@@ -40,7 +40,8 @@ const initialState: ChatState = {
     isChatSettingsOpen: false,
     chatAudio: onMusic,
     isMusicPlaying: true,
-    state: 'DEN'
+    state: 'DEN',
+    typedMessage: ''
 };
 
 const chatSlice = createSlice({
@@ -76,6 +77,9 @@ const chatSlice = createSlice({
         },
         setChatState(state, action: PayloadAction<IChatStates>) {
             state.state = action.payload;
+        },
+        setTypedMessage: (state, action: PayloadAction<string>) => {
+            state.typedMessage = action.payload
         }
     }
 });

@@ -2,33 +2,58 @@ import { Box } from '@mui/material'
 import Focused from '../message-animations/Focused'
 import Chaos from '../message-animations/Chaos'
 import EquatorTest from '../message-animations/EquatorTest'
+import ChatSettings from './ChatSettings'
+import { motion, AnimatePresence } from "framer-motion";
+import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks'
+import { Close, Send, Settings } from '@mui/icons-material'
+import { setChatSettingsOpen } from '../../libs/redux/slices/chat-slice'
 
-export default function Den() {
+
+export default function DenChannel() {
+
+  const totalWidth = window.innerWidth;
+  const totalHeight = window.innerHeight;
+  const dispatch = useAppDispatch()
+  const theme = useAppSelector(state => state.theme.current.styles)
+  const settingsModal = useAppSelector(state => state.chat.settingsModal.motion)
+  const initialMessages = useAppSelector(state => state.chat.initialMessages)
+  const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen)
+  const currentUserMessage = useAppSelector(state => state.chat.newMessages)
+
+  const clickAnimation = {
+    scale: 0.9,
+    transition: { type: "spring", stiffness: 400, damping: 10 },
+  };
+
+  const handleSendMessage = () => {
+    console.log("SEND MESSAGE")
+  }
+
   return (
     <Box width='100%'>
-      <div className="relative  lg:h-[75%] overflow-y-auto mb-[10px]  w-full">
-        {chat.settingsModal.motion === "focused" ? (
-          chat.initialMessages.length > 0 && (
+      <div className="relative   overflow-y-auto  w-full">
+        {settingsModal === "focused" ? (
+          initialMessages.length > 0 && (
             <Focused />
           )
-        ) : chat.settingsModal.motion === "chaos" ? (
+        ) : settingsModal === "chaos" ? (
           <Chaos
-            newMessage={chat.newMessage}
+            newMessage={currentUserMessage?.[0]}
             width={totalWidth}
             height={totalHeight}
           />
         ) : (
-          chat.initialMessages.length > 0 && (
+          initialMessages.length > 0 && (
             <EquatorTest
-              initialMessages={chat.initialMessages}
-              newMessage={chat.newMessage}
+              initialMessages={initialMessages}
+              newMessage={currentUserMessage}
             />
           )
         )}
       </div>
       {/* -------------------------------------- */}
 
-      <div className="flex items-start  justify-center gap-2 lg:gap-4 h-[7%] w-full ">
+      <div className="flex items-start  justify-center bg-red-900 relative gap-2 lg:gap-4   w-full ">
         <AnimatePresence>
           <div className="w-[60%] lg:w-[40%] xl:w-[35%]   ">
             <motion.textarea
@@ -41,65 +66,45 @@ export default function Den() {
                 damping: 30,
               }}
               placeholder="type something retarded..."
-              value={chat.currentUserMessage}
-              className={`bg-white ${theme.styles.bgColor === "#ffffff"
+              value={''}
+              className={`bg-white ${theme.bgColor === "#ffffff"
                 ? "border border-black"
                 : "border-none"
                 } text-[#121212] uppercase p-3 lg:p-5 text-[13px] lg:text-[18px] mx-auto rounded-[4px] lg:rounded-[8px] w-full outline-none resize-none`}
-              onChange={(e) => chat.setCurrentUserMessage(e.target.value)}
-              onKeyDown={chat.handleKeyDown}
+              // onChange={() => null} //chat.setCurrentUserMessage(e.target.value)
+              // onKeyDown={chat.handleKeyDown}
               rows={1}
             />
           </div>
         </AnimatePresence>
 
-        <motion.button
-          whileTap={chat.clickAnimation}
-          className={`p-[10px] lg:p-[15px] ${theme.styles.bgColor === "#ffffff"
-            ? "border border-black"
-            : "border-none"
-            } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
-          onClick={chat.handleSendMessage}
-        >
-          <AiOutlineSend
-            className={`w-[22px] lg:w-[35px] h-auto `}
-            style={{
-              color: theme.styles.buttonColor,
-            }}
-          />
-        </motion.button>
-        {!chat.isSettingsOpen && (
+        <Box>
           <motion.button
-            whileTap={chat.clickAnimation}
-            className={`p-[10px] lg:p-[15px] ${theme.styles.bgColor === "#ffffff"
-              ? "border border-black"
-              : "border-none"
-              } bg-white rounded-[4px] lg:rounded-[8px] lg:hidden`}
-            onClick={chat.handleSendMessage}
-          >
-            <AiOutlineSend
-              className={`w-[22px] lg:w-[35px] h-auto `}
-              style={{
-                color: theme.styles.buttonColor,
-              }}
-            />
-          </motion.button>
-        )}
-
-        <Box ref={chat.modalRef} className="relative isolate">
-          <motion.button
-            whileTap={chat.clickAnimation}
-            className={`p-[10px] lg:p-[15px] ${theme.styles.bgColor === "#ffffff"
+            whileTap={clickAnimation}
+            className={`p-[10px] lg:p-[15px] ${theme.bgColor === "#ffffff"
               ? "border border-black"
               : "border-none"
               } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
-            onClick={() => chat.setIsSettingsOpen(state => !state)}>
-            {chat.isSettingsOpen ? <SettingsClosed color={theme.styles.buttonColor} /> : <SettingsIcon color={theme.styles.buttonColor} />}
+            onClick={handleSendMessage}
+          >
+            <Send style={{ color: theme.buttonColor }} />
           </motion.button>
         </Box>
 
+        <Box >
+          <motion.button
+            whileTap={clickAnimation}
+            className={`p-[10px] lg:p-[15px] ${theme.bgColor === "#ffffff"
+              ? "border border-black"
+              : "border-none"
+              } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
+            onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}
+          >
+            {isChatSettingsOpen ? <Close style={{ color: theme.buttonColor }} /> : <Settings style={{ color: theme.buttonColor }} />}
+          </motion.button>
+        </Box>
 
-        {SettingsPartial}
+        <ChatSettings />
       </div>
     </Box>
   )
