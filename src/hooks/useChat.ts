@@ -148,7 +148,7 @@ const useChat = () => {
     }, [websiteAudio]);
 
     const handleClickOutside = useCallback((event: MouseEvent) => {
-        if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        if (modalRef.current !== event.target && !modalRef?.current?.contains?.(event.target as Node)) {
             setIsSettingsOpen(false);
         }
     }, []);

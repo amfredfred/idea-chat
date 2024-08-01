@@ -124,17 +124,15 @@ const notificationSounds: { [key in IChatStates]: string } = {
   ALPHA: ''
 }
 
-
 const Chat = () => {
   const navigate = useNavigate();
 
   const chat = useChat()
 
   const SettingsPartial = <motion.div
-    ref={chat.modalRef}
-    initial={{ y: "100%" }}
+    initial={{ y: 100 }}
     animate={{ y: 0 }}
-    exit={{ y: "100%" }}
+    exit={{ y: 100 }}
     transition={{ type: "spring", stiffness: 300, damping: 30 }}
     className="min-w-max absolute  right-[80%] lg:bottom-[90%] text-black z-50 flex flex-col gap-[10px] shadow rounded"
   >
@@ -371,21 +369,23 @@ const Chat = () => {
             />
           </motion.button>
         )}
-        <motion.button
-          whileTap={chat.clickAnimation}
-          className={`p-[10px] lg:p-[15px] relative isolate ${chat.websiteTheme.bgColor === "#ffffff"
-            ? "border border-black"
-            : "border-none"
-            } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
-          onClick={() => chat.setIsSettingsOpen(state => !state)}
-        >
+
+        <Box ref={chat.modalRef} className="relative isolate">
+          <motion.button
+            whileTap={chat.clickAnimation}
+            className={`p-[10px] lg:p-[15px] ${chat.websiteTheme.bgColor === "#ffffff"
+              ? "border border-black"
+              : "border-none"
+              } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
+            onClick={() => chat.setIsSettingsOpen(state => !state)}>
+            {chat.isSettingsOpen ? <SettingsClosed color={chat.websiteTheme.buttonColor} /> : <SettingsIcon color={chat.websiteTheme.buttonColor} />}
+          </motion.button>
           {chat.isSettingsOpen && SettingsPartial}
-          {chat.isSettingsOpen ? <SettingsClosed color={chat.websiteTheme.buttonColor} /> : <SettingsIcon color={chat.websiteTheme.buttonColor} />}
-        </motion.button>
+        </Box>
+
       </div>
     </Box>
   )
-
 
   return (
     <Box
