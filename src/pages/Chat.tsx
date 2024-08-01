@@ -21,7 +21,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MobileNav from "../components/MobileNav";
 import Footer from "../components/Footer";
 import Chaos from "../components/message-animations/Chaos";
-import TokenExplorer from "../components/TokenExplorer";
+import TokenExplorer from "../components/pumps-and-den/TokenExplorer";
 import useChat from "../hooks/useChat";
 // import { walletAddressState } from "../atoms/wallet"
 // import { useNavigate } from "react-router-dom" 

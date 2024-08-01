@@ -1,5 +1,5 @@
-import { IPumpCoin } from "../common/types";
-import PumpCard from "./PumpCard";
+import { IPumpCoin } from "../../common/types";
+import PumpCard from "../PumpCard";
 
 export default function ToekensAboutToGraduate({ pools }: { pools?: IPumpCoin[] }) {
 

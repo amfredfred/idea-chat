@@ -1,4 +1,4 @@
-import { IPumpCoinMigrated } from "../common/types";
+import { IPumpCoinMigrated } from "../../common/types";
 import PumpCard from "./PumpCard";
 
 export default function TokensGraduated({ pools }: { pools?: IPumpCoinMigrated[] }) {

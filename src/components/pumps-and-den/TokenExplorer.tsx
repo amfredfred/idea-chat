@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import TokensNewlyCreated from "./TokensNewlyCreated";
 import ToekensAboutToGraduate from "./ToekensAboutToGraduate";
 import TokensGraduated from "./TokensGraduated";
-import { IPumpRequestParams, PumpSocketReceived } from "../common/types";
-import usePumpScoket from "../hooks/usePumpSocket";
-import { useAppDispatch } from "../libs/redux/hooks";
-import { setTokensList } from "../libs/redux/slices/token-swap-slice";
+import { IPumpRequestParams, PumpSocketReceived } from "../../common/types";
+import usePumpScoket from "../../hooks/usePumpSocket";
+import { useAppDispatch } from "../../libs/redux/hooks";
+import { setTokensList } from "../../libs/redux/slices/token-swap-slice";
 
 export default function TokenExplorer() {
 
