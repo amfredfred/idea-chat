@@ -6,7 +6,7 @@ import { IPumpRequestParams, PumpSocketReceived } from "../../common/types";
 import usePumpScoket from "../../hooks/usePumpSocket";
 import { useAppDispatch } from "../../libs/redux/hooks";
 import { setTokensList } from "../../libs/redux/slices/token-swap-slice";
-import { Box, Button, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 
 export default function TokenExplorer() {
 
@@ -21,7 +21,7 @@ export default function TokenExplorer() {
     filter_migrated: {}
   }) //setSearchParams
 
-  const isMobile = useMediaQuery("(max-width:500px)")
+  const isMobile = useMediaQuery("(max-width:768px)")
   // const isTablet = useMediaQuery("(max-width:999px)")
 
   const [selectedView, setSelectedView] = useState<'new' | 'about' | 'graduated'>('graduated');
@@ -41,20 +41,27 @@ export default function TokenExplorer() {
   const abouttograduate = pumpList?.pump?.filter?.(pool => (Number(pool.usd_market_cap) >= 40e3) && (Number(pool.usd_market_cap) < 59e3))
 
   const pumpsNavigation = (
-    <Box display="flex" justifyContent="space-between" padding="1rem" fontStyle={{ background: 'orange', }}>
-      <Button variant="contained" onClick={() => setSelectedView('new')}>Newly Created</Button>
-      <Button variant="contained" onClick={() => setSelectedView('about')}>About to Graduate</Button>
-      <Button variant="contained" onClick={() => setSelectedView('graduated')}>Graduated</Button>
-    </Box>
+    <Box display="flex" justifyContent="space-between" className=' h-16'>
+      <Box className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => setSelectedView('new')}>
+        <small>New</small>
+      </Box>
+      <Box className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => setSelectedView('about')}>
+        <small>About To Graduate</small>
+      </Box>
+      <Box className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => setSelectedView('graduated')}>
+        <small>Graduated</small>
+      </Box>
+    </Box >
   );
 
   return (
-    <Box className="container overflow-hidden mx-auto flex flex-col " >
-      <Box className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 divide-x divide-grey-500">
+    <Box className="container overflow-hidden mx-auto flex flex-colh-full" >
+      <Box className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 divide-x divide-grey-500 " maxHeight='100%' flexGrow='1'>
         {isMobile ? (<>
           {selectedView === 'new' && <TokensNewlyCreated pools={newpumps} />}
           {selectedView === 'about' && <ToekensAboutToGraduate pools={abouttograduate} />}
           {selectedView === 'graduated' && <TokensGraduated pools={pumpList?.migrated} />}
+          {pumpsNavigation}
         </>
         ) : (<>
           <TokensNewlyCreated pools={newpumps} />
@@ -62,7 +69,6 @@ export default function TokenExplorer() {
           <TokensGraduated pools={pumpList?.migrated} /></>
         )}
       </Box>
-      {pumpsNavigation}
     </Box>
   )
 }

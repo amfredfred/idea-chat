@@ -23,7 +23,7 @@ import Footer from "../components/Footer";
 import Chaos from "../components/message-animations/Chaos";
 import TokenExplorer from "../components/pumps-and-den/TokenExplorer";
 import useChat from "../hooks/useChat";
-import { Box } from "@mui/material";
+import { Box, Divider, Drawer } from "@mui/material";
 import { IChatStates } from "../common/types";
 // import { walletAddressState } from "../atoms/wallet"
 // import { useNavigate } from "react-router-dom" 
@@ -129,23 +129,21 @@ const Chat = () => {
 
   const chat = useChat()
 
-  const SettingsPartial = <motion.div
-    initial={{ y: 100 }}
-    animate={{ y: 0 }}
-    exit={{ y: 100 }}
-    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-    className="min-w-max absolute  right-[80%] lg:bottom-[90%] text-black z-50 flex flex-col gap-[10px] shadow rounded"
+  const SettingsPartial = <Drawer
+    anchor='right'
+    open={chat.isSettingsOpen}
+    onClose={() => chat.setIsSettingsOpen(false)}
   >
     <div
       className={`${chat.websiteTheme.bgColor === "#ffffff"
         ? "border border-black"
         : "border-none"
-        } bg-white  p-5 rounded-[8px] flex flex-col gap-[20px] lg:gap-[5px] `}  >
-      <div className=" flex lg:items-center rounded-[8px] flex-col lg:flex-row ">
+        } bg-white  p-5 rounded-[8px] flex flex-col  lg:gap-[5px] `}  >
+      <div className=" flex  rounded-[8px] flex-col ">
         <div className=" w-[15%]  ">
-          <p className=" text-[12px] lg:text-[16px]">visual</p>
+          <p className=" text-[12px] lg:text-[16px]">Visual</p>
         </div>
-        <div className=" flex items-center justify-between w-full mt-[10px] lg:mt-[0px]">
+        <div className=" flex items-center justify-between w-full gap-3">
           <div className="  w-full flex justify-between lg:justify-around">
 
             {virtuals.map((virtual, index) => (
@@ -180,16 +178,15 @@ const Chat = () => {
 
       <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden " />
       {/* --------------------------------------------- */}
-      <div className=" flex lg:items-center flex-col lg:flex-row   rounded-[8px]">
+      <div className=" flex  flex-col   rounded-[8px]">
         <div
           className=" flex items-center gap-[10px] cursor-pointer mr-[5px] "
           onClick={chat.handleMusicPlayPause}
         >
-          <p className="  text-[12px] lg:text-[16px]">audio</p>
+          <p className="  text-[12px] lg:text-[16px]">Audio</p>
           <img src={audioIcon} className=" mt-[-3px]" />
         </div>
-        <div className=" w-full flex lg:justify-around justify-between mt-[10px] lg:mt-[0px]">
-
+        <div className=" w-full flex lg:justify-around justify-between gap-3">
           {musics.map((music, index) => (
             <div
               key={`music-${index}`}
@@ -217,11 +214,11 @@ const Chat = () => {
       </div>
       <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden" />
       {/* ------------------------------- */}
-      <div className=" flex flex-col lg:flex-row lg:items-center  rounded-[8px]">
+      <div className=" flex flex-col   rounded-[8px]">
         <p className=" w-[18%] text-[12px] lg:text-[16px]">
-          motion
+          Motion
         </p>
-        <div className=" flex w-full lg:justify-around gap-[20px] sm:gap-[40px] lg:gap-0 mt-[10px] lg:mt-[0px]">
+        <div className=" flex w-full lg:justify-around  sm:gap-[40px] lg:gap-0 gap-3">
 
           {motions.map((motion, index) => (
             <div
@@ -283,7 +280,7 @@ const Chat = () => {
         </div>
       </div>
     </div>
-  </motion.div>
+  </Drawer>
 
   const DEN = (
     <Box width='100%'>
@@ -312,7 +309,7 @@ const Chat = () => {
       </div>
       {/* -------------------------------------- */}
 
-      <div className="flex items-start lg:items-center justify-center gap-2 lg:gap-4 h-[7%] w-full ">
+      <div className="flex items-start  justify-center gap-2 lg:gap-4 h-[7%] w-full ">
         <AnimatePresence>
           <div className="w-[60%] lg:w-[40%] xl:w-[35%]   ">
             <motion.textarea
@@ -380,9 +377,10 @@ const Chat = () => {
             onClick={() => chat.setIsSettingsOpen(state => !state)}>
             {chat.isSettingsOpen ? <SettingsClosed color={chat.websiteTheme.buttonColor} /> : <SettingsIcon color={chat.websiteTheme.buttonColor} />}
           </motion.button>
-          {chat.isSettingsOpen && SettingsPartial}
         </Box>
 
+
+        {SettingsPartial}
       </div>
     </Box>
   )
@@ -400,16 +398,15 @@ const Chat = () => {
         <source src={chat.websiteAudio} type="audio/mp3" />
       </audio>
 
-      <Box className="h-[5%] lg:h-[10%]" sx={{ background: 'red', minHeight: 'max-content', padding: '1rem' }}>
-        <Box className="w-[90%] lg:flex justify-end hidden">
-          <Navbar {...chat.websiteTheme} />
-        </Box>
+      <Box className=" flex py-2 px-4   justify-end align-middle" >
+        <Navbar {...chat.websiteTheme} />
         <MobileNav
           isSettingsOpen={chat.isSettingsOpen}
           setIsSettingsOpen={chat.setIsSettingsOpen}
           socket={chat.socket}
         />
       </Box>
+      <Divider style={{ background: 'white' }} />
 
       <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
         <TokenExplorer />
