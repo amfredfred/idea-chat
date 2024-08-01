@@ -1,54 +1,36 @@
-import { useEffect, useState, useRef, useCallback } from "react";
-import { useRecoilState } from "recoil";
-import { userProfilePicState, userNameState } from "../atoms/users";
-import {  websiteAudioState } from "../atoms/website-theme";
+import { useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import io from "socket.io-client";
-import { IChatStates } from "../common/types";
+import { setUserName, setProfilePic } from "../libs/redux/slices/user-profile-slice";
+import { setInitialMessages, addNewMessage } from "../libs/redux/slices/message-slice";
+import { setSettingsModal, setIsSettingsOpen } from "../libs/redux/slices/settings-slice";
+import { setWebsiteAudio, setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
+import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
+import { Message } from "../libs/redux/slices/message-slice";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
-
-interface Message {
-    _id: any;
-    message: string;
-    username: string;
-    profilePic: string;
-}
-interface InitialMessage {
-    _id: any;
-    message: string;
-    username: string;
-    profilePic: string;
-}
-interface Settings {
-    visual: string;
-    audio: string;
-    motion: string;
-}
-
 
 const useChat = () => {
     const socket = io(BASE_URI, {
         transports: ['websocket']
     });
 
-    const [currentUserMessage, setCurrentUserMessage] = useState("");
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const [isMusicPlaying, setMusicIsPlaying] = useState(true);
-    const [settingsModal, setSettingsModal] = useState<Settings>({
-        visual: "rem",
-        audio: "win",
-        motion: "focused",
-    });
-    const [initialMessages, setInitialMessages] = useState<InitialMessage[]>([]);
-    const [newMessage, setNewMessage] = useState<Message[]>([]);
-    const [chatState, setChatState] = useState<IChatStates>("DEN");
-    const [userName, setUserName] = useRecoilState(userNameState);
-    const [profilePicState, setProfilePicState] = useRecoilState(userProfilePicState);
+    const dispatch = useAppDispatch();
+    const currentUserMessage = useAppSelector(state => state.messages.newMessages);
+    const isSettingsOpen = useAppSelector(state => state.settings.isSettingsOpen);
+    const isMusicPlaying = useAppSelector(state => state.audio.isMusicPlaying);
+    const settingsModal = useAppSelector(state => state.settings.settingsModal);
+    const initialMessages = useAppSelector(state => state.messages.initialMessages);
+    const newMessages = useAppSelector(state => state.messages.newMessages);
+    const userName = useAppSelector(state => state.userProfile.userName);
+    const profilePicState = useAppSelector(state => state.userProfile.profilePic);
+    const websiteAudio = useAppSelector(state => state.audio.websiteAudio);
+    const chatState = useAppSelector(state => state.settings.chat.state)
     const notificationRef = useRef<HTMLAudioElement | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [websiteAudio, setWebsiteAudio] = useRecoilState(websiteAudioState);
     const modalRef = useRef<HTMLDivElement>(null);
+
+    const toggleSettings = (state: boolean) => dispatch(setIsSettingsOpen(state));
 
     const clickAnimation = {
         scale: 0.9,
@@ -63,34 +45,32 @@ const useChat = () => {
             );
             const data = response.data;
             if (data.username) {
-                setUserName(data.username);
+                dispatch(setUserName(data.username));
             }
             if (data.profilePic) {
-                setProfilePicState(data.profilePic);
+                dispatch(setProfilePic(data.profilePic));
             }
         } catch (err: any) {
             console.log("profile-error", err.message);
         }
-    }, [setProfilePicState, setUserName]);
+    }, [dispatch]);
 
     const fetchInitialMessages = useCallback(async () => {
         try {
             const response = await axios.get(`${BASE_URI}/api/initialMessages`);
             const messages = response.data;
             if (messages) {
-                setInitialMessages(messages);
+                dispatch(setInitialMessages(messages));
             }
         } catch (err) {
             console.log("initial-messages-error", err);
         }
-    }, []);
+    }, [dispatch]);
 
     const handleNewMessage = useCallback((msg: Message) => {
-        setNewMessage((prevMessages: Message[]) => {
-            notificationRef.current!.play();
-            return [...prevMessages, msg];
-        });
-    }, []);
+        dispatch(addNewMessage(msg));
+        notificationRef.current!.play();
+    }, [dispatch]);
 
     useEffect(() => {
         fetchUserProfile();
@@ -105,14 +85,14 @@ const useChat = () => {
 
     const handleSendMessage = useCallback(() => {
         if (currentUserMessage.length <= 500) {
-            if (currentUserMessage.trim()) {
-                socket.emit("sendMessage", {
-                    username: userName,
-                    message: currentUserMessage,
-                    profilePic: profilePicState,
-                });
-                setCurrentUserMessage("");
-            }
+            // if (currentUserMessage.trim()) {
+            //     socket.emit("sendMessage", {
+            //         username: userName,
+            //         message: currentUserMessage,
+            //         profilePic: profilePicState,
+            //     });
+            //     // setCurrentUserMessage("");
+            // }
         } else {
             alert("Character count exceeds 500");
         }
@@ -121,7 +101,7 @@ const useChat = () => {
     const handleKeyDown = useCallback((e: any) => {
         if (e.key === "Enter" && e.shiftKey) {
             e.preventDefault();
-            setCurrentUserMessage((prevValue) => prevValue + "\n");
+            // setCurrentUserMessage((prevValue) => prevValue + "\n");
         } else if (e.key === "Enter") {
             handleSendMessage();
         }
@@ -131,13 +111,13 @@ const useChat = () => {
         if (audioRef.current) {
             if (audioRef.current.paused) {
                 await audioRef.current.play();
-                setMusicIsPlaying(true);
+                dispatch(setMusicIsPlaying(true));
             } else {
                 audioRef.current.pause();
-                setMusicIsPlaying(false);
+                dispatch(setMusicIsPlaying(false));
             }
         }
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         if (audioRef.current && audioRef.current.src !== websiteAudio) {
@@ -148,9 +128,9 @@ const useChat = () => {
 
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (modalRef.current !== event.target && !modalRef?.current?.contains?.(event.target as Node)) {
-            setIsSettingsOpen(false);
+            dispatch(setIsSettingsOpen(false));
         }
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -161,7 +141,6 @@ const useChat = () => {
 
     return {
         currentUserMessage,
-        setCurrentUserMessage,
         isSettingsOpen,
         setIsSettingsOpen,
         isMusicPlaying,
@@ -170,14 +149,10 @@ const useChat = () => {
         setSettingsModal,
         initialMessages,
         setInitialMessages,
-        newMessage,
-        setNewMessage,
-        chatState,
-        setChatState,
+        newMessages,
         userName,
         setUserName,
         profilePicState,
-        setProfilePicState,
         notificationRef,
         audioRef,
         websiteAudio,
@@ -187,7 +162,9 @@ const useChat = () => {
         handleKeyDown,
         handleMusicPlayPause,
         socket,
-        clickAnimation
+        chatState,
+        clickAnimation,
+        toggleSettings
     };
 };
 

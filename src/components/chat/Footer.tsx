@@ -1,20 +1,22 @@
 import { useRecoilValue } from "recoil";
-import { websiteThemeState } from "../atoms/website-theme";
+import { websiteThemeState } from "../../atoms/website-theme";
+import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
+import { IChatStates } from "../../common/types";
+import { setChatState } from "../../libs/redux/slices/settings-slice";
 
-const Footer = ({
-  chatState,
-  setChatState,
-}: {
-  chatState: any;
-  setChatState: any;
-}) => {
+const Footer = () => {
   const websiteTheme = useRecoilValue(websiteThemeState);
+
+  const dispacth = useAppDispatch()
+  const chatState = useAppSelector(state => state.settings.chat.state)
+  const updateChatState = (state: IChatStates) => dispacth(setChatState(state))
+
   return (
-    <div className="lg:hidden h-[8%] w-[75%] mx-auto   ">
+    <div className="mx-auto   ">
+
       <div
-        className={`h-[32px] w-full bg-white rounded-[4px] flex justify-between items-center p-[2px] pl-[2px] pr-[2px] ${
-          websiteTheme.bgColor === "#ffffff" && "border border-black"
-        }`}
+        className={`h-[32px] w-full bg-white rounded-[4px] flex justify-between items-center p-[2px] pl-[2px] pr-[2px] ${websiteTheme.bgColor === "#ffffff" && "border border-black"
+          }`}
       >
         <div
           style={{
@@ -22,7 +24,7 @@ const Footer = ({
               chatState === "DEN" ? websiteTheme.bgColor : "#ffffff",
             color: chatState === "DEN" ? websiteTheme.textColor : "#000000",
           }}
-          onClick={() => setChatState("DEN")}
+          onClick={() => updateChatState("DEN")}
           className={` uppercase text-[14px]  h-[30px] w-[90px] flex items-center justify-center rounded-[2px]`}
         >
           den
@@ -33,7 +35,7 @@ const Footer = ({
               chatState === "PUMP" ? websiteTheme.bgColor : "#ffffff",
             color: chatState === "PUMP" ? websiteTheme.textColor : "#000000",
           }}
-          onClick={() => setChatState("PUMP")}
+          onClick={() => updateChatState("PUMP")}
           className={` uppercase text-[14px] ml-[25px] h-[30px] w-[90px] flex items-center justify-center rounded-[2px]  `}
         >
           PUMP
@@ -44,7 +46,7 @@ const Footer = ({
               chatState === "ALPHA" ? websiteTheme.bgColor : "#ffffff",
             color: chatState === "ALPHA" ? websiteTheme.textColor : "#000000",
           }}
-          onClick={() => setChatState("ALPHA")}
+          onClick={() => updateChatState("ALPHA")}
           className={` uppercase text-[14px] ml-[25px] h-[30px] w-[90px] flex items-center justify-center rounded-[2px]`}
         >
           alpha

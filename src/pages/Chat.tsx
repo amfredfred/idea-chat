@@ -19,14 +19,15 @@ import ambientMusic from "../assets/ambient.mp3";
 import EquatorTest from "../components/message-animations/EquatorTest";
 import { Link, useNavigate } from "react-router-dom";
 import MobileNav from "../components/MobileNav";
-import Footer from "../components/Footer";
+import Footer from "../components/chat/Footer";
 import Chaos from "../components/message-animations/Chaos";
 import TokenExplorer from "../components/pumps-and-den/TokenExplorer";
 import useChat from "../hooks/useChat";
-import { Box, Divider, Drawer } from "@mui/material";
+import { Box, Drawer } from "@mui/material";
 import { IChatStates } from "../common/types";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import { setTheme } from "../libs/redux/slices/theme-slice";
+import PumpChannel from "../components/chat/PumpChannel";
 // import { walletAddressState } from "../atoms/wallet"
 // import { useNavigate } from "react-router-dom" 
 
@@ -83,7 +84,6 @@ const Chat = () => {
   const theme = useAppSelector((state) => state.theme.current);
   const themes = useAppSelector((state) => state.theme.themes);
   const dispatch = useAppDispatch()
-
   const chat = useChat()
 
   const SettingsPartial = <Drawer
@@ -237,14 +237,11 @@ const Chat = () => {
       <div className="relative  lg:h-[75%] overflow-y-auto mb-[10px]  w-full">
         {chat.settingsModal.motion === "focused" ? (
           chat.initialMessages.length > 0 && (
-            <Focused
-              initialMessages={chat.initialMessages}
-              newMessage={chat.newMessage}
-            />
+            <Focused />
           )
         ) : chat.settingsModal.motion === "chaos" ? (
           <Chaos
-            newMessage={chat.newMessage}
+            newMessage={chat.currentUserMessage}
             width={totalWidth}
             height={totalHeight}
           />
@@ -252,7 +249,7 @@ const Chat = () => {
           chat.initialMessages.length > 0 && (
             <EquatorTest
               initialMessages={chat.initialMessages}
-              newMessage={chat.newMessage}
+              newMessage={chat.currentUserMessage}
             />
           )
         )}
@@ -272,12 +269,12 @@ const Chat = () => {
                 damping: 30,
               }}
               placeholder="type something retarded..."
-              value={chat.currentUserMessage}
+              value={''}
               className={`bg-white ${theme.styles.bgColor === "#ffffff"
                 ? "border border-black"
                 : "border-none"
                 } text-[#121212] uppercase p-3 lg:p-5 text-[13px] lg:text-[18px] mx-auto rounded-[4px] lg:rounded-[8px] w-full outline-none resize-none`}
-              onChange={(e) => chat.setCurrentUserMessage(e.target.value)}
+              // onChange={() => null} //chat.setCurrentUserMessage(e.target.value)
               onKeyDown={chat.handleKeyDown}
               rows={1}
             />
@@ -324,7 +321,7 @@ const Chat = () => {
               ? "border border-black"
               : "border-none"
               } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
-            onClick={() => chat.setIsSettingsOpen(state => !state)}>
+            onClick={() => chat.toggleSettings(!chat.isSettingsOpen)}>
             {chat.isSettingsOpen ? <SettingsClosed color={theme.styles.buttonColor} /> : <SettingsIcon color={theme.styles.buttonColor} />}
           </motion.button>
         </Box>
@@ -356,22 +353,22 @@ const Chat = () => {
           socket={chat.socket}
         />
       </Box>
-      <Divider style={{ background: 'white' }} />
 
       <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
-        <TokenExplorer />
+        {chat.chatState == 'PUMP' && <PumpChannel />}
       </Box>
 
-      <Box display='flex' alignItems='center' justifyContent='center' width='100%' marginTop='auto'>
-        {chat.chatState == 'DEN' ? DEN : null}
-        <audio ref={chat.notificationRef} hidden>
-          <source src={notificationSounds?.[chat.chatState]} type="audio/mpeg" />
-          <source src={notificationSounds?.[chat.chatState]} type="audio/mp3" />
-          Your browser does not support the audio element.
-        </audio>
+      <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center' marginTop='auto'>
+        <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
+          {chat.chatState == 'DEN' ? DEN : null}
+          <audio ref={chat.notificationRef} hidden>
+            <source src={notificationSounds?.[chat.chatState]} type="audio/mpeg" />
+            <source src={notificationSounds?.[chat.chatState]} type="audio/mp3" />
+            Your browser does not support the audio element.
+          </audio>
+        </Box>
+        <Footer />
       </Box>
-
-      <Footer setChatState={chat.setChatState} chatState={chat.chatState} />
     </Box>
   );
 };

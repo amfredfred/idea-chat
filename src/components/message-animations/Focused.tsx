@@ -1,37 +1,23 @@
-import { useRecoilValue } from "recoil";
-import { websiteThemeState } from "../../atoms/website-theme";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { MessageComponent } from "../Message";
 import React from "react";
 import { MessageModal } from "../MessageModal";
+import { useAppSelector } from "../../libs/redux/hooks";
 
-interface Message {
-  _id: any;
-  message: string;
-  username: string;
-  profilePic: string;
-}
 
-interface InitialMessage {
-  _id: any;
-  message: string;
-  username: string;
-  profilePic: string;
-}
 
-const Focused = ({
-  initialMessages,
-  newMessage,
-}: {
-  initialMessages: InitialMessage[];
-  newMessage: Message[];
-}) => {
-  const websiteTheme = useRecoilValue(websiteThemeState);
+const Focused = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [modalMessage, setModalMessage] = useState<string | null>(null);
   const [modalUsername, setModalUsername] = useState<string | null>(null);
-  const [modalPfp, setModalPfp] = useState<string  | undefined>();
+  const [modalPfp, setModalPfp] = useState<string | undefined>();
+
+  const initialMessages = useAppSelector(state => state.chat.initialMessages)
+  const newMessage = useAppSelector(state => state.chat.newMessages)
+  const websiteTheme = useAppSelector(state => state.theme.current.styles);
+
+
   useEffect(() => {
     scrollToBottom();
   }, [newMessage, initialMessages]);
@@ -64,7 +50,7 @@ const Focused = ({
             profilePic={modalPfp}
           />
         )}
-        {initialMessages?.map?.((msg: InitialMessage, index: number) => (
+        {initialMessages?.map?.((msg, index: number) => (
           <>
             <div
               className="flex gap-2 lg:gap-5 xl:gap-10 items-center overflow-y-auto"

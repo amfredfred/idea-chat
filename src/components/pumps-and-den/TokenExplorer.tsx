@@ -55,7 +55,7 @@ export default function TokenExplorer() {
   );
 
   return (
-    <Box className="container overflow-hidden mx-auto flex flex-colh-full" >
+    <Box className="container overflow-hidden mx-auto flex h-full"  >
       <Box className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 divide-x divide-grey-500 " maxHeight='100%' flexGrow='1'>
         {isMobile ? (<>
           {selectedView === 'new' && <TokensNewlyCreated pools={newpumps} />}
