@@ -10,12 +10,14 @@ import MobileNav from "../components/MobileNav";
 import Footer from "../components/chat/Footer";
 import Chaos from "../components/message-animations/Chaos";
 import useChat from "../hooks/useChat";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { IChatStates } from "../common/types";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import PumpChannel from "../components/chat/PumpChannel";
 import ChatSettings from "../components/chat/ChatSettings";
 import { setChatSettingsOpen } from "../libs/redux/slices/chat-slice";
+import { useCallback, useEffect, useRef } from "react";
+import { setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
 // import { walletAddressState } from "../atoms/wallet"
 // import { useNavigate } from "react-router-dom" 
 
@@ -31,8 +33,30 @@ const Chat = () => {
 
   const theme = useAppSelector((state) => state.theme.current);
   const chatState = useAppSelector(state => state.chat.state)
+  const chatAudio = useAppSelector(state => state.chat.chatAudio)
   const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen);
   const dispatch = useAppDispatch()
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const handleMusicPlayPause = useCallback(async () => {
+    if (audioRef.current) { 
+      if (audioRef.current.src != chatAudio) {
+        audioRef.current.src = chatAudio
+      }
+      if (audioRef.current.paused) {
+        await audioRef.current.play();
+        dispatch(setMusicIsPlaying(true));
+      } else {
+        audioRef.current.pause();
+        dispatch(setMusicIsPlaying(false));
+      }
+    }
+  }, [chatAudio, dispatch, audioRef]);
+
+  useEffect(() => {
+    handleMusicPlayPause()
+  }, [handleMusicPlayPause]);
+
   const chat = useChat()
 
   const DEN = (
@@ -142,9 +166,13 @@ const Chat = () => {
       }}
       className={`transition-colors duration-1000 w-full flex flex-col  bg-black relative font-jbm uppercase h-screen lg:h-screen overflow-hidden`}
     >
-      <audio src="" ref={chat.audioRef} loop hidden>
-        <source src={chat.chatAudio} type="audio/mpeg" />
-        <source src={chat.chatAudio} type="audio/mp3" />
+
+      <Button onClick={handleMusicPlayPause}>
+        handleMusicPlayPause
+      </Button>
+      <audio ref={audioRef} loop hidden>
+        <source src={chatAudio} type="audio/mpeg" />
+        <source src={chatAudio} type="audio/mp3" />
       </audio>
 
       <Box className=" flex py-2 px-4   justify-end align-middle" >

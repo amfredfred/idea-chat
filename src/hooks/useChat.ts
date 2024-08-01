@@ -107,27 +107,6 @@ const useChat = () => {
         }
     }, [handleSendMessage]);
 
-    const handleMusicPlayPause = useCallback(async () => {
-        if (audioRef.current) {
-            if (audioRef.current.paused) {
-                await audioRef.current.play();
-                dispatch(setMusicIsPlaying(true));
-            } else {
-                audioRef.current.pause();
-                dispatch(setMusicIsPlaying(false));
-            }
-        }
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (audioRef.current && audioRef.current.src !== chatAudio) {
-            audioRef.current.src = chatAudio;
-            audioRef.current.play().catch(() => { });
-        }
-    }, [chatAudio]);
-
-    console.log({ chatAudio })
-
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (modalRef.current !== event.target && !modalRef?.current?.contains?.(event.target as Node)) {
             dispatch(setIsSettingsOpen(false));
@@ -162,7 +141,6 @@ const useChat = () => {
         modalRef,
         handleSendMessage,
         handleKeyDown,
-        handleMusicPlayPause,
         socket,
         chatState,
         clickAnimation,

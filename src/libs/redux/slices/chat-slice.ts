@@ -66,7 +66,6 @@ const chatSlice = createSlice({
             state.isChatSettingsOpen = action.payload;
         },
         setChatAudio(state, action: PayloadAction<string>) {
-            console.log('CHat audio', action)
             state.chatAudio = action.payload;
         },
         setWebsiteMotion(state, action: PayloadAction<string>) {

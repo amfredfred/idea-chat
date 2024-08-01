@@ -130,10 +130,7 @@ export default function ChatSettings() {
               <div
                 key={`music-${index}`}
                 className=" flex flex-col items-center justify-center"
-                onClick={() => {
-                  dispatch(setChatAudio(music.source))
-                  console.log('dispatch(setChatAudio(music.source))', music)
-                }} >
+                onClick={() => dispatch(setChatAudio(music.source))} >
                 <div
                   className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${chatAudio === music.source
                     ? "border-[#0000FF]"
