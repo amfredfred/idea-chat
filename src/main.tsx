@@ -13,7 +13,7 @@ import { SolanaWalletProvider } from "./components/WalletProvider.tsx";
 import RoutesPortal from "./routes/index.tsx";
 import StoreProvider from "./providers/StoreProvider/index.tsx";
 import TokenswapStack from "./components/token-swap/TokenSwapStack.tsx";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,7 +24,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <React.StrictMode>
         <StoreProvider>
           <Stack direction="row" overflow='hidden' position='relative' style={{ width: '100vw', height: '100vh', flexWrap: 'wrap' }}>
-            <RoutesPortal />
+            <Box flexGrow={1}>
+              <RoutesPortal />
+            </Box>
             <TokenswapStack />
             <ToastContainer />
           </Stack>

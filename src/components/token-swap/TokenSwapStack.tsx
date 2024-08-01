@@ -31,7 +31,7 @@ const TokenswapStack: React.FC = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const isMobile = useMediaQuery('(max-width:500px)');
   const wallet = useWallet();
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -51,16 +51,10 @@ const TokenswapStack: React.FC = () => {
 
   const toggleMinimize = () => {
     setIsMinimized(prev => {
-      const { width, height } = getDimensions(containerRef)
-      if (!prev) {
-        const centerX = (window.innerWidth / 2 - (width / 2));
-        const centerY = isMobile ? 0 : -(window.innerHeight / 2 + height / 2);
-        setPosition({ x: centerX, y: centerY });
-      } else {
-        const centerX = window.innerWidth / 2 - (width / 2);
-        const centerY = window.innerHeight / 2 - height;
-        setPosition({ x: centerX, y: centerY });
-      }
+      const { width } = getDimensions(containerRef)
+      const centerX = window.innerWidth / 2 - (width / 2);
+      const centerY = isMobile ? 0 : !prev ? 40 : position.y;
+      setPosition({ x: centerX, y: centerY });
       return !prev
     });
   };
@@ -77,25 +71,20 @@ const TokenswapStack: React.FC = () => {
 
   useEffect(() => {
     if (isVisible) {
-      const { width, height } = getDimensions(containerRef)
-      const centerX = window.innerWidth / 2 - (width / 2);
-      const centerY = window.innerHeight / 2 - height;
+      const centerX = window.innerWidth / 2 - window.innerWidth / 4;
+      const centerY = isMobile ? 0 : window.innerHeight / 2 - window.innerHeight / 4;
       setPosition({ x: centerX, y: centerY });
       setIsReady(true);
     }
-  }, [isVisible]);
+  }, [isVisible, isMobile]);
 
   useEffect(() => {
     const handleResize = () => {
       const { width, height } = getDimensions(containerRef)
       console.log(width, height / 2)
-      if (isMobile) {
-        setPosition({ x: (window.innerWidth / 2 - (width / 2)), y: isMobile ? 0 : -(window.innerHeight / 2 + height / 2) });
-      } else {
-        const centerX = window.innerWidth / 2 - (width / 2);
-        const centerY = window.innerHeight / 2 - height;
-        setPosition({ x: centerX, y: centerY });
-      }
+      const centerX = window.innerWidth / 2 - (width / 2);
+      const centerY = isMobile ? 0 : isMinimized ? 40 : window.innerHeight / 2 - height;
+      setPosition({ x: centerX, y: centerY });
     };
 
     window.addEventListener('resize', handleResize);
@@ -150,9 +139,10 @@ const TokenswapStack: React.FC = () => {
       <Box
         ref={containerRef}
         sx={{
-          position: 'absolute',
-          maxWidth: '100%',
-          maxHeight: '100%',
+          position: 'fixed', // (isMobile && isMinimized) ? 'revert' :
+          width: 400,
+          maxWidth: '100vw',
+          maxHeight: '100vh',
           zIndex: 1000,
           borderRadius: isMinimized ? '10px' : '20px',
           borderBottomLeftRadius: isMobile ? 0 : isMinimized ? '10px' : '20px',
@@ -160,12 +150,9 @@ const TokenswapStack: React.FC = () => {
           overflow: 'hidden',
           display: isReady ? 'flex' : 'none',
           flexDirection: 'column',
-          backdropFilter: 'blur(50px)',
           background: 'linear-gradient(rgb(4, 36, 65) 0%, rgb(42, 36, 60) 100%) no-repeat;',
           boxShadow: isMinimized ? '' : '0 10px 4px rgba(0,0,0,0.8)',
-          bottom: (isMobile) ? 0 : 'auto',
-          width: isMobile ? '100%' : '400px',
-          height: 'auto',
+          bottom: (isMobile) ? 0 : undefined,
         }}
       >
         <div className="text-yellow-100 flex w-full" style={{
