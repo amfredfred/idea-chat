@@ -1,4 +1,4 @@
-export interface IPumpCoin {
+export type IPumpCoin = {
   address: string
   associated_bonding_curve: string
   base_reserve: number
@@ -56,8 +56,7 @@ export interface IPumpCoin {
   volume_24h: number
   website: string
 }
-
-export interface IPumpCoinMigrated {
+export type IPumpCoinMigrated = {
   account: string;
   decimals: number;
   supply: string;
@@ -85,12 +84,12 @@ export interface IPumpCoinMigrated {
   progress: number
 }
 
-export interface IPumpRequestParams {
+export type IPumpRequestParams = {
   filter_listing: Record<string, string>,
   filter_migrated: Record<string, string>
 }
 
-export interface PumpDetail {
+export type PumpDetail = {
   address: string
   burn_ratio: string
   burn_status: string // "burn"
@@ -100,14 +99,13 @@ export interface PumpDetail {
   holder_token_num?: number
 }
 
-
-export interface PumpSocketSend {
+export type PumpSocketSend = {
   requestPumpList: 'requestPumpList';
   requestPumpDetails: 'requestPumpDetails';
   userJoined: { userId: string; userName: string };
 }
 
-export interface PumpSocketReceived {
+export type PumpSocketReceived = {
   pumpList: {
     pump: IPumpCoin[],
     migrated: IPumpCoinMigrated[]
@@ -118,14 +116,14 @@ export type SocketEventCallback<T = any> = (data: T) => void;
 
 import { Socket } from 'socket.io-client';
 
-export interface UseSocketReturn<T = any> {
+export type UseSocketReturn<T = any> = {
   socket: Socket | null;
   connected: boolean;
   emitEvent: (event: string, data?: any) => void;
   onEvent: (event: string, callback: SocketEventCallback<T>) => () => void;
 }
 
-export interface ITokenSwapInputProps {
+export type ITokenSwapInputProps = {
   side: 'receive' | 'pay';
   onChange: (value: number | string) => void;
   selectedToken: IPumpCoinMigrated | undefined;
@@ -135,3 +133,5 @@ export interface ITokenSwapInputProps {
   value: number | string
   loading?: boolean
 }
+
+export type IChatStates = "DEN" | "PUMP" | "ALPHA"

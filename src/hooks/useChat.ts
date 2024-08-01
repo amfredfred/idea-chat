@@ -4,6 +4,7 @@ import { userProfilePicState, userNameState } from "../atoms/users";
 import { websiteThemeState, websiteAudioState } from "../atoms/website-theme";
 import axios from "axios";
 import io from "socket.io-client";
+import { IChatStates } from "../common/types";
 
 const BASE_URI = import.meta.env.VITE_BASE_URI;
 
@@ -25,6 +26,7 @@ interface Settings {
     motion: string;
 }
 
+
 const useChat = () => {
     const socket = io(BASE_URI, {
         transports: ['websocket']
@@ -41,7 +43,7 @@ const useChat = () => {
     const [websiteTheme, setWebsiteTheme] = useRecoilState(websiteThemeState);
     const [initialMessages, setInitialMessages] = useState<InitialMessage[]>([]);
     const [newMessage, setNewMessage] = useState<Message[]>([]);
-    const [chatState, setChatState] = useState<"DEN" | "PUMP" | "ALPHA">("DEN");
+    const [chatState, setChatState] = useState<IChatStates>("DEN");
     const [userName, setUserName] = useRecoilState(userNameState);
     const [profilePicState, setProfilePicState] = useRecoilState(userProfilePicState);
     const notificationRef = useRef<HTMLAudioElement | null>(null);
