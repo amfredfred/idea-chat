@@ -358,7 +358,7 @@ const Chat = () => {
         {chat.chatState == 'PUMP' && <PumpChannel />}
       </Box>
 
-      <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center' marginTop='auto'>
+      <Box className='flex flex-col justify-center mt-auto p-2' alignItems='center'>
         <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
           {chat.chatState == 'DEN' ? DEN : null}
           <audio ref={chat.notificationRef} hidden>
