@@ -3,7 +3,6 @@ import axios from "axios";
 import io from "socket.io-client";
 import { setUserName, setProfilePic } from "../libs/redux/slices/user-profile-slice";
 import { setInitialMessages, addNewMessage } from "../libs/redux/slices/message-slice";
-import { setSettingsModal, setIsSettingsOpen } from "../libs/redux/slices/settings-slice";
 import { setChatAudio, setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import { Message } from "../libs/redux/slices/message-slice";
@@ -30,7 +29,6 @@ const useChat = () => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const modalRef = useRef<HTMLDivElement>(null);
 
-    const toggleSettings = (state: boolean) => dispatch(setIsSettingsOpen(state));
 
     const clickAnimation = {
         scale: 0.9,
@@ -107,27 +105,25 @@ const useChat = () => {
         }
     }, [handleSendMessage]);
 
-    const handleClickOutside = useCallback((event: MouseEvent) => {
-        if (modalRef.current !== event.target && !modalRef?.current?.contains?.(event.target as Node)) {
-            dispatch(setIsSettingsOpen(false));
-        }
-    }, [dispatch]);
+    // const handleClickOutside = useCallback((event: MouseEvent) => {
+    //     if (modalRef.current !== event.target && !modalRef?.current?.contains?.(event.target as Node)) {
+    //         dispatch(setIsSettingsOpen(false));
+    //     }
+    // }, [dispatch]);
 
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [handleClickOutside]);
+    // useEffect(() => {
+    //     document.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // }, [handleClickOutside]);
 
     return {
         currentUserMessage,
         isSettingsOpen,
-        setIsSettingsOpen,
         isMusicPlaying,
         setMusicIsPlaying,
         settingsModal,
-        setSettingsModal,
         initialMessages,
         setInitialMessages,
         newMessages,
@@ -144,7 +140,6 @@ const useChat = () => {
         socket,
         chatState,
         clickAnimation,
-        toggleSettings
     };
 };
 

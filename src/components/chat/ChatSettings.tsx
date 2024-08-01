@@ -62,18 +62,6 @@ export default function ChatSettings() {
   const theme = useAppSelector(state => state.theme.current)
   const { isChatSettingsOpen, settingsModal, chatAudio } = useAppSelector(state => state.chat)
 
-  // const handleMusicPlayPause = useCallback(async () => {
-  //   if (audioRef.current) {
-  //     if (audioRef.current.paused) {
-  //       await audioRef.current.play();
-  //       dispatch(setMusicIsPlaying(true));
-  //     } else {
-  //       audioRef.current.pause();
-  //       dispatch(setMusicIsPlaying(false));
-  //     }
-  //   }
-  // }, [dispatch]);
-
   return (
     <Drawer
       anchor='right'

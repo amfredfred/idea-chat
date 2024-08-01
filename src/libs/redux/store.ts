@@ -4,9 +4,9 @@ import appSlice from './slices/app-slice'
 import themeSlice from './slices/theme-slice'
 import userProfileSlice from './slices/user-profile-slice'
 import messagesSlice from './slices/message-slice'
-// import settingsSlice from './slices/settings-slice'
 import audioSlice from './slices/audio-slice'
 import chatSlice from './slices/chat-slice'
+import pumpSocketSlice from './slices/pump-socket-slice'
 
 export const makeStore = () => {
     return configureStore({
@@ -18,7 +18,8 @@ export const makeStore = () => {
             messages: messagesSlice,
             audio: audioSlice,
 
-            chat: chatSlice
+            chat: chatSlice,
+            pumpSocket: pumpSocketSlice,
         }
     })
 }

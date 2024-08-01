@@ -4,17 +4,19 @@ import ToekensAboutToGraduate from "./ToekensAboutToGraduate";
 import TokensGraduated from "./TokensGraduated";
 import { IPumpRequestParams, PumpSocketReceived } from "../../common/types";
 import usePumpScoket from "../../hooks/usePumpSocket";
-import { useAppDispatch } from "../../libs/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setTokensList } from "../../libs/redux/slices/token-swap-slice";
 import { Box, useMediaQuery } from "@mui/material";
+import { connectSocket, setSocket } from "../../libs/redux/slices/pump-socket-slice";
 
 export default function TokenExplorer() {
 
   const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
   const dispatch = useAppDispatch()
+  const { connected, pumpList } = useAppSelector(state => state.pumpSocket)
 
-  const { emitEvent, onEvent, connected } = usePumpScoket(API_URL);
-  const [pumpList, setPumpList] = useState<PumpSocketReceived['pumpList']>();
+  // const { emitEvent, onEvent, connected } = usePumpScoket(API_URL);
+  // const [pumpList, setPumpList] = useState<PumpSocketReceived['pumpList']>();
 
   const [searchParams,] = useState<IPumpRequestParams>({
     filter_listing: {},
@@ -27,15 +29,15 @@ export default function TokenExplorer() {
   const [selectedView, setSelectedView] = useState<'new' | 'about' | 'graduated'>('graduated');
 
   useEffect(() => {
-    return onEvent('pumpList', (data) => {
-      setPumpList(data)
-      dispatch(setTokensList(data?.migrated))
-    });
-  }, [onEvent, dispatch]);
+    const disconnectSocket = dispatch(connectSocket(API_URL));
+    return () => {
+      disconnectSocket()
+    };
+  }, [dispatch, API_URL]);
 
-  useEffect(() => {
-    return () => emitEvent('requestPumpList', searchParams);
-  }, [connected, emitEvent, searchParams])
+  // useEffect(() => {
+  //   return () => emitEvent('requestPumpList', searchParams);
+  // }, [connected, emitEvent, searchParams])
 
   const newpumps = pumpList?.pump?.filter?.(pool => ((pool.created_timestamp * 1000) < Date.now() + 20e3) && (Number(pool.usd_market_cap) <= 40e3))
   const abouttograduate = pumpList?.pump?.filter?.(pool => (Number(pool.usd_market_cap) >= 40e3) && (Number(pool.usd_market_cap) < 59e3))
