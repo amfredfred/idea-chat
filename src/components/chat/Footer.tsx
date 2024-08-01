@@ -12,13 +12,13 @@ const Footer = () => {
   const buttons = ['DEN', 'PUMP.RAY', 'ALPHA']
 
   return (
-    <Box className={` gap-4 mr-auto h-11 flex justify-between rounded-md  bg-white  xl:w-[566px] border border-white overflow-hidden`}>  {
+    <Box className={` max-sm:mx-auto  mr-auto h-11 flex justify-between rounded-md  max-sm:w-[361px] sm:w-[566px] border border-white overflow-hidden`}>  {
       buttons.map(button => {
         return <Box
           style={{
-            background: 'green', backgroundColor:
-              chatState === button ? websiteTheme.bgColor : "#ffffff",
-            color: chatState === button ? websiteTheme.textColor : "#000000",
+            backgroundColor: chatState !== button ? 'white' : "transparent",
+            color: chatState !== button ? "#000000" : websiteTheme.textColor,
+            borderRadius: chatState == button ? 5 : 0
           }}
           className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => updateChatState(button as any)}>
           <small

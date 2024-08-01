@@ -94,7 +94,8 @@ export const {
     setChatAudio,
     setMusicIsPlaying,
     setWebsiteMotion,
-    setChatState
+    setChatState,
+    setTypedMessage
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

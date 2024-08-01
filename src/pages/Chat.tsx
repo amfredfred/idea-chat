@@ -13,7 +13,7 @@ import { useCallback, useEffect, useRef } from "react";
 
 const notificationSounds: { [key in IChatStates]: string } = {
   DEN: messageNotification,
-  PUMP: '',
+  "PUMP.RAY": '',
   ALPHA: ''
 }
 
@@ -68,8 +68,8 @@ const Chat = () => {
         {chatState == 'PUMP.RAY' && <PumpChannel />}
       </Box>
 
-      <Box display='flex' alignItems='center' justifyContent='center' className='container'>
-        <Box alignItems='center' display='flex' flexDirection='column' gap='1rem' width={700} maxWidth={'100%'} paddingBottom='1rem' >
+      <Box  className='w-full  '>
+        <Box alignItems='center' display='flex' margin='auto' flexDirection='column' gap='1rem' width={700} maxWidth={'100vw'} paddingBottom='1rem' >
           <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
             {chatState == 'DEN' ? <DenChannel /> : null}
             <audio ref={chat.notificationRef} hidden>

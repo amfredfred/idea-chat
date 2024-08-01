@@ -14,6 +14,7 @@ import slideMusic from "../../assets/slide.mp3";
 import synthMusic from "../../assets/synth.mp3";
 import ambientMusic from "../../assets/ambient.mp3";
 import { useCallback, useEffect, useRef } from "react";
+import { motion } from 'framer-motion'
 
 const musics = [
   {
@@ -77,12 +78,20 @@ export default function ChatSettings() {
   if (!isChatSettingsOpen) return null
 
   return (
-    <div
+    <motion.div
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 100, opacity: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      }}
       ref={containerRef}
       className={`${theme.styles.bgColor === "#ffffff"
         ? "border border-black"
         : "border-none"
-        }  p-5 rounded-[8px] flex flex-col  lg:gap-[5px] bg-white absolute  lg:bottom-full sm:bottom-full`}  >
+        }  p-5 rounded-[8px] flex flex-col sm:right-[0] lg:gap-[5px] bg-white absolute lg:bottom-[110%]  max-sm:bottom-[110%] max-sm:w-[361px] max-w-full`}  >
       <div className=" flex  rounded-[8px] flex-col ">
         <div className=" w-[15%]  ">
           <p className=" text-[12px] lg:text-[16px]">Visual</p>
@@ -210,6 +219,6 @@ export default function ChatSettings() {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
