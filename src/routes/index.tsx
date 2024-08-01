@@ -38,12 +38,15 @@ const ProtectedRoute: React.FC = () => {
 };
 
 export default function RoutesPortal() {
-  const { connected, searchParams, socketState } = useAppSelector(state => state.pumpSocket)
+  const connected = useAppSelector(state => state.pumpSocket.connected)
+  const searchParams = useAppSelector(state => state.pumpSocket.searchParams)
+  const socketState = useAppSelector(state => state.pumpSocket.socketState)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     return () => {
-      dispatch(connectSocket(API_URL));
+      dispatch(connectSocket(API_URL))
     };
   }, [dispatch]);
 

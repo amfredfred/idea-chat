@@ -18,8 +18,6 @@ import ChatSettings from "../components/chat/ChatSettings";
 import { setChatSettingsOpen } from "../libs/redux/slices/chat-slice";
 import { useCallback, useEffect, useRef } from "react";
 import { setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
-// import { walletAddressState } from "../atoms/wallet"
-// import { useNavigate } from "react-router-dom" 
 
 const totalWidth = window.innerWidth;
 const totalHeight = window.innerHeight;
@@ -178,7 +176,7 @@ const Chat = () => {
       <Box className=" flex py-2 px-4   justify-end align-middle" >
         <Navbar {...theme.styles} />
         <MobileNav
-          isSettingsOpen={chat.isSettingsOpen}
+          isSettingsOpen={isChatSettingsOpen}
           setIsSettingsOpen={chat.setIsSettingsOpen}
           socket={chat.socket}
         />

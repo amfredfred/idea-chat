@@ -11,7 +11,7 @@ const TokenSelection: React.FC<{
     onRequestClose: (state: boolean) => void
 }> = ({ onTokenSelect, isOpen, onRequestClose }) => {
 
-    const tokensList = useAppSelector(state => state.tokenSwap.tokensList)
+    const tokensList = useAppSelector(state => state.pumpSocket.pumpList?.migrated)
     const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
