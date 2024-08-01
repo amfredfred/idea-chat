@@ -2,7 +2,7 @@ import { Drawer } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setTheme } from "../../libs/redux/slices/theme-slice";
 import { Link, useNavigate } from "react-router-dom";
-import { setChatSettingsOpen, setWebsiteAudio, setWebsiteMotion } from "../../libs/redux/slices/chat-slice";
+import { setChatSettingsOpen, setChatAudio, setWebsiteMotion } from "../../libs/redux/slices/chat-slice";
 import synthIcon from "../../assets/synth.svg";
 import audioIcon from "../../assets/audio.svg";
 import slideIcon from "../../assets/slide.svg";
@@ -60,9 +60,19 @@ export default function ChatSettings() {
   const dispatch = useAppDispatch()
   const themes = useAppSelector(state => state.theme.themes)
   const theme = useAppSelector(state => state.theme.current)
-  const { isChatSettingsOpen, settingsModal, websiteAudio } = useAppSelector(state => state.chat)
+  const { isChatSettingsOpen, settingsModal, chatAudio } = useAppSelector(state => state.chat)
 
-  console.log({ isChatSettingsOpen })
+  // const handleMusicPlayPause = useCallback(async () => {
+  //   if (audioRef.current) {
+  //     if (audioRef.current.paused) {
+  //       await audioRef.current.play();
+  //       dispatch(setMusicIsPlaying(true));
+  //     } else {
+  //       audioRef.current.pause();
+  //       dispatch(setMusicIsPlaying(false));
+  //     }
+  //   }
+  // }, [dispatch]);
 
   return (
     <Drawer
@@ -120,9 +130,12 @@ export default function ChatSettings() {
               <div
                 key={`music-${index}`}
                 className=" flex flex-col items-center justify-center"
-                onClick={() => dispatch(setWebsiteAudio(music.source))} >
+                onClick={() => {
+                  dispatch(setChatAudio(music.source))
+                  console.log('dispatch(setChatAudio(music.source))', music)
+                }} >
                 <div
-                  className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${websiteAudio === music.source
+                  className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${chatAudio === music.source
                     ? "border-[#0000FF]"
                     : "border-black"
                     }  h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
@@ -130,7 +143,7 @@ export default function ChatSettings() {
                   <img src={music.icon} className=" w-[100%] h-auto" />
                 </div>
                 <p
-                  className={`text-[10px] lg:text-[16px] ${websiteAudio === music.source
+                  className={`text-[10px] lg:text-[16px] ${chatAudio === music.source
                     ? "text-[#0000FF]"
                     : "text-black"
                     } p-[4px] rounded-[2px] lg:border-none`}

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IChatStates } from '../../../common/types';
+import onMusic from "../../../assets/on.mp3";
 
 interface Message {
     _id: any;
@@ -21,7 +22,7 @@ interface ChatState {
     newMessages: Message[];
     settingsModal: Settings;
     isChatSettingsOpen: boolean;
-    websiteAudio: string;
+    chatAudio: string;
     isMusicPlaying: boolean;
     state: IChatStates
 }
@@ -37,7 +38,7 @@ const initialState: ChatState = {
         motion: 'focused'
     },
     isChatSettingsOpen: false,
-    websiteAudio: '',
+    chatAudio: onMusic,
     isMusicPlaying: true,
     state: 'DEN'
 };
@@ -62,11 +63,11 @@ const chatSlice = createSlice({
             state.settingsModal = action.payload;
         },
         setChatSettingsOpen(state, action: PayloadAction<boolean>) {
-            console.log(action)
             state.isChatSettingsOpen = action.payload;
         },
-        setWebsiteAudio(state, action: PayloadAction<string>) {
-            state.websiteAudio = action.payload;
+        setChatAudio(state, action: PayloadAction<string>) {
+            console.log('CHat audio', action)
+            state.chatAudio = action.payload;
         },
         setWebsiteMotion(state, action: PayloadAction<string>) {
             state.settingsModal.motion = action.payload;
@@ -87,7 +88,7 @@ export const {
     addNewMessage,
     setSettingsModal,
     setChatSettingsOpen,
-    setWebsiteAudio,
+    setChatAudio,
     setMusicIsPlaying,
     setWebsiteMotion,
     setChatState

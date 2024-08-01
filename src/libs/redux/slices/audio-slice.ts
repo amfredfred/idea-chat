@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AudioState {
-    websiteAudio: string;
+    chatAudio: string;
     isMusicPlaying: boolean;
 }
 
 const initialState: AudioState = {
-    websiteAudio: '',
+    chatAudio: '',
     isMusicPlaying: true
 };
 
@@ -14,8 +14,8 @@ const audioSlice = createSlice({
     name: 'audio',
     initialState,
     reducers: {
-        setWebsiteAudio(state, action: PayloadAction<string>) {
-            state.websiteAudio = action.payload;
+        setChatAudio(state, action: PayloadAction<string>) {
+            state.chatAudio = action.payload;
         },
         setMusicIsPlaying(state, action: PayloadAction<boolean>) {
             state.isMusicPlaying = action.payload;
@@ -23,5 +23,5 @@ const audioSlice = createSlice({
     }
 });
 
-export const { setWebsiteAudio, setMusicIsPlaying } = audioSlice.actions;
+export const { setChatAudio, setMusicIsPlaying } = audioSlice.actions;
 export default audioSlice.reducer;

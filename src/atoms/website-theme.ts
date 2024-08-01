@@ -11,7 +11,7 @@ export const websiteThemeState = atom({
   },
 });
 
-export const websiteAudioState = atom({
-  key: "websiteAudioState",
+export const chatAudioState = atom({
+  key: "chatAudioState",
   default: onMusic,
 });

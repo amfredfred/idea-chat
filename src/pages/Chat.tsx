@@ -5,27 +5,14 @@ import SettingsClosed from "../components/SettingsClosed";
 import { motion, AnimatePresence } from "framer-motion";
 import messageNotification from "../assets/message_notification.mp3";
 import Focused from "../components/message-animations/Focused";
-import synthIcon from "../assets/synth.svg";
-import audioIcon from "../assets/audio.svg";
-import slideIcon from "../assets/slide.svg";
-import onIcon from "../assets/on.svg";
-import ambientIcon from "../assets/ambient.svg";
-import winIcon from "../assets/win.svg";
-import winMusic from "../assets/win.mp3";
-import onMusic from "../assets/on.mp3";
-import slideMusic from "../assets/slide.mp3";
-import synthMusic from "../assets/synth.mp3";
-import ambientMusic from "../assets/ambient.mp3";
 import EquatorTest from "../components/message-animations/EquatorTest";
-import { Link, useNavigate } from "react-router-dom";
 import MobileNav from "../components/MobileNav";
 import Footer from "../components/chat/Footer";
 import Chaos from "../components/message-animations/Chaos";
 import useChat from "../hooks/useChat";
-import { Box, Drawer } from "@mui/material";
+import { Box } from "@mui/material";
 import { IChatStates } from "../common/types";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
-import { setTheme } from "../libs/redux/slices/theme-slice";
 import PumpChannel from "../components/chat/PumpChannel";
 import ChatSettings from "../components/chat/ChatSettings";
 import { setChatSettingsOpen } from "../libs/redux/slices/chat-slice";
@@ -34,7 +21,6 @@ import { setChatSettingsOpen } from "../libs/redux/slices/chat-slice";
 
 const totalWidth = window.innerWidth;
 const totalHeight = window.innerHeight;
-
 const notificationSounds: { [key in IChatStates]: string } = {
   DEN: messageNotification,
   PUMP: '',
@@ -157,8 +143,8 @@ const Chat = () => {
       className={`transition-colors duration-1000 w-full flex flex-col  bg-black relative font-jbm uppercase h-screen lg:h-screen overflow-hidden`}
     >
       <audio src="" ref={chat.audioRef} loop hidden>
-        <source src={chat.websiteAudio} type="audio/mpeg" />
-        <source src={chat.websiteAudio} type="audio/mp3" />
+        <source src={chat.chatAudio} type="audio/mpeg" />
+        <source src={chat.chatAudio} type="audio/mp3" />
       </audio>
 
       <Box className=" flex py-2 px-4   justify-end align-middle" >

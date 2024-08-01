@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import { setUserName, setProfilePic } from "../libs/redux/slices/user-profile-slice";
 import { setInitialMessages, addNewMessage } from "../libs/redux/slices/message-slice";
 import { setSettingsModal, setIsSettingsOpen } from "../libs/redux/slices/settings-slice";
-import { setWebsiteAudio, setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
+import { setChatAudio, setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import { Message } from "../libs/redux/slices/message-slice";
 
@@ -24,7 +24,7 @@ const useChat = () => {
     const newMessages = useAppSelector(state => state.messages.newMessages);
     const userName = useAppSelector(state => state.userProfile.userName);
     const profilePicState = useAppSelector(state => state.userProfile.profilePic);
-    const websiteAudio = useAppSelector(state => state.audio.websiteAudio);
+    const chatAudio = useAppSelector(state => state.audio.chatAudio);
     const chatState = useAppSelector(state => state.chat.state)
     const notificationRef = useRef<HTMLAudioElement | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -120,11 +120,13 @@ const useChat = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (audioRef.current && audioRef.current.src !== websiteAudio) {
-            audioRef.current.src = websiteAudio;
+        if (audioRef.current && audioRef.current.src !== chatAudio) {
+            audioRef.current.src = chatAudio;
             audioRef.current.play().catch(() => { });
         }
-    }, [websiteAudio]);
+    }, [chatAudio]);
+
+    console.log({ chatAudio })
 
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (modalRef.current !== event.target && !modalRef?.current?.contains?.(event.target as Node)) {
@@ -155,8 +157,8 @@ const useChat = () => {
         profilePicState,
         notificationRef,
         audioRef,
-        websiteAudio,
-        setWebsiteAudio,
+        chatAudio,
+        setChatAudio,
         modalRef,
         handleSendMessage,
         handleKeyDown,
