@@ -42,7 +42,6 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        // Only allow numbers and a single decimal point
         if (/^\d*\.?\d*$/.test(newValue)) {
             onChange(newValue);
         }
@@ -62,7 +61,6 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                 <Box display='flex' flexDirection='row' gap='1rem' paddingInline='.6rem' alignItems='center'>
                     <StyledInput
                         placeholder="0"
-                        type="text"
                         inputMode="decimal"
                         readOnly={readonly}
                         // pattern="^\d*\.?\d*$"

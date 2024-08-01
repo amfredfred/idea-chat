@@ -1,3 +1,5 @@
+import { MutableRefObject } from "react";
+
 export const promise = (seconds: number = 3) => new Promise((resolved) => setTimeout(resolved, seconds * 1000))
 export const parseEther = (amount: number, decimals: number) => amount / 10 ** decimals;
 export const parseAmount = (amount: number, decimals: number) => amount * 10 ** decimals;
@@ -22,3 +24,11 @@ export function shortenString(str: string, maxLength: number = 10, mode: 'left' 
             return str.slice(0, maxLength - ellipsisLength) + ellipsis;
     }
 }
+
+export const getDimensions = (ref: MutableRefObject<HTMLElement | null>) => {
+    if (ref.current) {
+        const { offsetWidth: width, offsetHeight: height } = ref.current;
+        return { width, height };
+    }
+    return { width: 0, height: 0 };
+};

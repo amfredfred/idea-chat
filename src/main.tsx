@@ -6,6 +6,7 @@ if (process.env.NODE_ENV !== 'production') {
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import 'swiper/css';
 import "./index.css";
 import { RecoilRoot } from "recoil";
 import { SolanaWalletProvider } from "./components/WalletProvider.tsx";
@@ -22,7 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <SolanaWalletProvider>
       <React.StrictMode>
         <StoreProvider>
-          <Stack direction="row" overflow='hidden' position='relative'>
+          <Stack direction="row" overflow='hidden' position='relative' style={{ width: '100vw', height: '100vh', flexWrap: 'wrap' }}>
             <RoutesPortal />
             <TokenswapStack />
             <ToastContainer />
