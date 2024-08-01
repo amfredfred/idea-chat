@@ -82,7 +82,7 @@ export default function ChatSettings() {
       className={`${theme.styles.bgColor === "#ffffff"
         ? "border border-black"
         : "border-none"
-        }  p-5 rounded-[8px] flex flex-col  lg:gap-[5px] bg-white absolute  lg:bottom-0 sm:bottom-full`}  >
+        }  p-5 rounded-[8px] flex flex-col  lg:gap-[5px] bg-white absolute  lg:bottom-full sm:bottom-full`}  >
       <div className=" flex  rounded-[8px] flex-col ">
         <div className=" w-[15%]  ">
           <p className=" text-[12px] lg:text-[16px]">Visual</p>

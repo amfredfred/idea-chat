@@ -30,7 +30,7 @@ export default function DenChannel() {
   }
 
   return (
-    <Box width='100%'>
+    <Box width='100%' >
       <div className="relative   overflow-y-auto  w-full">
         {settingsModal === "focused" ? (
           initialMessages.length > 0 && (
@@ -53,13 +53,13 @@ export default function DenChannel() {
       </div>
       {/* -------------------------------------- */}
 
-      <div className="flex items-start  justify-center bg-red-900 relative gap-2 lg:gap-4   w-full ">
+      <Box alignItems='center' className="flex items-start  justify-center  relative gap-2 lg:gap-4 w-full " >
         <AnimatePresence>
-          <div className="w-[60%] lg:w-[40%] xl:w-[35%]   ">
+          <Box className="w-[60%]  xl:w-[566px] " maxWidth='100%' display='flex'>
             <motion.textarea
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -100, opacity: 0 }}
               transition={{
                 type: "spring",
                 stiffness: 300,
@@ -75,7 +75,7 @@ export default function DenChannel() {
               // onKeyDown={chat.handleKeyDown}
               rows={1}
             />
-          </div>
+          </Box>
         </AnimatePresence>
 
         <Box>
@@ -105,7 +105,7 @@ export default function DenChannel() {
         </Box>
 
         <ChatSettings />
-      </div>
+      </Box>
     </Box>
   )
 }

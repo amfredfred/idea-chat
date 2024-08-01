@@ -134,4 +134,4 @@ export type ITokenSwapInputProps = {
   loading?: boolean
 }
 
-export type IChatStates = "DEN" | "PUMP" | "ALPHA"
+export type IChatStates = "DEN" | "PUMP.RAY" | "ALPHA"

@@ -65,19 +65,21 @@ const Chat = () => {
       </Box>
 
       <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
-        {chatState == 'PUMP' && <PumpChannel />}
+        {chatState == 'PUMP.RAY' && <PumpChannel />}
       </Box>
 
-      <Box className='flex flex-col justify-center mt-auto p-2' alignItems='center'>
-        <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
-          {chatState == 'DEN' ? <DenChannel /> : null}
-          <audio ref={chat.notificationRef} hidden>
-            <source src={notificationSounds?.[chatState]} type="audio/mpeg" />
-            <source src={notificationSounds?.[chatState]} type="audio/mp3" />
-            Your browser does not support the audio element.
-          </audio>
+      <Box display='flex' alignItems='center' justifyContent='center' className='container'>
+        <Box alignItems='center' display='flex' flexDirection='column' gap='1rem' width={700} maxWidth={'100%'} paddingBottom='1rem' >
+          <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
+            {chatState == 'DEN' ? <DenChannel /> : null}
+            <audio ref={chat.notificationRef} hidden>
+              <source src={notificationSounds?.[chatState]} type="audio/mpeg" />
+              <source src={notificationSounds?.[chatState]} type="audio/mp3" />
+              Your browser does not support the audio element.
+            </audio>
+          </Box>
+          <Footer />
         </Box>
-        <Footer />
       </Box>
     </Box>
   );
