@@ -6,6 +6,7 @@ import { WalletContextState } from "@solana/wallet-adapter-react";
 export interface IApp {
     isInitLoading: boolean,
     isLoading: boolean,
+    
 }
 
 export interface SwapInfo {

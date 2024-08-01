@@ -25,6 +25,8 @@ import TokenExplorer from "../components/pumps-and-den/TokenExplorer";
 import useChat from "../hooks/useChat";
 import { Box, Divider, Drawer } from "@mui/material";
 import { IChatStates } from "../common/types";
+import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
+import { setTheme } from "../libs/redux/slices/theme-slice";
 // import { walletAddressState } from "../atoms/wallet"
 // import { useNavigate } from "react-router-dom" 
 
@@ -59,54 +61,6 @@ const musics = [
   }
 ];
 
-const virtuals = [
-  {
-    name: 'rem',
-    styles: {
-      bgColor: "#0000FF",
-      textColor: "#ffffff",
-      buttonColor: "#0000FF",
-    },
-    class: 'bg-[#0000FF] text-white p-[5px] lg:p-2 rounded-[3px] text-[8px] lg:text-[10px] cursor-pointer'
-  },
-  {
-    name: 'neo',
-    styles: {
-      bgColor: "#000000",
-      textColor: "#00FF00",
-      buttonColor: "#000000",
-    },
-    class: 'bg-[#000000] text-[#00FF00] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
-  },
-  {
-    name: 'oen',
-    styles: {
-      bgColor: "#00FF00",
-      textColor: "#000000",
-      buttonColor: "#00FF00",
-    },
-    class: 'bg-[#00FF00] text-[#000000] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
-  },
-  {
-    name: 'hmmm',
-    styles: {
-      bgColor: "#FF5959",
-      textColor: "#ffffff",
-      buttonColor: "#000000",
-    },
-    class: 'bg-[#FF5959] text-[#3D3D3D] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
-  },
-  {
-    name: 'B/W',
-    styles: {
-      bgColor: "#ffffff",
-      textColor: "#000000",
-      buttonColor: "#000000",
-    },
-    class: 'bg-[#ffffff] text-[#000000] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] border border-black cursor-pointer'
-  }
-];
-
 const motions = [{
   name: 'chaos',
   motion: "chaos"
@@ -126,6 +80,9 @@ const notificationSounds: { [key in IChatStates]: string } = {
 
 const Chat = () => {
   const navigate = useNavigate();
+  const theme = useAppSelector((state) => state.theme.current);
+  const themes = useAppSelector((state) => state.theme.themes);
+  const dispatch = useAppDispatch()
 
   const chat = useChat()
 
@@ -135,40 +92,33 @@ const Chat = () => {
     onClose={() => chat.setIsSettingsOpen(false)}
   >
     <div
-      className={`${chat.websiteTheme.bgColor === "#ffffff"
+      className={`${theme.styles.bgColor === "#ffffff"
         ? "border border-black"
         : "border-none"
-        } bg-white  p-5 rounded-[8px] flex flex-col  lg:gap-[5px] `}  >
+        }  p-5 rounded-[8px] flex flex-col  lg:gap-[5px] `}  >
       <div className=" flex  rounded-[8px] flex-col ">
         <div className=" w-[15%]  ">
           <p className=" text-[12px] lg:text-[16px]">Visual</p>
         </div>
         <div className=" flex items-center justify-between w-full gap-3">
           <div className="  w-full flex justify-between lg:justify-around">
-
-            {virtuals.map((virtual, index) => (
+            {themes.map((theme, index) => (
               <div
-                key={`virtual-${index}`}
+                key={`theme-${index}`}
                 className=" flex flex-col items-center"
-                onClick={() => {
-                  chat.setWebsiteTheme({
-                    ...chat.websiteTheme,
-                    ...virtual.styles
-                  });
-                }}
-              >
-                <div className={virtual.class}>
+                onClick={() => dispatch(setTheme(theme.name))}   >
+                <div className={theme.class}>
                   <p>dont sin</p>
                   <p>dont sin</p>
                   <p>dont sin</p>
                 </div>
                 <p
-                  className={`text-[10px] lg:text-[16px] ${chat.settingsModal.visual === "oen"
+                  className={`text-[10px] lg:text-[16px] ${chat.settingsModal.visual === theme.name
                     ? "text-[#0000FF]"
                     : "text-black"
                     }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
                 >
-                  oen
+                  {theme.name}
                 </p>
               </div>
             ))}
@@ -254,13 +204,13 @@ const Chat = () => {
             className=" uppercase font-jbm  p-[5px]   "
             style={{
               background:
-                chat.websiteTheme.bgColor === "#ffffff"
+                theme.styles.bgColor === "#ffffff"
                   ? "black"
-                  : chat.websiteTheme.bgColor,
+                  : theme.styles.bgColor,
               color:
-                chat.websiteTheme.bgColor === "#ffffff"
+                theme.styles.bgColor === "#ffffff"
                   ? "white"
-                  : chat.websiteTheme.textColor,
+                  : theme.styles.textColor,
             }}
           >
             profile
@@ -270,9 +220,9 @@ const Chat = () => {
                      `}
             style={{
               color:
-                chat.websiteTheme.bgColor === "#ffffff"
+                theme.styles.bgColor === "#ffffff"
                   ? "#000000"
-                  : chat.websiteTheme.bgColor,
+                  : theme.styles.bgColor,
             }}
           >
             <Link to={"/"}>exit</Link>
@@ -323,7 +273,7 @@ const Chat = () => {
               }}
               placeholder="type something retarded..."
               value={chat.currentUserMessage}
-              className={`bg-white ${chat.websiteTheme.bgColor === "#ffffff"
+              className={`bg-white ${theme.styles.bgColor === "#ffffff"
                 ? "border border-black"
                 : "border-none"
                 } text-[#121212] uppercase p-3 lg:p-5 text-[13px] lg:text-[18px] mx-auto rounded-[4px] lg:rounded-[8px] w-full outline-none resize-none`}
@@ -336,7 +286,7 @@ const Chat = () => {
 
         <motion.button
           whileTap={chat.clickAnimation}
-          className={`p-[10px] lg:p-[15px] ${chat.websiteTheme.bgColor === "#ffffff"
+          className={`p-[10px] lg:p-[15px] ${theme.styles.bgColor === "#ffffff"
             ? "border border-black"
             : "border-none"
             } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
@@ -345,14 +295,14 @@ const Chat = () => {
           <AiOutlineSend
             className={`w-[22px] lg:w-[35px] h-auto `}
             style={{
-              color: chat.websiteTheme.buttonColor,
+              color: theme.styles.buttonColor,
             }}
           />
         </motion.button>
         {!chat.isSettingsOpen && (
           <motion.button
             whileTap={chat.clickAnimation}
-            className={`p-[10px] lg:p-[15px] ${chat.websiteTheme.bgColor === "#ffffff"
+            className={`p-[10px] lg:p-[15px] ${theme.styles.bgColor === "#ffffff"
               ? "border border-black"
               : "border-none"
               } bg-white rounded-[4px] lg:rounded-[8px] lg:hidden`}
@@ -361,7 +311,7 @@ const Chat = () => {
             <AiOutlineSend
               className={`w-[22px] lg:w-[35px] h-auto `}
               style={{
-                color: chat.websiteTheme.buttonColor,
+                color: theme.styles.buttonColor,
               }}
             />
           </motion.button>
@@ -370,12 +320,12 @@ const Chat = () => {
         <Box ref={chat.modalRef} className="relative isolate">
           <motion.button
             whileTap={chat.clickAnimation}
-            className={`p-[10px] lg:p-[15px] ${chat.websiteTheme.bgColor === "#ffffff"
+            className={`p-[10px] lg:p-[15px] ${theme.styles.bgColor === "#ffffff"
               ? "border border-black"
               : "border-none"
               } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
             onClick={() => chat.setIsSettingsOpen(state => !state)}>
-            {chat.isSettingsOpen ? <SettingsClosed color={chat.websiteTheme.buttonColor} /> : <SettingsIcon color={chat.websiteTheme.buttonColor} />}
+            {chat.isSettingsOpen ? <SettingsClosed color={theme.styles.buttonColor} /> : <SettingsIcon color={theme.styles.buttonColor} />}
           </motion.button>
         </Box>
 
@@ -388,8 +338,8 @@ const Chat = () => {
   return (
     <Box
       style={{
-        backgroundColor: chat.websiteTheme.bgColor,
-        color: chat.websiteTheme.textColor,
+        backgroundColor: theme.styles.bgColor,
+        color: theme.styles.textColor,
       }}
       className={`transition-colors duration-1000 w-full flex flex-col  bg-black relative font-jbm uppercase h-screen lg:h-screen overflow-hidden`}
     >
@@ -399,7 +349,7 @@ const Chat = () => {
       </audio>
 
       <Box className=" flex py-2 px-4   justify-end align-middle" >
-        <Navbar {...chat.websiteTheme} />
+        <Navbar {...theme.styles} />
         <MobileNav
           isSettingsOpen={chat.isSettingsOpen}
           setIsSettingsOpen={chat.setIsSettingsOpen}

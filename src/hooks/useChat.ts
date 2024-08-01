@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRecoilState } from "recoil";
 import { userProfilePicState, userNameState } from "../atoms/users";
-import { websiteThemeState, websiteAudioState } from "../atoms/website-theme";
+import {  websiteAudioState } from "../atoms/website-theme";
 import axios from "axios";
 import io from "socket.io-client";
 import { IChatStates } from "../common/types";
@@ -40,7 +40,6 @@ const useChat = () => {
         audio: "win",
         motion: "focused",
     });
-    const [websiteTheme, setWebsiteTheme] = useRecoilState(websiteThemeState);
     const [initialMessages, setInitialMessages] = useState<InitialMessage[]>([]);
     const [newMessage, setNewMessage] = useState<Message[]>([]);
     const [chatState, setChatState] = useState<IChatStates>("DEN");
@@ -169,8 +168,6 @@ const useChat = () => {
         setMusicIsPlaying,
         settingsModal,
         setSettingsModal,
-        websiteTheme,
-        setWebsiteTheme,
         initialMessages,
         setInitialMessages,
         newMessage,
