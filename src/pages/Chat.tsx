@@ -130,9 +130,166 @@ const Chat = () => {
 
   const chat = useChat()
 
+  const SettingsPartial = <motion.div
+    ref={chat.modalRef}
+    initial={{ y: "100%" }}
+    animate={{ y: 0 }}
+    exit={{ y: "100%" }}
+    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+    className="min-w-max absolute  right-[80%] lg:bottom-[90%] text-black z-50 flex flex-col gap-[10px] shadow rounded"
+  >
+    <div
+      className={`${chat.websiteTheme.bgColor === "#ffffff"
+        ? "border border-black"
+        : "border-none"
+        } bg-white  p-5 rounded-[8px] flex flex-col gap-[20px] lg:gap-[5px] `}  >
+      <div className=" flex lg:items-center rounded-[8px] flex-col lg:flex-row ">
+        <div className=" w-[15%]  ">
+          <p className=" text-[12px] lg:text-[16px]">visual</p>
+        </div>
+        <div className=" flex items-center justify-between w-full mt-[10px] lg:mt-[0px]">
+          <div className="  w-full flex justify-between lg:justify-around">
+
+            {virtuals.map((virtual, index) => (
+              <div
+                key={`virtual-${index}`}
+                className=" flex flex-col items-center"
+                onClick={() => {
+                  chat.setWebsiteTheme({
+                    ...chat.websiteTheme,
+                    ...virtual.styles
+                  });
+                }}
+              >
+                <div className={virtual.class}>
+                  <p>dont sin</p>
+                  <p>dont sin</p>
+                  <p>dont sin</p>
+                </div>
+                <p
+                  className={`text-[10px] lg:text-[16px] ${chat.settingsModal.visual === "oen"
+                    ? "text-[#0000FF]"
+                    : "text-black"
+                    }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
+                >
+                  oen
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden " />
+      {/* --------------------------------------------- */}
+      <div className=" flex lg:items-center flex-col lg:flex-row   rounded-[8px]">
+        <div
+          className=" flex items-center gap-[10px] cursor-pointer mr-[5px] "
+          onClick={chat.handleMusicPlayPause}
+        >
+          <p className="  text-[12px] lg:text-[16px]">audio</p>
+          <img src={audioIcon} className=" mt-[-3px]" />
+        </div>
+        <div className=" w-full flex lg:justify-around justify-between mt-[10px] lg:mt-[0px]">
+
+          {musics.map((music, index) => (
+            <div
+              key={`music-${index}`}
+              className=" flex flex-col items-center justify-center"
+              onClick={() => chat.setWebsiteAudio(music.source)} >
+              <div
+                className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${chat.websiteAudio === music.source
+                  ? "border-[#0000FF]"
+                  : "border-black"
+                  }  h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
+              >
+                <img src={music.icon} className=" w-[100%] h-auto" />
+              </div>
+              <p
+                className={`text-[10px] lg:text-[16px] ${chat.websiteAudio === music.source
+                  ? "text-[#0000FF]"
+                  : "text-black"
+                  } p-[4px] rounded-[2px] lg:border-none`}
+              >
+                {music.name}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden" />
+      {/* ------------------------------- */}
+      <div className=" flex flex-col lg:flex-row lg:items-center  rounded-[8px]">
+        <p className=" w-[18%] text-[12px] lg:text-[16px]">
+          motion
+        </p>
+        <div className=" flex w-full lg:justify-around gap-[20px] sm:gap-[40px] lg:gap-0 mt-[10px] lg:mt-[0px]">
+
+          {motions.map((motion, index) => (
+            <div
+              key={`motion-${index}`}
+              className=" flex flex-col items-center"
+              onClick={() =>
+                chat.setSettingsModal({
+                  ...chat.settingsModal,
+                  motion: motion.motion,
+                })
+              }
+            >
+              <div
+                className={` bg-[#white] ${chat.settingsModal.motion === motion.motion
+                  ? "text-[#0000FF] border border-[#0000FF]"
+                  : "text-black border border-black"
+                  }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`}
+              >
+                <p>dont sin</p>
+                <p>dont sin</p>
+                <p>dont sin</p>
+              </div>
+              <p className=" text-[10px] lg:text-[16px] p-[4px] rounded-[2px] lg:border-none">
+                {motion.name}
+              </p>
+            </div>
+          ))}
+
+        </div>
+        <div className="lg:hidden flex flex-col gap-[15px] mt-[15px] w-full">
+          <button
+            onClick={() => navigate("/profile")}
+            className=" uppercase font-jbm  p-[5px]   "
+            style={{
+              background:
+                chat.websiteTheme.bgColor === "#ffffff"
+                  ? "black"
+                  : chat.websiteTheme.bgColor,
+              color:
+                chat.websiteTheme.bgColor === "#ffffff"
+                  ? "white"
+                  : chat.websiteTheme.textColor,
+            }}
+          >
+            profile
+          </button>
+          <button
+            className={`  uppercase font-jbm  
+                     `}
+            style={{
+              color:
+                chat.websiteTheme.bgColor === "#ffffff"
+                  ? "#000000"
+                  : chat.websiteTheme.bgColor,
+            }}
+          >
+            <Link to={"/"}>exit</Link>
+          </button>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+
   const DEN = (
     <Box width='100%'>
-      <div className="relative h-[70%] lg:h-[75%] overflow-y-auto mb-[10px]  w-full">
+      <div className="relative  lg:h-[75%] overflow-y-auto mb-[10px]  w-full">
         {chat.settingsModal.motion === "focused" ? (
           chat.initialMessages.length > 0 && (
             <Focused
@@ -159,186 +316,27 @@ const Chat = () => {
 
       <div className="flex items-start lg:items-center justify-center gap-2 lg:gap-4 h-[7%] w-full ">
         <AnimatePresence>
-          {chat.isSettingsOpen ? (
-            <motion.div
-              ref={chat.modalRef}
+          <div className="w-[60%] lg:w-[40%] xl:w-[35%]   ">
+            <motion.textarea
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="w-[90%]  lg:w-[50%] xl:w-[35%] 2xl:w-[35%] relative top-[-450px] lg:top-[-100px] text-black z-10 flex flex-col gap-[10px]  "
-            >
-              <div
-                className={`${chat.websiteTheme.bgColor === "#ffffff"
-                  ? "border border-black"
-                  : "border-none"
-                  } bg-white  p-5 rounded-[8px] flex flex-col gap-[20px] lg:gap-[5px] `}  >
-                <div className=" flex lg:items-center rounded-[8px] flex-col lg:flex-row ">
-                  <div className=" w-[15%]  ">
-                    <p className=" text-[12px] lg:text-[16px]">visual</p>
-                  </div>
-                  <div className=" flex items-center justify-between w-full mt-[10px] lg:mt-[0px]">
-                    <div className="  w-full flex justify-between lg:justify-around">
-
-                      {virtuals.map((virtual, index) => (
-                        <div
-                          key={`virtual-${index}`}
-                          className=" flex flex-col items-center"
-                          onClick={() => {
-                            chat.setWebsiteTheme({
-                              ...chat.websiteTheme,
-                              ...virtual.styles
-                            });
-                          }}
-                        >
-                          <div className={virtual.class}>
-                            <p>dont sin</p>
-                            <p>dont sin</p>
-                            <p>dont sin</p>
-                          </div>
-                          <p
-                            className={`text-[10px] lg:text-[16px] ${chat.settingsModal.visual === "oen"
-                              ? "text-[#0000FF]"
-                              : "text-black"
-                              }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
-                          >
-                            oen
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden " />
-                {/* --------------------------------------------- */}
-                <div className=" flex lg:items-center flex-col lg:flex-row   rounded-[8px]">
-                  <div
-                    className=" flex items-center gap-[10px] cursor-pointer mr-[5px] "
-                    onClick={chat.handleMusicPlayPause}
-                  >
-                    <p className="  text-[12px] lg:text-[16px]">audio</p>
-                    <img src={audioIcon} className=" mt-[-3px]" />
-                  </div>
-                  <div className=" w-full flex lg:justify-around justify-between mt-[10px] lg:mt-[0px]">
-
-                    {musics.map((music, index) => (
-                      <div
-                        key={`music-${index}`}
-                        className=" flex flex-col items-center justify-center"
-                        onClick={() => chat.setWebsiteAudio(music.source)} >
-                        <div
-                          className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${chat.websiteAudio === music.source
-                            ? "border-[#0000FF]"
-                            : "border-black"
-                            }  h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
-                        >
-                          <img src={music.icon} className=" w-[100%] h-auto" />
-                        </div>
-                        <p
-                          className={`text-[10px] lg:text-[16px] ${chat.websiteAudio === music.source
-                            ? "text-[#0000FF]"
-                            : "text-black"
-                            } p-[4px] rounded-[2px] lg:border-none`}
-                        >
-                          {music.name}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden" />
-                {/* ------------------------------- */}
-                <div className=" flex flex-col lg:flex-row lg:items-center  rounded-[8px]">
-                  <p className=" w-[18%] text-[12px] lg:text-[16px]">
-                    motion
-                  </p>
-                  <div className=" flex w-full lg:justify-around gap-[20px] sm:gap-[40px] lg:gap-0 mt-[10px] lg:mt-[0px]">
-
-                    {motions.map((motion, index) => (
-                      <div
-                        key={`motion-${index}`}
-                        className=" flex flex-col items-center"
-                        onClick={() =>
-                          chat.setSettingsModal({
-                            ...chat.settingsModal,
-                            motion: motion.motion,
-                          })
-                        }
-                      >
-                        <div
-                          className={` bg-[#white] ${chat.settingsModal.motion === motion.motion
-                            ? "text-[#0000FF] border border-[#0000FF]"
-                            : "text-black border border-black"
-                            }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`}
-                        >
-                          <p>dont sin</p>
-                          <p>dont sin</p>
-                          <p>dont sin</p>
-                        </div>
-                        <p className=" text-[10px] lg:text-[16px] p-[4px] rounded-[2px] lg:border-none">
-                          {motion.name}
-                        </p>
-                      </div>
-                    ))}
-
-                  </div>
-                  <div className="lg:hidden flex flex-col gap-[15px] mt-[15px] w-full">
-                    <button
-                      onClick={() => navigate("/profile")}
-                      className=" uppercase font-jbm  p-[5px]   "
-                      style={{
-                        background:
-                          chat.websiteTheme.bgColor === "#ffffff"
-                            ? "black"
-                            : chat.websiteTheme.bgColor,
-                        color:
-                          chat.websiteTheme.bgColor === "#ffffff"
-                            ? "white"
-                            : chat.websiteTheme.textColor,
-                      }}
-                    >
-                      profile
-                    </button>
-                    <button
-                      className={`  uppercase font-jbm  
-                     `}
-                      style={{
-                        color:
-                          chat.websiteTheme.bgColor === "#ffffff"
-                            ? "#000000"
-                            : chat.websiteTheme.bgColor,
-                      }}
-                    >
-                      <Link to={"/"}>exit</Link>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ) : (
-            <div className="w-[60%] lg:w-[40%] xl:w-[35%]   ">
-              <motion.textarea
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                exit={{ y: "100%" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
-                }}
-                placeholder="type something retarded..."
-                value={chat.currentUserMessage}
-                className={`bg-white ${chat.websiteTheme.bgColor === "#ffffff"
-                  ? "border border-black"
-                  : "border-none"
-                  } text-[#121212] uppercase p-3 lg:p-5 text-[13px] lg:text-[18px] mx-auto rounded-[4px] lg:rounded-[8px] w-full outline-none resize-none`}
-                onChange={(e) => chat.setCurrentUserMessage(e.target.value)}
-                onKeyDown={chat.handleKeyDown}
-                rows={1}
-              />
-            </div>
-          )}
+              transition={{
+                type: "spring",
+                stiffness: 300,
+                damping: 30,
+              }}
+              placeholder="type something retarded..."
+              value={chat.currentUserMessage}
+              className={`bg-white ${chat.websiteTheme.bgColor === "#ffffff"
+                ? "border border-black"
+                : "border-none"
+                } text-[#121212] uppercase p-3 lg:p-5 text-[13px] lg:text-[18px] mx-auto rounded-[4px] lg:rounded-[8px] w-full outline-none resize-none`}
+              onChange={(e) => chat.setCurrentUserMessage(e.target.value)}
+              onKeyDown={chat.handleKeyDown}
+              rows={1}
+            />
+          </div>
         </AnimatePresence>
 
         <motion.button
@@ -375,17 +373,14 @@ const Chat = () => {
         )}
         <motion.button
           whileTap={chat.clickAnimation}
-          className={`p-[10px] lg:p-[15px] ${chat.websiteTheme.bgColor === "#ffffff"
+          className={`p-[10px] lg:p-[15px] relative isolate ${chat.websiteTheme.bgColor === "#ffffff"
             ? "border border-black"
             : "border-none"
             } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
-          onClick={() => chat.setIsSettingsOpen(!chat.isSettingsOpen)}
+          onClick={() => chat.setIsSettingsOpen(state => !state)}
         >
-          {chat.isSettingsOpen ? (
-            <SettingsClosed color={chat.websiteTheme.buttonColor} />
-          ) : (
-            <SettingsIcon color={chat.websiteTheme.buttonColor} />
-          )}
+          {chat.isSettingsOpen && SettingsPartial}
+          {chat.isSettingsOpen ? <SettingsClosed color={chat.websiteTheme.buttonColor} /> : <SettingsIcon color={chat.websiteTheme.buttonColor} />}
         </motion.button>
       </div>
     </Box>
@@ -405,7 +400,7 @@ const Chat = () => {
         <source src={chat.websiteAudio} type="audio/mp3" />
       </audio>
 
-      <Box className="h-[5%] lg:h-[10%]">
+      <Box className="h-[5%] lg:h-[10%]" sx={{ background: 'red', minHeight: 'max-content', padding: '1rem' }}>
         <Box className="w-[90%] lg:flex justify-end hidden">
           <Navbar {...chat.websiteTheme} />
         </Box>
@@ -416,7 +411,7 @@ const Chat = () => {
         />
       </Box>
 
-      <Box flexGrow='1'>
+      <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
         <TokenExplorer />
       </Box>
 

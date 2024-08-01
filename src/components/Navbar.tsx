@@ -1,7 +1,8 @@
+import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 const Navbar = (websiteTheme: any) => {
   return (
-    <div
+    <Box
       style={{
         backgroundColor: websiteTheme.bgColor,
         color: websiteTheme.textColor,
@@ -14,7 +15,7 @@ const Navbar = (websiteTheme: any) => {
       <Link to={"/"}>
         <p>exit</p>
       </Link>
-    </div>
+    </Box>
   );
 };
 
