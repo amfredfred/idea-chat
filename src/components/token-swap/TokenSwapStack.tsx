@@ -40,7 +40,6 @@ const TokenswapStack: React.FC = () => {
 
   const handleSwap = async () => {
     if (tokenSwapState !== 'pending') {
-      console.log('called');
       dispatch(handleTokenSwap({
         connection,
         wallet,
@@ -81,7 +80,6 @@ const TokenswapStack: React.FC = () => {
   useEffect(() => {
     const handleResize = () => {
       const { width, height } = getDimensions(containerRef)
-      console.log(width, height / 2)
       const centerX = window.innerWidth / 2 - (width / 2);
       const centerY = isMobile ? 0 : isMinimized ? 40 : window.innerHeight / 2 - height;
       setPosition({ x: centerX, y: centerY });

@@ -148,7 +148,7 @@ const Chat = () => {
               } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
             onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}>
             {isChatSettingsOpen ? <SettingsClosed color={theme.styles.buttonColor} /> : <SettingsIcon color={theme.styles.buttonColor} />}
-          </motion.button>sd
+          </motion.button>
         </Box>
 
         <ChatSettings />
@@ -164,10 +164,6 @@ const Chat = () => {
       }}
       className={`transition-colors duration-1000 w-full flex flex-col  bg-black relative font-jbm uppercase h-screen lg:h-screen overflow-hidden`}
     >
-
-      <Button onClick={handleMusicPlayPause}>
-        handleMusicPlayPause
-      </Button>
       <audio ref={audioRef} loop hidden>
         <source src={chatAudio} type="audio/mpeg" />
         <source src={chatAudio} type="audio/mp3" />

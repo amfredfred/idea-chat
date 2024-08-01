@@ -47,15 +47,15 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">holders</p>
-            <p className=" text-[16px] ">420</p>
+            <p className=" text-[16px] ">{formatNumber(pump?.holder_count ?? 0)}</p>
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">volume</p>
-            <p className=" text-[16px] ">$240K</p>
+            <p className=" text-[16px] ">${formatNumber(pump?.usd_market_cap) ?? 0}</p>
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">dev</p>
-            <p className=" text-[16px] ">sold</p>
+            {/* <p className=" text-[16px] ">{ pump?.}</p> */}
           </div>
         </div>
 
