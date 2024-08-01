@@ -3,8 +3,11 @@ import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom
 import Profile from "../components/Profile.tsx";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
-import Loading from "../components/Loading.tsx"; 
+import Loading from "../components/Loading.tsx";
 import Chat from "../pages/Chat.tsx";
+import { useAppDispatch, useAppSelector } from "../libs/redux/hooks.ts";
+import { connectSocket, emitEvent } from "../libs/redux/slices/pump-socket-slice.ts";
+const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 
 const connectWallet = async (wallet: any): Promise<boolean> => {
   try {
@@ -35,6 +38,22 @@ const ProtectedRoute: React.FC = () => {
 };
 
 export default function RoutesPortal() {
+  const { connected, searchParams, socketState } = useAppSelector(state => state.pumpSocket)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    return () => {
+      dispatch(connectSocket(API_URL));
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(emitEvent('requestPumpList', searchParams))
+  }, [connected, searchParams, dispatch])
+
+  if (socketState !== 'receiving') {
+    return <Loading />
+  }
 
   return (
     <BrowserRouter>

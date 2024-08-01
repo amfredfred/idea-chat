@@ -1,18 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import io, { Socket } from 'socket.io-client';
 import { AppDispatch } from '../store';
-import { PumpSocketReceived, PumpSocketSend } from '../../../common/types';
+import { IPumpRequestParams, PumpSocketReceived, PumpSocketSend } from '../../../common/types';
+
+type PumpSocketStates = 'idle' | 'error' | 'receiving' | 'ready'
 
 interface PumpSocketState {
     socket: Socket | null;
     connected: boolean;
     pumpList: PumpSocketReceived['pumpList'] | null;
+    searchParams: IPumpRequestParams,
+    socketState: PumpSocketStates
 }
 
 const initialState: PumpSocketState = {
     socket: null,
     connected: false,
     pumpList: null,
+    searchParams: {
+        filter_listing: {},
+        filter_migrated: {}
+    },
+    socketState: 'idle'
 };
 
 const pumpSocketSlice = createSlice({
@@ -28,10 +37,16 @@ const pumpSocketSlice = createSlice({
         setPumpList: (state, action: PayloadAction<PumpSocketReceived['pumpList']>) => {
             state.pumpList = action.payload;
         },
+        setSearchParams: (state, action: PayloadAction<IPumpRequestParams>) => {
+            state.searchParams = action.payload
+        },
+        setPumpSocketState: (state, action: PayloadAction<PumpSocketStates>) => {
+            state.socketState = action.payload;
+        },
     },
 });
 
-export const { setSocket, setConnected, setPumpList } = pumpSocketSlice.actions;
+export const { setSocket, setConnected, setPumpList, setPumpSocketState, setSearchParams } = pumpSocketSlice.actions;
 
 export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch) => {
     const socketInstance = io(serverUrl, {
@@ -47,7 +62,8 @@ export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch
         dispatch(setConnected(false));
     });
 
-    socketInstance.on('pumpListUpdate', (data: PumpSocketReceived['pumpList']) => {
+    socketInstance.on('pumpList', (data: PumpSocketReceived['pumpList']) => {
+        dispatch(setPumpSocketState('receiving'))
         dispatch(setPumpList(data));
     });
 
