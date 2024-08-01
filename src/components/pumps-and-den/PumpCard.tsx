@@ -1,9 +1,9 @@
-import { websiteThemeState } from "../atoms/website-theme";
+import { websiteThemeState } from "../../atoms/website-theme";
 import { useRecoilValue } from "recoil";
-import { IPumpCoin, IPumpCoinMigrated } from "../common/types";
-import { useAppDispatch } from "../libs/redux/hooks";
-import { setSelectedtokenToReceive } from "../libs/redux/slices/token-swap-slice";
-import { formatNumber } from "../utils/format";
+import { IPumpCoin, IPumpCoinMigrated } from "../../common/types";
+import { useAppDispatch } from "../../libs/redux/hooks";
+import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-slice";
+import { formatNumber } from "../../utils/format";
 import { Box, Button, LinearProgress } from "@mui/material";
 import { CandlestickChartRounded } from "@mui/icons-material";
 
