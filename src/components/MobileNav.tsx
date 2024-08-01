@@ -5,14 +5,12 @@ import SettingsClosed from "./SettingsClosed";
 import SettingsIcon from "./SettingsIcon";
 import bottleIcon from "../assets/bottle.png";
 import { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
+import { setChatSettingsOpen } from "../libs/redux/slices/chat-slice";
 
 const MobileNav = ({
-  setIsSettingsOpen,
-  isSettingsOpen,
   socket,
 }: {
-  setIsSettingsOpen: any;
-  isSettingsOpen: any;
   socket: any;
 }) => {
   const clickAnimation = {
@@ -21,11 +19,18 @@ const MobileNav = ({
   };
   const [liveUsersCount, setLiveUsersCount] = useState<number | null>(0);
   const websiteTheme = useRecoilValue(websiteThemeState);
+
   useEffect(() => {
-    socket.on("connectedUsersCountUpdate", (count: number) => {
-      setLiveUsersCount(count);
-    });
-  }, []);
+    if (socket) {
+      socket.on("connectedUsersCountUpdate", (count: number) => {
+        setLiveUsersCount(count);
+      });
+    }
+  }, [socket]);
+
+  const dispatch = useAppDispatch()
+  const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen)
+
   return (
     <div className=" mt-[20px] mb-[20px] lg:hidden w-[90%]  mx-auto flex justify-between items-center sticky ">
       <div>
@@ -40,13 +45,8 @@ const MobileNav = ({
           whileTap={clickAnimation}
           style={{ borderColor: websiteTheme.textColor }}
           className={`p-[5px]   rounded-[4px] lg:rounded-[8px] lg:hidden border-[1px]  `}
-          onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-        >
-          {isSettingsOpen ? (
-            <SettingsClosed color={websiteTheme.textColor} />
-          ) : (
-            <SettingsIcon color={websiteTheme.textColor} />
-          )}
+          onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}  >
+          {isChatSettingsOpen ? <SettingsClosed color={websiteTheme.textColor} /> : <SettingsIcon color={websiteTheme.textColor} />}
         </motion.button>
       </div>
     </div>

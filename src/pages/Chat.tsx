@@ -37,7 +37,7 @@ const Chat = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleMusicPlayPause = useCallback(async () => {
-    if (audioRef.current) { 
+    if (audioRef.current) {
       if (audioRef.current.src != chatAudio) {
         audioRef.current.src = chatAudio
       }
@@ -171,11 +171,7 @@ const Chat = () => {
 
       <Box className=" flex py-2 px-4   justify-end align-middle" >
         <Navbar {...theme.styles} />
-        <MobileNav
-          isSettingsOpen={isChatSettingsOpen}
-          setIsSettingsOpen={chat.setIsSettingsOpen}
-          socket={chat.socket}
-        />
+        <MobileNav socket={chat.socket} />
       </Box>
 
       <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
