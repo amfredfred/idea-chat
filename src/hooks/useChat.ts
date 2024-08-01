@@ -17,15 +17,15 @@ const useChat = () => {
 
     const dispatch = useAppDispatch();
     const currentUserMessage = useAppSelector(state => state.messages.newMessages);
-    const isSettingsOpen = useAppSelector(state => state.settings.isSettingsOpen);
+    const isSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen);
     const isMusicPlaying = useAppSelector(state => state.audio.isMusicPlaying);
-    const settingsModal = useAppSelector(state => state.settings.settingsModal);
+    const settingsModal = useAppSelector(state => state.chat.settingsModal);
     const initialMessages = useAppSelector(state => state.messages.initialMessages);
     const newMessages = useAppSelector(state => state.messages.newMessages);
     const userName = useAppSelector(state => state.userProfile.userName);
     const profilePicState = useAppSelector(state => state.userProfile.profilePic);
     const websiteAudio = useAppSelector(state => state.audio.websiteAudio);
-    const chatState = useAppSelector(state => state.settings.chat.state)
+    const chatState = useAppSelector(state => state.chat.state)
     const notificationRef = useRef<HTMLAudioElement | null>(null);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const modalRef = useRef<HTMLDivElement>(null);

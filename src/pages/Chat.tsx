@@ -21,57 +21,19 @@ import { Link, useNavigate } from "react-router-dom";
 import MobileNav from "../components/MobileNav";
 import Footer from "../components/chat/Footer";
 import Chaos from "../components/message-animations/Chaos";
-import TokenExplorer from "../components/pumps-and-den/TokenExplorer";
 import useChat from "../hooks/useChat";
 import { Box, Drawer } from "@mui/material";
 import { IChatStates } from "../common/types";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import { setTheme } from "../libs/redux/slices/theme-slice";
 import PumpChannel from "../components/chat/PumpChannel";
+import ChatSettings from "../components/chat/ChatSettings";
+import { setChatSettingsOpen } from "../libs/redux/slices/chat-slice";
 // import { walletAddressState } from "../atoms/wallet"
 // import { useNavigate } from "react-router-dom" 
 
 const totalWidth = window.innerWidth;
 const totalHeight = window.innerHeight;
-
-const musics = [
-  {
-    source: winMusic,
-    name: 'win',
-    icon: winIcon
-  },
-  {
-    source: onMusic,
-    name: 'on',
-    icon: onIcon
-  },
-  {
-    source: slideMusic,
-    name: 'slide',
-    icon: slideIcon
-  },
-  {
-    source: synthMusic,
-    name: 'synth',
-    icon: synthIcon
-  },
-  {
-    source: ambientMusic,
-    name: 'ambient',
-    icon: ambientIcon
-  }
-];
-
-const motions = [{
-  name: 'chaos',
-  motion: "chaos"
-}, {
-  name: 'focused',
-  motion: "focused"
-}, {
-  name: 'equator',
-  motion: "equator"
-}]
 
 const notificationSounds: { [key in IChatStates]: string } = {
   DEN: messageNotification,
@@ -80,157 +42,12 @@ const notificationSounds: { [key in IChatStates]: string } = {
 }
 
 const Chat = () => {
-  const navigate = useNavigate();
+
   const theme = useAppSelector((state) => state.theme.current);
-  const themes = useAppSelector((state) => state.theme.themes);
+  const chatState = useAppSelector(state => state.chat.state)
+  const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen);
   const dispatch = useAppDispatch()
   const chat = useChat()
-
-  const SettingsPartial = <Drawer
-    anchor='right'
-    open={chat.isSettingsOpen}
-    onClose={() => chat.setIsSettingsOpen(false)}
-  >
-    <div
-      className={`${theme.styles.bgColor === "#ffffff"
-        ? "border border-black"
-        : "border-none"
-        }  p-5 rounded-[8px] flex flex-col  lg:gap-[5px] `}  >
-      <div className=" flex  rounded-[8px] flex-col ">
-        <div className=" w-[15%]  ">
-          <p className=" text-[12px] lg:text-[16px]">Visual</p>
-        </div>
-        <div className=" flex items-center justify-between w-full gap-3">
-          <div className="  w-full flex justify-between lg:justify-around">
-            {themes.map((theme, index) => (
-              <div
-                key={`theme-${index}`}
-                className=" flex flex-col items-center"
-                onClick={() => dispatch(setTheme(theme.name))}   >
-                <div className={theme.class}>
-                  <p>dont sin</p>
-                  <p>dont sin</p>
-                  <p>dont sin</p>
-                </div>
-                <p
-                  className={`text-[10px] lg:text-[16px] ${chat.settingsModal.visual === theme.name
-                    ? "text-[#0000FF]"
-                    : "text-black"
-                    }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
-                >
-                  {theme.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden " />
-      {/* --------------------------------------------- */}
-      <div className=" flex  flex-col   rounded-[8px]">
-        <div
-          className=" flex items-center gap-[10px] cursor-pointer mr-[5px] "
-          onClick={chat.handleMusicPlayPause}
-        >
-          <p className="  text-[12px] lg:text-[16px]">Audio</p>
-          <img src={audioIcon} className=" mt-[-3px]" />
-        </div>
-        <div className=" w-full flex lg:justify-around justify-between gap-3">
-          {musics.map((music, index) => (
-            <div
-              key={`music-${index}`}
-              className=" flex flex-col items-center justify-center"
-              onClick={() => chat.setWebsiteAudio(music.source)} >
-              <div
-                className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${chat.websiteAudio === music.source
-                  ? "border-[#0000FF]"
-                  : "border-black"
-                  }  h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
-              >
-                <img src={music.icon} className=" w-[100%] h-auto" />
-              </div>
-              <p
-                className={`text-[10px] lg:text-[16px] ${chat.websiteAudio === music.source
-                  ? "text-[#0000FF]"
-                  : "text-black"
-                  } p-[4px] rounded-[2px] lg:border-none`}
-              >
-                {music.name}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden" />
-      {/* ------------------------------- */}
-      <div className=" flex flex-col   rounded-[8px]">
-        <p className=" w-[18%] text-[12px] lg:text-[16px]">
-          Motion
-        </p>
-        <div className=" flex w-full lg:justify-around  sm:gap-[40px] lg:gap-0 gap-3">
-
-          {motions.map((motion, index) => (
-            <div
-              key={`motion-${index}`}
-              className=" flex flex-col items-center"
-              onClick={() =>
-                chat.setSettingsModal({
-                  ...chat.settingsModal,
-                  motion: motion.motion,
-                })
-              }
-            >
-              <div
-                className={` bg-[#white] ${chat.settingsModal.motion === motion.motion
-                  ? "text-[#0000FF] border border-[#0000FF]"
-                  : "text-black border border-black"
-                  }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`}
-              >
-                <p>dont sin</p>
-                <p>dont sin</p>
-                <p>dont sin</p>
-              </div>
-              <p className=" text-[10px] lg:text-[16px] p-[4px] rounded-[2px] lg:border-none">
-                {motion.name}
-              </p>
-            </div>
-          ))}
-
-        </div>
-        <div className="lg:hidden flex flex-col gap-[15px] mt-[15px] w-full">
-          <button
-            onClick={() => navigate("/profile")}
-            className=" uppercase font-jbm  p-[5px]   "
-            style={{
-              background:
-                theme.styles.bgColor === "#ffffff"
-                  ? "black"
-                  : theme.styles.bgColor,
-              color:
-                theme.styles.bgColor === "#ffffff"
-                  ? "white"
-                  : theme.styles.textColor,
-            }}
-          >
-            profile
-          </button>
-          <button
-            className={`  uppercase font-jbm  
-                     `}
-            style={{
-              color:
-                theme.styles.bgColor === "#ffffff"
-                  ? "#000000"
-                  : theme.styles.bgColor,
-            }}
-          >
-            <Link to={"/"}>exit</Link>
-          </button>
-        </div>
-      </div>
-    </div>
-  </Drawer>
 
   const DEN = (
     <Box width='100%'>
@@ -296,7 +113,7 @@ const Chat = () => {
             }}
           />
         </motion.button>
-        {!chat.isSettingsOpen && (
+        {!isChatSettingsOpen && (
           <motion.button
             whileTap={chat.clickAnimation}
             className={`p-[10px] lg:p-[15px] ${theme.styles.bgColor === "#ffffff"
@@ -321,13 +138,12 @@ const Chat = () => {
               ? "border border-black"
               : "border-none"
               } bg-white rounded-[4px] lg:rounded-[8px] hidden lg:block`}
-            onClick={() => chat.toggleSettings(!chat.isSettingsOpen)}>
-            {chat.isSettingsOpen ? <SettingsClosed color={theme.styles.buttonColor} /> : <SettingsIcon color={theme.styles.buttonColor} />}
-          </motion.button>
+            onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}>
+            {isChatSettingsOpen ? <SettingsClosed color={theme.styles.buttonColor} /> : <SettingsIcon color={theme.styles.buttonColor} />}
+          </motion.button>sd
         </Box>
 
-
-        {SettingsPartial}
+        <ChatSettings />
       </div>
     </Box>
   )
@@ -355,12 +171,12 @@ const Chat = () => {
       </Box>
 
       <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
-        {chat.chatState == 'PUMP' && <PumpChannel />}
+        {chatState == 'PUMP' && <PumpChannel />}
       </Box>
 
       <Box className='flex flex-col justify-center mt-auto p-2' alignItems='center'>
         <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
-          {chat.chatState == 'DEN' ? DEN : null}
+          {chatState == 'DEN' ? DEN : null}
           <audio ref={chat.notificationRef} hidden>
             <source src={notificationSounds?.[chat.chatState]} type="audio/mpeg" />
             <source src={notificationSounds?.[chat.chatState]} type="audio/mp3" />

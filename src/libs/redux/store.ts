@@ -4,7 +4,7 @@ import appSlice from './slices/app-slice'
 import themeSlice from './slices/theme-slice'
 import userProfileSlice from './slices/user-profile-slice'
 import messagesSlice from './slices/message-slice'
-import settingsSlice from './slices/settings-slice'
+// import settingsSlice from './slices/settings-slice'
 import audioSlice from './slices/audio-slice'
 import chatSlice from './slices/chat-slice'
 
@@ -16,7 +16,6 @@ export const makeStore = () => {
             theme: themeSlice,
             userProfile: userProfileSlice,
             messages: messagesSlice,
-            settings: settingsSlice,
             audio: audioSlice,
 
             chat: chatSlice

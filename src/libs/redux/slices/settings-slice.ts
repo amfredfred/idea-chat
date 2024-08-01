@@ -38,11 +38,8 @@ const settingsSlice = createSlice({
         setIsSettingsOpen(state, action: PayloadAction<boolean>) {
             state.isSettingsOpen = action.payload;
         },
-        setChatState(state, action: PayloadAction<IChatStates>) {
-            state.chat.state = action.payload;
-        }
     }
 });
 
-export const { setSettingsModal, setIsSettingsOpen, setChatState } = settingsSlice.actions;
+export const { setSettingsModal, setIsSettingsOpen  } = settingsSlice.actions;
 export default settingsSlice.reducer;

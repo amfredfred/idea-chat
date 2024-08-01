@@ -1,12 +1,12 @@
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { IChatStates } from "../../common/types";
-import { setChatState } from "../../libs/redux/slices/settings-slice";
 import { Box } from "@mui/material";
+import { setChatState } from "../../libs/redux/slices/chat-slice";
 
 const Footer = () => {
 
   const dispacth = useAppDispatch()
-  const chatState = useAppSelector(state => state.settings.chat.state)
+  const chatState = useAppSelector(state => state.chat.state)
   const updateChatState = (state: IChatStates) => dispacth(setChatState(state))
   const websiteTheme = useAppSelector(state => state.theme.current.styles);
   const buttons = ['DEN', 'PUMP', 'ALPHA']

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IChatStates } from '../../../common/types';
 
 interface Message {
     _id: any;
@@ -19,9 +20,10 @@ interface ChatState {
     initialMessages: Message[];
     newMessages: Message[];
     settingsModal: Settings;
-    isSettingsOpen: boolean;
+    isChatSettingsOpen: boolean;
     websiteAudio: string;
     isMusicPlaying: boolean;
+    state: IChatStates
 }
 
 const initialState: ChatState = {
@@ -34,9 +36,10 @@ const initialState: ChatState = {
         audio: 'win',
         motion: 'focused'
     },
-    isSettingsOpen: false,
+    isChatSettingsOpen: false,
     websiteAudio: '',
-    isMusicPlaying: true
+    isMusicPlaying: true,
+    state: 'DEN'
 };
 
 const chatSlice = createSlice({
@@ -58,14 +61,21 @@ const chatSlice = createSlice({
         setSettingsModal(state, action: PayloadAction<Settings>) {
             state.settingsModal = action.payload;
         },
-        setIsSettingsOpen(state, action: PayloadAction<boolean>) {
-            state.isSettingsOpen = action.payload;
+        setChatSettingsOpen(state, action: PayloadAction<boolean>) {
+            console.log(action)
+            state.isChatSettingsOpen = action.payload;
         },
         setWebsiteAudio(state, action: PayloadAction<string>) {
             state.websiteAudio = action.payload;
         },
+        setWebsiteMotion(state, action: PayloadAction<string>) {
+            state.settingsModal.motion = action.payload;
+        },
         setMusicIsPlaying(state, action: PayloadAction<boolean>) {
             state.isMusicPlaying = action.payload;
+        },
+        setChatState(state, action: PayloadAction<IChatStates>) {
+            state.state = action.payload;
         }
     }
 });
@@ -76,9 +86,11 @@ export const {
     setInitialMessages,
     addNewMessage,
     setSettingsModal,
-    setIsSettingsOpen,
+    setChatSettingsOpen,
     setWebsiteAudio,
-    setMusicIsPlaying
+    setMusicIsPlaying,
+    setWebsiteMotion,
+    setChatState
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
