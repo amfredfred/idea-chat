@@ -6,7 +6,7 @@ import useChat from "../hooks/useChat";
 import { Box } from "@mui/material";
 import { IChatStates } from "../common/types";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
-import PumpChannel from "../components/chat/PumpChannel";
+import PumpChannel from "../components/chat/PumpDotRay";
 import { setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
 import DenChannel from "../components/chat/DenChannel";
 import { useCallback, useEffect, useRef } from "react";

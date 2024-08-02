@@ -31,7 +31,7 @@ const TokenswapStack: React.FC = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
-  const isMobile = useMediaQuery('(max-width:500px)');
+  const isMobile = useMediaQuery('(max-width:600px)');
   const wallet = useWallet();
   const containerRef = useRef<HTMLDivElement>(null)
 

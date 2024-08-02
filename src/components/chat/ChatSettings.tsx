@@ -72,7 +72,7 @@ export default function ChatSettings() {
       if (target !== containerRef.current && !containerRef.current?.contains(target as Node))
         closeMenu()
     })
-    return document.removeEventListener('mousedown', closeMenu)
+    return document.removeEventListener('mousedown', () => {})
   }, [closeMenu])
 
   if (!isChatSettingsOpen) return null
