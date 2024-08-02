@@ -24,7 +24,7 @@ const initialState: PumpSocketState = {
     socketState: 'idle'
 };
 
-const pumpSocketSlice = createSlice({
+const socketIoSlice = createSlice({
     name: 'pumpSocket',
     initialState,
     reducers: {
@@ -46,7 +46,7 @@ const pumpSocketSlice = createSlice({
     },
 });
 
-export const { setSocket, setConnected, setPumpList, setPumpSocketState, setSearchParams } = pumpSocketSlice.actions;
+export const { setSocket, setConnected, setPumpList, setPumpSocketState, setSearchParams } = socketIoSlice.actions;
 
 export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch) => {
     const socketInstance = io(serverUrl, {
@@ -93,4 +93,4 @@ export const onEvent = <K extends keyof PumpSocketReceived>(event: K, callback: 
     return () => { };
 };
 
-export default pumpSocketSlice.reducer;
+export default socketIoSlice.reducer;

@@ -78,7 +78,7 @@ export default function PumpChart() {
                         <Button variant="outlined" className="flex align-middle gap-2 justify-center" onClick={() => dispatch(setPumpChartShown(false))}>
                             <ArrowBack /> Back
                         </Button>
-                        <Button disableElevation variant="contained" className="flex col-span-2 align-middle gap-2 justify-center" onClick={atClickBuy}>
+                        <Button style={{ color: theme.buttonColor, background: theme.textColor }} disableElevation variant="contained" className="flex col-span-2 align-middle gap-2 justify-center" onClick={atClickBuy}>
                             Buy
                         </Button>
                     </Box>
