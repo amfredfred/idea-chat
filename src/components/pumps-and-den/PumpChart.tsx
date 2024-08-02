@@ -25,7 +25,24 @@ export default function PumpChart() {
             className='gap-4 grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1'>
             <Box className="md:col-span-2 flex flex-col gap-4">
                 <Box className="w-full p-4  bg-zinc-950 lg:h-[96px] rounded-lg overflow-hidden">
-                    HED
+                    <div className="flex items-center gap-2">
+                        <Box className="relative hover:cursor-pointer z-10">
+                            <Box className="flex items-center">
+                                <Box className="relative flex items-center z-[-2]" sx={{ width: 66, height: 66 }}>
+                                    <img src={pumpItem?.logo} style={{ aspectRatio: '1/1' }} alt="Token Image" className=" aspect-square rounded-full" height="100%" />
+                                </Box>
+                            </Box>
+                        </Box>
+                        <div className=" flex flex-col gap-1">
+                            <p className=" text-[16px] whitespace-nowrap overflow-hidden ">
+                                {pumpItem?.symbol} ({pumpItem?.name})
+                            </p>
+                            <p title={pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
+                                className=" text-[11px] whitespace-nowrap overflow-hidden max-w-[50%] text-ellipsis">
+                                {pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
+                            </p>
+                        </div>
+                    </div>
                 </Box>
                 <Box className="w-full bg-zinc-950 lg:h-[390px] rounded-lg overflow-hidden">
                     <AdvancedRealTimeChart theme="dark" autosize />

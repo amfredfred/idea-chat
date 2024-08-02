@@ -12,7 +12,7 @@ import { Connection } from '@solana/web3.js';
 import { toast } from 'react-toastify';
 import { useMediaQuery } from '@mui/material';
 import { getDimensions } from '../../utils';
-import { fetchHistoricalData } from '../../libs/redux/slices/pump-chart-slice';
+import { fetchHistoricalData, setPumpItem } from '../../libs/redux/slices/pump-chart-slice';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -50,6 +50,7 @@ const TokenswapStack: React.FC = () => {
   };
 
   const handleLoadAndShowChart = () => {
+    dispatch(setPumpItem(tokenToSend as any))
     dispatch(fetchHistoricalData(String(tokenToSend?.address)))
   }
 
