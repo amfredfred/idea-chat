@@ -40,7 +40,7 @@ const initialState: ChatState = {
     isChatSettingsOpen: false,
     chatAudio: onMusic,
     isMusicPlaying: true,
-    state: 'DEN',
+    state: 'PUMP.RAY',
     typedMessage: ''
 };
 

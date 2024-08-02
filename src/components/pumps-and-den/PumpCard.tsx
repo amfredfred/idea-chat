@@ -1,11 +1,12 @@
 import { websiteThemeState } from "../../atoms/website-theme";
 import { useRecoilValue } from "recoil";
 import { IPumpCoin, IPumpCoinMigrated } from "../../common/types";
-import { useAppDispatch } from "../../libs/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-slice";
 import { formatNumber } from "../../utils/format";
 import { Box, Button, LinearProgress } from "@mui/material";
 import { CandlestickChartRounded } from "@mui/icons-material";
+import { fetchHistoricalData } from "../../libs/redux/slices/pump-chart-slice";
 
 export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
   const websiteTheme = useRecoilValue(websiteThemeState);
@@ -14,6 +15,11 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
   const dispatch = useAppDispatch()
   const atClickBuy = () => dispatch(setSelectedtokenToReceive(pump))
   const atClickApeBlindly = () => { console.log('atApeBlindly') }
+  const pumpChartStatus = useAppSelector(state => state.pumpChart.status);
+
+  const handleLoadAndShowChart = () => {
+    dispatch(fetchHistoricalData(pump.address))
+  }
 
   return (
     <div
@@ -67,7 +73,7 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
         />
 
         <Box display='flex' gap='1rem' alignItems='center' justifyContent='space-between'>
-          <Button className=' bg-red-400 flex' variant="outlined"
+          <Button onClick={handleLoadAndShowChart} disabled={pumpChartStatus === 'pending'} className=' bg-red-400 flex' variant="outlined"
             style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden' }} >
             Chart  <CandlestickChartRounded className='text-yellow-100' />
           </Button>

@@ -11,20 +11,23 @@ interface PumpChartState {
     status: 'idle' | 'pending' | 'error' | 'success'
     message: string | null,
     isPumpChartShown: boolean
+    mint: string | null
 }
 
 const initialState: PumpChartState = {
     data: [],
     status: 'error',
     message: null,
-    isPumpChartShown: true
+    isPumpChartShown: false,
+    mint: null
 };
 
 
 export const fetchHistoricalData = createAsyncThunk(
     'pump_chart/fetchHistoricalData',
-    async (tokenAddress: string) => {
+    async (tokenAddress: string, thumApi) => {
         const response = await axios.get(`https://api.helius.com/v0/historical/${tokenAddress}`);
+        thumApi
         return response.data;
     }
 );
@@ -38,15 +41,19 @@ const pumpChartSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchHistoricalData.pending, (state) => {
+        builder.addCase(fetchHistoricalData.pending, (state, { payload }) => {
+            console.log({ payload })
+            state.isPumpChartShown = false
             state.status = 'pending';
         });
         builder.addCase(fetchHistoricalData.fulfilled, (state, action: PayloadAction<HistoricalDataPoint[]>) => {
             state.status = 'success';
+            state.isPumpChartShown = true
             state.data = action.payload;
         });
         builder.addCase(fetchHistoricalData.rejected, (state, action) => {
             state.status = 'error';
+            state.isPumpChartShown = true
             state.message = action.error.message || 'Failed to fetch historical data';
         });
     },
