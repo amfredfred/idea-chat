@@ -10,6 +10,7 @@ import PumpChannel from "../components/chat/PumpDotRay";
 import { setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
 import DenChannel from "../components/chat/DenChannel";
 import { useCallback, useEffect, useRef } from "react";
+import ContainedLayout from "../layouts/ContainedLayout";
 
 const notificationSounds: { [key in IChatStates]: string } = {
   DEN: messageNotification,
@@ -47,41 +48,42 @@ const Chat = () => {
   const chat = useChat()
 
   return (
-    <Box
-      style={{
-        backgroundColor: theme.styles.bgColor,
-        color: theme.styles.textColor,
-      }}
-      className={`transition-colors duration-1000 w-full flex flex-col  bg-black relative font-jbm uppercase h-screen lg:h-screen overflow-hidden`}
-    >
-      <audio ref={audioRef} loop hidden>
-        <source src={chatAudio} type="audio/mpeg" />
-        <source src={chatAudio} type="audio/mp3" />
-      </audio>
+    <ContainedLayout>
+      <Box
+        style={{
+          color: theme.styles.textColor,
+        }}
+        className={`transition-colors duration-1000 flex flex-col  relative font-jbm uppercase h-full  overflow-hidden`}
+      >
+        <audio ref={audioRef} loop hidden>
+          <source src={chatAudio} type="audio/mpeg" />
+          <source src={chatAudio} type="audio/mp3" />
+        </audio>
 
-      <Box className=" flex py-2 px-4   justify-end align-middle" >
-        <Navbar {...theme.styles} />
-        <MobileNav socket={chat.socket} />
-      </Box>
+        <Box className=" flex py-2 px-4   justify-end align-middle" >
+          <Navbar {...theme.styles} />
+          <MobileNav socket={chat.socket} />
+        </Box>
 
-      <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
-        {chatState == 'PUMP.RAY' && <PumpChannel />}
-      </Box>
+        <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
+          {chatState == 'PUMP.RAY' && <PumpChannel />}
+        </Box>
 
-      <Box  className='w-full  '>
-        <Box alignItems='center' display='flex' margin='auto' flexDirection='column' gap='1rem' width={700} maxWidth={'100vw'} paddingBottom='1rem' >
-          <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
-            {chatState == 'DEN' ? <DenChannel /> : null}
-            <audio ref={chat.notificationRef} hidden>
-              <source src={notificationSounds?.[chatState]} type="audio/mpeg" />
-              <source src={notificationSounds?.[chatState]} type="audio/mp3" />
-              Your browser does not support the audio element.
-            </audio>
+        <Box className='w-full  '>
+          <Box alignItems='center' display='flex' margin='auto' flexDirection='column' gap='1rem' width={700} maxWidth={'100vw'} paddingBottom='1rem' >
+            <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
+              {chatState == 'DEN' ? <DenChannel /> : null}
+              <audio ref={chat.notificationRef} hidden>
+                <source src={notificationSounds?.[chatState]} type="audio/mpeg" />
+                <source src={notificationSounds?.[chatState]} type="audio/mp3" />
+                Your browser does not support the audio element.
+              </audio>
+            </Box>
+            <Footer />
           </Box>
-          <Footer />
         </Box>
       </Box>
-    </Box>
+    </ContainedLayout>
   );
 };
 

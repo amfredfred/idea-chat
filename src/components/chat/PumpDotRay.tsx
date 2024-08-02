@@ -1,5 +1,11 @@
+import { Box } from '@mui/material'
 import TokenExplorer from '../pumps-and-den/TokenExplorer'
 
 export default function PumpDotRay() {
-    return <TokenExplorer />
+    return (
+        <Box>
+            <TokenExplorer />
+
+        </Box>
+    )
 }

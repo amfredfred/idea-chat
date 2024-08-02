@@ -7,6 +7,9 @@ import Loading from "../components/Loading.tsx";
 import Chat from "../pages/Chat.tsx";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks.ts";
 import { connectSocket, emitEvent } from "../libs/redux/slices/pump-socket-slice.ts";
+import TokenswapStack from "../components/token-swap/TokenSwapStack.tsx";
+import { ToastContainer } from "react-toastify";
+import { Stack } from "@mui/material";
 const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 
 const connectWallet = async (wallet: any): Promise<boolean> => {
@@ -41,6 +44,7 @@ export default function RoutesPortal() {
   const connected = useAppSelector(state => state.pumpSocket.connected)
   const searchParams = useAppSelector(state => state.pumpSocket.searchParams)
   const socketState = useAppSelector(state => state.pumpSocket.socketState)
+  const theme = useAppSelector(state => state.theme.current.styles)
 
   const dispatch = useAppDispatch()
 
@@ -59,14 +63,18 @@ export default function RoutesPortal() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Stack direction="column" overflow='hidden' position='relative' style={{ width: '100vw', height: '100vh', flexWrap: 'wrap', background: theme.bgColor }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+      <TokenswapStack />
+      <ToastContainer />
+    </Stack>
   )
 }
