@@ -50,11 +50,11 @@ export default function PumpChart() {
                             </Box>
                         </Box>
                         <div className="flex flex-col gap-1">
-                            <p className="text-[16px] max-sm:text-[12px] whitespace-nowrap lg:overflow-hidden text-ellipsis">
+                            <p className="text-[16px] max-sm:text-[12px] whitespace-nowrap max-lg:overflow-hidden text-ellipsis">
                                 {pumpItem?.symbol} ({pumpItem?.name})
                             </p>
                             <p title={pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
-                                className="text-[11px] max-sm:text-[9px] whitespace-nowrap overflow-hidden lg:max-w-[50%] text-ellipsis">
+                                className="text-[11px] max-sm:text-[9px] whitespace-nowrap max-lg:overflow-hidden max-lg:max-w-[60%] sm:w-[90%] text-ellipsis">
                                 {pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
                             </p>
                         </div>
@@ -86,11 +86,11 @@ export default function PumpChart() {
             </Box>
             <Box className="p-4 md:col-span-1 lg:w-full lg:h-full" border='solid thin white' >
                 <Box sx={{ width: '100%', typography: 'body1' }}>
-                    <TabContext value={value}>
+                    <TabContext value={value} >
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <TabList onChange={handleChange}>
-                                <Tab label="Token info" value="1" style={{ color: theme.textColor }} />
-                                <Tab label="Holders" value="2" style={{ color: theme.textColor }} />
+                            <TabList onChange={handleChange} centered >
+                                <Tab label="Token info" value="1" style={{ color: theme.textColor, flexGrow:1 }}  />
+                                <Tab label="Holders" value="2" style={{ color: theme.textColor, flexGrow: 1 }} />
                             </TabList>
                         </Box>
                         <TabPanel value="1">

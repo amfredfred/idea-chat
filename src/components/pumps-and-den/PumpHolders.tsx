@@ -4,24 +4,23 @@ import { PieChart } from '@mui/x-charts'
 
 export default function PumpHolders() {
     return (
-        <Box className=' flex-col  gap-4 m-auto  flex justify-center' width={'100%'}>
-            <PieChart
-                width={300}
-                height={300}
-                className=' m-auto'
-                series={[
-                    {
-                        data: [{ value: 10 }, { value: 15 }, { value: 20 }],
-                        innerRadius: 30,
-                        outerRadius: 100,
-                        paddingAngle: 5,
-                        cornerRadius: 5,
-                        startAngle: -90,
-                        endAngle: 180,
-                        cx: 150,
-                        cy: 150,
-                    }
-                ]} />
+        <Box className=' flex-col  gap-4 m-auto  flex justify-center' width={'100%'} alignItems='center'>
+            <Box sx={{ width:'100%' }}>
+                <PieChart
+                    height={300}
+                    className=' m-auto   flex centre justify-center'
+                    series={[
+                        {
+                            startAngle: -280,
+                            data: [{ value: 60, label: '', color: '#00FF00', }, { value: 10, color: '#FFFFFF' }, { value: 30, color: '#F7FF05' }],
+                            innerRadius: 90,
+                            arcLabel: (params) => params.label ?? '',
+                            cx: 150,
+                            cy: 150,
+                        },
+                    ]}
+                />
+            </Box>
             <Button variant="outlined" className="flex align-middle gap-2 justify-center"   >
                 <Map /> View on bubblemaps
             </Button>
