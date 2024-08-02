@@ -4,7 +4,7 @@ import { PieChart } from '@mui/x-charts'
 
 export default function PumpHolders() {
     return (
-        <Box className=' flex-col  gap-4 m-auto  flex justify-center' width={'100%'} alignItems='center'>
+        <Box className=' flex-col  gap-4 m-auto  flex justify-center  ' width={'100%'} alignItems='center'>
             <Box sx={{ width:'100%' }}>
                 <PieChart
                     height={300}
@@ -21,7 +21,7 @@ export default function PumpHolders() {
                     ]}
                 />
             </Box>
-            <Button variant="outlined" className="flex align-middle gap-2 justify-center"   >
+            <Button variant="outlined" className="flex align-middle gap-2 justify-center  w-full"   >
                 <Map /> View on bubblemaps
             </Button>
         </Box>

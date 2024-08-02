@@ -39,7 +39,7 @@ export default function PumpChart() {
                 stiffness: 300,
                 damping: 30,
             }}
-            className='gap-4 grid md:grid-cols-3 max-md:flex max-md:flex-col overflow-auto max-sm:h-full no-scrollbar '
+            className='gap-4 grid lg:grid-cols-3 max-lg:flex max-lg:flex-col overflow-auto max-lg:h-full no-scrollbar '
         >
             <Box className="md:col-span-2 flex flex-col gap-4 h-max ">
                 <Box className="w-full grid grid-cols-3 sm:p-4 h-max sm:border border-gray-500  max-sm:flex max-sm:flex-col  " >
