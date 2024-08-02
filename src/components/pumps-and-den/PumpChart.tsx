@@ -2,7 +2,7 @@ import { Box, Button, Divider, Tab } from "@mui/material";
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setPumpChartShown } from "../../libs/redux/slices/pump-chart-slice";
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowBack, Map } from "@mui/icons-material";
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -15,6 +15,7 @@ import PumpfunButton from "../buttons/PumpfunButton";
 import React, { useState } from "react";
 import { shortenString } from "../../utils";
 import { formatNumber } from "../../utils/format";
+import { PieChart } from '@mui/x-charts/PieChart';
 
 export default function PumpChart() {
 
@@ -50,7 +51,7 @@ export default function PumpChart() {
                 stiffness: 300,
                 damping: 30,
             }}
-            className='gap-4 grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1'>
+            className='gap-4 grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 overflow-auto'>
             <Box className="md:col-span-2 flex flex-col gap-4">
                 <Box className="w-full    grid grid-cols-3  p-4  overflow-hidden" border='solid thin white' >
                     <div className="flex items-center gap-2 col-span-2">
@@ -120,7 +121,29 @@ export default function PumpChart() {
                                 <InfoItem left="DEV" right="LOCKED" />
                             </Box>
                         </TabPanel>
-                        <TabPanel value="2">Item Two</TabPanel>
+                        <TabPanel value="2">
+                            <Box display='flex' className=' flex-col  gap-4'>
+                                <PieChart
+                                    width={300}
+                                    height={300}
+                                    series={[
+                                        {
+                                            data: [{ value: 10 }, { value: 15 }, { value: 20 }],
+                                            innerRadius: 30,
+                                            outerRadius: 100,
+                                            paddingAngle: 5,
+                                            cornerRadius: 5,
+                                            startAngle: -90,
+                                            endAngle: 180,
+                                            cx: 150,
+                                            cy: 150,
+                                        }
+                                    ]} />
+                                <Button variant="outlined" className="flex align-middle gap-2 justify-center" onClick={() => dispatch(setPumpChartShown(false))}>
+                                    <Map /> View on bubblemaps
+                                </Button>
+                            </Box>
+                        </TabPanel>
                     </TabContext>
                 </Box>
             </Box>
