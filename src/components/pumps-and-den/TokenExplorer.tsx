@@ -3,6 +3,7 @@ import TokensNewlyCreated from "./TokensNewlyCreated";
 import ToekensAboutToGraduate from "./ToekensAboutToGraduate";
 import TokensGraduated from "./TokensGraduated";
 import { Box, useMediaQuery } from "@mui/material";
+import { motion } from 'framer-motion'
 
 export default function TokenExplorer() {
   const isMobile = useMediaQuery("(max-width:768px)")
@@ -11,7 +12,15 @@ export default function TokenExplorer() {
   const [selectedView, setSelectedView] = useState<'new' | 'about' | 'graduated'>('graduated');
 
   const pumpsNavigation = (
-    <Box display="flex" justifyContent="space-between" className=' h-16'>
+    <motion.div initial={{  opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      }}
+      className='flex justify-between h-16'>
       <Box className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => setSelectedView('new')}>
         <small>New</small>
       </Box>
@@ -21,12 +30,21 @@ export default function TokenExplorer() {
       <Box className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => setSelectedView('graduated')}>
         <small>Graduated</small>
       </Box>
-    </Box >
+    </motion.div >
   );
 
   return (
-    <Box className="container overflow-hidden mx-auto flex h-full"  >
-      <Box className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 divide-x divide-grey-500 " maxHeight='100%' flexGrow='1'>
+    <motion.div
+      initial={{ x: -100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -100, opacity: 0 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      }}
+      className="container overflow-hidden mx-auto flex h-full"  >
+      <Box className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 motion.divide-x divide-grey-500 " maxHeight='100%' flexGrow='1'>
         {isMobile ? (<>
           {selectedView === 'new' && <TokensNewlyCreated />}
           {selectedView === 'about' && <ToekensAboutToGraduate />}
@@ -39,6 +57,6 @@ export default function TokenExplorer() {
           <TokensGraduated /></>
         )}
       </Box>
-    </Box>
+    </motion.div>
   )
 }
