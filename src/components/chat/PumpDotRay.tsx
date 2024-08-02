@@ -8,7 +8,7 @@ export default function PumpDotRay() {
     const isPumpChartShown = useAppSelector(state => state.pumpChart.isPumpChartShown);
 
     return (
-        <Box width='100%'>
+        <Box width='100%' height={'100%'}>
             {isPumpChartShown ? <PumpChart /> : <TokenExplorer />}
         </Box>
     )
