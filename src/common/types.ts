@@ -1,4 +1,4 @@
-export type IPumpCoin = ({
+export type IPumpCoin =  {
   address: string
   associated_bonding_curve: string
   base_reserve: number
@@ -55,34 +55,8 @@ export type IPumpCoin = ({
   volume_6h: number
   volume_24h: number
   website: string
-} | {
-  account: string;
-  decimals: number;
-  supply: string;
-  mintAuthority: string;
-  tokenStandard: string;
-  updateAuthority: string;
-  address: string;
-  name: string;
-  symbol: string;
-  uri: string;
-  sellerFeeBasisPoints: number;
-  primarySaleHappened: boolean;
-  isMutable: boolean;
-  createdOn: string;
-  description: string;
-  logo: string;
-  showName: boolean;
-  telegram: string;
-  twitter: string;
-  website?: string;
-  reply_count: number
-  usd_market_cap: number
-  holder_count: number
-  total_supply: number
-  progress: number
-}
-)
+} 
+
 export type IPumpRequestParams = {
   filter_listing: Record<string, string>,
   filter_migrated: Record<string, string>

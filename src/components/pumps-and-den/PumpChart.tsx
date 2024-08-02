@@ -1,4 +1,4 @@
-import { Box, Button, Tab } from "@mui/material";
+import { Box, Button, Divider, Tab } from "@mui/material";
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setPumpChartShown } from "../../libs/redux/slices/pump-chart-slice";
@@ -13,20 +13,32 @@ import XButton from "../buttons/XButton";
 import WebsiteButton from "../buttons/WebsiteButton";
 import PumpfunButton from "../buttons/PumpfunButton";
 import React, { useState } from "react";
+import { shortenString } from "../../utils";
+import { formatNumber } from "../../utils/format";
 
 export default function PumpChart() {
 
     const pumpItem = useAppSelector(state => state.pumpChart.pumpItem)
+    const theme = useAppSelector(state => state.theme.current.styles)
     const dispatch = useAppDispatch()
     const atClickBuy = () => dispatch(setSelectedtokenToReceive(pumpItem))
 
 
-    const [value, setValue] =  useState('1');
+    const [value, setValue] = useState('1');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
 
+    const InfoItem = ({ left, right }: { left: string, right: string }) =>
+        <Box display='flex' alignItems='center' justifyContent='space-between'>
+            <Box>
+                {left}
+            </Box>
+            <Box>
+                {right}
+            </Box>
+        </Box>
 
     return (
         <motion.div
@@ -40,7 +52,7 @@ export default function PumpChart() {
             }}
             className='gap-4 grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1'>
             <Box className="md:col-span-2 flex flex-col gap-4">
-                <Box className="w-full  lg:h-[96px] grid grid-cols-3 rounded-lg overflow-hidden">
+                <Box className="w-full    grid grid-cols-3  p-4  overflow-hidden" border='solid thin white' >
                     <div className="flex items-center gap-2 col-span-2">
                         <Box className="relative hover:cursor-pointer z-10 ">
                             <Box className="relative flex items-center z-[-2]" sx={{ width: 66, height: 66 }}>
@@ -57,7 +69,7 @@ export default function PumpChart() {
                             </p>
                         </div>
                     </div>
-                    <Box alignItems='flex-end' className=" flex flex-col gap-1 col-span-1 justify-center align-middle">
+                    <Box alignItems='flex-end' className=" flex flex-col gap-1 col-span-1 justify-center align-middle" >
                         <Box display='flex' alignItems='center' gap='.3rem'>
                             <TelegramButton url={pumpItem?.telegram} />
                             <XButton url={pumpItem?.twitter} />
@@ -68,7 +80,7 @@ export default function PumpChart() {
                         </Box>
                     </Box>
                 </Box>
-                <Box className="w-full lg:h-[390px] rounded-lg overflow-hidden aspect-video">
+                <Box className="w-full lg:h-[390px]   overflow-hidden aspect-video" border='solid thin white' >
                     <AdvancedRealTimeChart theme="dark" autosize />
                 </Box>
                 <Box className="w-full ">
@@ -82,19 +94,33 @@ export default function PumpChart() {
                     </Box>
                 </Box>
             </Box>
-            <Box className="bg-zinc-950 rounded-lg p-4  overflow-hidden md:col-span-1 lg:w-full lg:h-full">
+            <Box className="p-4  overflow-hidden md:col-span-1 lg:w-full lg:h-full" border='solid thin white' borderBottom='none'>
                 <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={value}>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Item One" value="1" />
-                                <Tab label="Item Two" value="2" />
-                                <Tab label="Item Three" value="3" />
+                                <Tab label="Token info" value="1" style={{ color: theme.textColor }} />
+                                <Tab label="holders" value="2" style={{ color: theme.textColor }} />
                             </TabList>
                         </Box>
-                        <TabPanel value="1">Item One</TabPanel>
+                        <TabPanel value="1">
+                            <Box display='flex' className=' flex-col  gap-4'>
+                                <InfoItem left="ADDRESS" right={shortenString(String(pumpItem?.address))} />
+                                <Divider />
+                                <InfoItem left="PRICE" right={`$${formatNumber(pumpItem?.price ?? 0)}`} />
+                                <Divider />
+                                <InfoItem left="MCAP" right={`$${formatNumber(pumpItem?.usd_market_cap ?? 0)}`} />
+                                <Divider />
+                                <InfoItem left="LIQUIDITY" right={formatNumber(Number(pumpItem?.total_supply))} />
+                                <Divider />
+                                <InfoItem left="VOLUME  1H" right={`${formatNumber(pumpItem?.volume_1h ?? 0)}`} />
+                                <Divider />
+                                <InfoItem left="HOLDERS" right={`${formatNumber(pumpItem?.holder_count ?? 0)}`} />
+                                <Divider />
+                                <InfoItem left="DEV" right="LOCKED" />
+                            </Box>
+                        </TabPanel>
                         <TabPanel value="2">Item Two</TabPanel>
-                        <TabPanel value="3">Item Three</TabPanel>
                     </TabContext>
                 </Box>
             </Box>
