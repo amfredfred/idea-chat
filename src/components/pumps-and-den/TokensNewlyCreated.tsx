@@ -1,8 +1,11 @@
 import { Box } from '@mui/material'
-import { IPumpCoin } from '../../common/types'
 import PumpCard from './PumpCard'
+import { useAppSelector } from '../../libs/redux/hooks'
 
-export default function TokensNewlyCreated({ pools }: { pools?: IPumpCoin[] }) {
+export default function TokensNewlyCreated() {
+
+  const newPumps = useAppSelector(state => state?.pumpSocket.pumpList?.pump)
+  const pools = newPumps?.filter?.(pool => ((pool.created_timestamp * 1000) < Date.now() + 20e3) && (Number(pool.usd_market_cap) <= 40e3))
 
   return (
     <Box className="flex flex-col md:p-3 h-full  overflow-hidden  px-4 ">

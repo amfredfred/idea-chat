@@ -1,8 +1,10 @@
 import { Box } from "@mui/material";
-import { IPumpCoinMigrated } from "../../common/types";
 import PumpCard from "./PumpCard";
+import { useAppSelector } from "../../libs/redux/hooks";
 
-export default function TokensGraduated({ pools }: { pools?: IPumpCoinMigrated[] }) {
+export default function TokensGraduated() {
+
+    const pools = useAppSelector(state => state?.pumpSocket.pumpList?.migrated)
 
     return (
         <Box className="flex flex-col md:p-3 h-full  overflow-hidden  px-4 ">
