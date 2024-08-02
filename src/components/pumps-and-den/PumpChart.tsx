@@ -42,7 +42,7 @@ export default function PumpChart() {
             className='gap-4 grid lg:grid-cols-3 max-lg:flex max-lg:flex-col overflow-auto max-lg:h-full no-scrollbar '
         >
             <Box className="md:col-span-2 flex flex-col gap-4 h-max ">
-                <Box className="w-full grid grid-cols-3 sm:p-4 h-max sm:border border-gray-500  max-sm:flex max-sm:flex-col  " >
+                <Box className="w-full grid grid-cols-3 sm:p-4 h-max sm:border border-gray-500  max-sm:flex max-sm:flex-col " >
                     <div className="flex items-center gap-2 col-span-2">
                         <Box className="relative hover:cursor-pointer z-10">
                             <Box className="relative flex items-center z-[-2]" sx={{ width: 66, height: 66 }}>
@@ -84,7 +84,7 @@ export default function PumpChart() {
                     </Box>
                 </Box>
             </Box>
-            <Box className="p-4 md:col-span-1 lg:w-full lg:h-full" border='solid thin white' >
+            <Box className="p-4 md:col-span-1 lg:w-full lg:h-full " border='solid thin white' borderBottom={0} >
                 <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={value} >
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
