@@ -1,18 +1,18 @@
-import { X } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useAppSelector } from '../../libs/redux/hooks'
+import { useAppSelector } from '../../libs/redux/hooks' 
+import PillSVG from '../../assets/pumpfun-logo.webp'
 
-export default function XButton({ url }: { url: string | undefined }) {
+export default function PumpfunButton({ mintAddress }: { mintAddress: string | undefined }) {
 
     const theme = useAppSelector(state => state.theme.current.styles)
 
-    if (!url) return
+    if (!mintAddress) return
 
     return (
-        <Link target='_blank' to={url ?? '#invalid-link'}>
-            <IconButton className=' shadow-md'>
-                <X color='action' style={{ color: theme.textColor, fontSize: 16 }} />
+        <Link target='_blank' to={`${mintAddress}`}>
+            <IconButton style={{ border: 'solid thin red', borderColor: theme.textColor }}>
+                <img src={PillSVG} style={{ width:16 }} />
             </IconButton>
         </Link>
     )

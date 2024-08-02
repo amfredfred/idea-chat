@@ -191,6 +191,21 @@ const DegenPill = () => {
   );
 };
 
+
+export const PillSVG = ({ width = 100, height = 50, color = '#3498db' }) => (
+  <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg">
+    <rect
+      x="0"
+      y="0"
+      width={width}
+      height={height}
+      rx={height / 2}
+      ry={height / 2}
+      fill={color}
+    />
+  </svg>
+);
+
 const CopyTextIcon = () => {
   return (
     <svg

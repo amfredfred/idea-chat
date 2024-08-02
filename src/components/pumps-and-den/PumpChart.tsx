@@ -8,6 +8,8 @@ import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-sl
 import TelegramButton from "../buttons/TelegramButton";
 import XButton from "../buttons/XButton";
 import WebsiteButton from "../buttons/WebsiteButton";
+import PumpfunButton from "../buttons/PumpfunButton";
+import { DegenPill } from "../Icons";
 
 export default function PumpChart() {
 
@@ -51,9 +53,7 @@ export default function PumpChart() {
                             <WebsiteButton url={pumpItem?.website} />
                         </Box>
                         <Box display='flex' alignItems='center' gap='.3rem'>
-                            <TelegramButton url={pumpItem?.telegram} />
-                            <XButton url={pumpItem?.twitter} />
-                            <WebsiteButton url={pumpItem?.website} />
+                            <PumpfunButton mintAddress={pumpItem?.address} />
                         </Box>
                     </Box>
                 </Box>
@@ -72,7 +72,7 @@ export default function PumpChart() {
                 </Box>
             </Box>
             <Box className="bg-zinc-950 rounded-lg p-4  overflow-hidden md:col-span-1 lg:w-full lg:h-full">
-
+ 
             </Box>
         </motion.div>
     )
