@@ -39,10 +39,10 @@ export default function PumpChart() {
                 stiffness: 300,
                 damping: 30,
             }}
-            className='gap-4 grid md:grid-cols-3 max-md:flex max-md:flex-col overflow-auto h-full no-scrollbar '
+            className='gap-4 grid md:grid-cols-3 max-md:flex max-md:flex-col overflow-auto max-sm:h-full no-scrollbar '
         >
             <Box className="md:col-span-2 flex flex-col gap-4 h-max ">
-                <Box className="w-full grid grid-cols-3 p-4 h-max" border='solid thin white'>
+                <Box className="w-full grid grid-cols-3 sm:p-4 h-max sm:border border-gray-500  max-sm:flex max-sm:flex-col  " >
                     <div className="flex items-center gap-2 col-span-2">
                         <Box className="relative hover:cursor-pointer z-10">
                             <Box className="relative flex items-center z-[-2]" sx={{ width: 66, height: 66 }}>
@@ -50,16 +50,16 @@ export default function PumpChart() {
                             </Box>
                         </Box>
                         <div className="flex flex-col gap-1">
-                            <p className="text-[16px] max-sm:text-[12px] whitespace-nowrap overflow-hidden text-ellipsis">
+                            <p className="text-[16px] max-sm:text-[12px] whitespace-nowrap lg:overflow-hidden text-ellipsis">
                                 {pumpItem?.symbol} ({pumpItem?.name})
                             </p>
                             <p title={pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
-                                className="text-[11px] max-sm:text-[9px] whitespace-nowrap overflow-hidden max-w-[50%] text-ellipsis">
+                                className="text-[11px] max-sm:text-[9px] whitespace-nowrap overflow-hidden lg:max-w-[50%] text-ellipsis">
                                 {pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
                             </p>
                         </div>
                     </div>
-                    <Box alignItems='flex-end' className="flex flex-col gap-1 col-span-1 justify-center align-middle">
+                    <Box alignItems='flex-end' className="flex flex-col gap-1 max-sm:mt-4 max-sm:p-2 max-sm:flex-row   max-sm:flex max-sm:justify-between col-span-1 justify-center align-middle max-sm:border border-gray-500 ">
                         <Box display='flex' alignItems='center' gap='.3rem'>
                             <TelegramButton url={pumpItem?.telegram} />
                             <XButton url={pumpItem?.twitter} />
@@ -78,7 +78,7 @@ export default function PumpChart() {
                         <Button variant="outlined" className="flex align-middle gap-2 justify-center" onClick={() => dispatch(setPumpChartShown(false))}>
                             <ArrowBack /> Back
                         </Button>
-                        <Button variant="contained" className="flex col-span-2 align-middle gap-2 justify-center" onClick={atClickBuy}>
+                        <Button disableElevation variant="contained" className="flex col-span-2 align-middle gap-2 justify-center" onClick={atClickBuy}>
                             Buy
                         </Button>
                     </Box>
