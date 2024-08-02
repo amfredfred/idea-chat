@@ -2,7 +2,7 @@ import { Box, Button, Divider, Tab } from "@mui/material";
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setPumpChartShown } from "../../libs/redux/slices/pump-chart-slice";
-import { ArrowBack, Map } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -15,7 +15,8 @@ import PumpfunButton from "../buttons/PumpfunButton";
 import React, { useState } from "react";
 import { shortenString } from "../../utils";
 import { formatNumber } from "../../utils/format";
-import { PieChart } from '@mui/x-charts/PieChart';
+import PumpHolders from "./PumpHolders";
+import PumpStats from "./PumpStats";
 
 export default function PumpChart() {
 
@@ -30,16 +31,6 @@ export default function PumpChart() {
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
-
-    const InfoItem = ({ left, right }: { left: string, right: string }) =>
-        <Box display='flex' alignItems='center' justifyContent='space-between'>
-            <Box>
-                {left}
-            </Box>
-            <Box>
-                {right}
-            </Box>
-        </Box>
 
     return (
         <motion.div
@@ -105,44 +96,10 @@ export default function PumpChart() {
                             </TabList>
                         </Box>
                         <TabPanel value="1">
-                            <Box display='flex' className=' flex-col  gap-4'>
-                                <InfoItem left="ADDRESS" right={shortenString(String(pumpItem?.address))} />
-                                <Divider />
-                                <InfoItem left="PRICE" right={`$${formatNumber(pumpItem?.price ?? 0)}`} />
-                                <Divider />
-                                <InfoItem left="MCAP" right={`$${formatNumber(pumpItem?.usd_market_cap ?? 0)}`} />
-                                <Divider />
-                                <InfoItem left="LIQUIDITY" right={formatNumber(Number(pumpItem?.total_supply))} />
-                                <Divider />
-                                <InfoItem left="VOLUME  1H" right={`${formatNumber(pumpItem?.volume_1h ?? 0)}`} />
-                                <Divider />
-                                <InfoItem left="HOLDERS" right={`${formatNumber(pumpItem?.holder_count ?? 0)}`} />
-                                <Divider />
-                                <InfoItem left="DEV" right="LOCKED" />
-                            </Box>
+                            <PumpStats />
                         </TabPanel>
                         <TabPanel value="2">
-                            <Box display='flex' className=' flex-col  gap-4'>
-                                <PieChart
-                                    width={300}
-                                    height={300}
-                                    series={[
-                                        {
-                                            data: [{ value: 10 }, { value: 15 }, { value: 20 }],
-                                            innerRadius: 30,
-                                            outerRadius: 100,
-                                            paddingAngle: 5,
-                                            cornerRadius: 5,
-                                            startAngle: -90,
-                                            endAngle: 180,
-                                            cx: 150,
-                                            cy: 150,
-                                        }
-                                    ]} />
-                                <Button variant="outlined" className="flex align-middle gap-2 justify-center" onClick={() => dispatch(setPumpChartShown(false))}>
-                                    <Map /> View on bubblemaps
-                                </Button>
-                            </Box>
+                            <PumpHolders />
                         </TabPanel>
                     </TabContext>
                 </Box>
