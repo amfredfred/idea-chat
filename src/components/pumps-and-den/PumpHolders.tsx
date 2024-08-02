@@ -4,10 +4,11 @@ import { PieChart } from '@mui/x-charts'
 
 export default function PumpHolders() {
     return (
-        <Box display='flex' className=' flex-col  gap-4' width={'100%'}>
+        <Box className=' flex-col  gap-4 m-auto  flex justify-center' width={'100%'}>
             <PieChart
                 width={300}
                 height={300}
+                className=' m-auto'
                 series={[
                     {
                         data: [{ value: 10 }, { value: 15 }, { value: 20 }],
