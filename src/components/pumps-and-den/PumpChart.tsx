@@ -1,5 +1,5 @@
 export default function PumpChart() {
     return (
-        <div>PumpChart</div>
+        <div>PumpChar sdsdt</div>
     )
 }

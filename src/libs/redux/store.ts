@@ -7,6 +7,7 @@ import messagesSlice from './slices/message-slice'
 import audioSlice from './slices/audio-slice'
 import chatSlice from './slices/chat-slice'
 import pumpSocketSlice from './slices/pump-socket-slice'
+import pumpChartSlice from './slices/pump-chart-slice'
 
 export const makeStore = () => {
     return configureStore({
@@ -20,6 +21,7 @@ export const makeStore = () => {
 
             chat: chatSlice,
             pumpSocket: pumpSocketSlice,
+            pumpChart: pumpChartSlice
         }
     })
 }
