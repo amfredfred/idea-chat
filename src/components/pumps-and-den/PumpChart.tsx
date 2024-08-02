@@ -1,21 +1,32 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Tab } from "@mui/material";
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setPumpChartShown } from "../../libs/redux/slices/pump-chart-slice";
-import { ArrowBack, Telegram } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import { motion } from 'framer-motion'
 import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-slice";
 import TelegramButton from "../buttons/TelegramButton";
 import XButton from "../buttons/XButton";
 import WebsiteButton from "../buttons/WebsiteButton";
 import PumpfunButton from "../buttons/PumpfunButton";
-import { DegenPill } from "../Icons";
+import React, { useState } from "react";
 
 export default function PumpChart() {
 
     const pumpItem = useAppSelector(state => state.pumpChart.pumpItem)
     const dispatch = useAppDispatch()
     const atClickBuy = () => dispatch(setSelectedtokenToReceive(pumpItem))
+
+
+    const [value, setValue] =  useState('1');
+
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue);
+    };
+
 
     return (
         <motion.div
@@ -72,7 +83,20 @@ export default function PumpChart() {
                 </Box>
             </Box>
             <Box className="bg-zinc-950 rounded-lg p-4  overflow-hidden md:col-span-1 lg:w-full lg:h-full">
- 
+                <Box sx={{ width: '100%', typography: 'body1' }}>
+                    <TabContext value={value}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <TabList onChange={handleChange} aria-label="lab API tabs example">
+                                <Tab label="Item One" value="1" />
+                                <Tab label="Item Two" value="2" />
+                                <Tab label="Item Three" value="3" />
+                            </TabList>
+                        </Box>
+                        <TabPanel value="1">Item One</TabPanel>
+                        <TabPanel value="2">Item Two</TabPanel>
+                        <TabPanel value="3">Item Three</TabPanel>
+                    </TabContext>
+                </Box>
             </Box>
         </motion.div>
     )
