@@ -1,14 +1,14 @@
 import { websiteThemeState } from "../../atoms/website-theme";
 import { useRecoilValue } from "recoil";
-import { IPumpCoin, IPumpCoinMigrated } from "../../common/types";
+import { IPumpCoin } from "../../common/types";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-slice";
 import { formatNumber } from "../../utils/format";
-import { Box, Button, LinearProgress } from "@mui/material";
+import { Box, Button, CircularProgress, LinearProgress } from "@mui/material";
 import { CandlestickChartRounded } from "@mui/icons-material";
-import { fetchHistoricalData } from "../../libs/redux/slices/pump-chart-slice";
+import { fetchHistoricalData, setPumpItem } from "../../libs/redux/slices/pump-chart-slice";
 
-export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
+export default function PumpCard(pump: IPumpCoin) {
   const websiteTheme = useRecoilValue(websiteThemeState);
 
   // const pumpProgress = pump?.progress?.toFixed?.(1)
@@ -16,8 +16,10 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
   const atClickBuy = () => dispatch(setSelectedtokenToReceive(pump))
   const atClickApeBlindly = () => { console.log('atApeBlindly') }
   const pumpChartStatus = useAppSelector(state => state.pumpChart.status);
+  const pumpItem = useAppSelector(state => state.pumpChart.pumpItem)
 
   const handleLoadAndShowChart = () => {
+    dispatch(setPumpItem(pump))
     dispatch(fetchHistoricalData(pump.address))
   }
 
@@ -73,9 +75,13 @@ export default function PumpCard(pump: IPumpCoin | IPumpCoinMigrated) {
         />
 
         <Box display='flex' gap='1rem' alignItems='center' justifyContent='space-between'>
-          <Button onClick={handleLoadAndShowChart} disabled={pumpChartStatus === 'pending'} className=' bg-red-400 flex' variant="outlined"
+          <Button onClick={handleLoadAndShowChart}
+            
+            // disabled={pumpChartStatus === 'pending'}
+            
+            className=' bg-red-400 flex' variant="outlined"
             style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden' }} >
-            Chart  <CandlestickChartRounded className='text-yellow-100' />
+            Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}
           </Button>
           <Button onClick={Number(pump?.progress ?? 1) >= 1 ? atClickBuy : atClickApeBlindly} title="Hello wolr" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none' }} >
             {Number(pump?.progress ?? 1) >= 1 ? 'Buy' : 'APE BLINDLY'}

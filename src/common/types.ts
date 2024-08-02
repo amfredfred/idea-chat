@@ -1,4 +1,4 @@
-export type IPumpCoin = {
+export type IPumpCoin = ({
   address: string
   associated_bonding_curve: string
   base_reserve: number
@@ -55,8 +55,7 @@ export type IPumpCoin = {
   volume_6h: number
   volume_24h: number
   website: string
-}
-export type IPumpCoinMigrated = {
+} | {
   account: string;
   decimals: number;
   supply: string;
@@ -83,7 +82,7 @@ export type IPumpCoinMigrated = {
   total_supply: number
   progress: number
 }
-
+)
 export type IPumpRequestParams = {
   filter_listing: Record<string, string>,
   filter_migrated: Record<string, string>
@@ -108,7 +107,7 @@ export type PumpSocketSend = {
 export type PumpSocketReceived = {
   pumpList: {
     pump: IPumpCoin[],
-    migrated: IPumpCoinMigrated[]
+    migrated: IPumpCoin[]
   };
 }
 
@@ -126,8 +125,8 @@ export type UseSocketReturn<T = any> = {
 export type ITokenSwapInputProps = {
   side: 'receive' | 'pay';
   onChange: (value: number | string) => void;
-  selectedToken: IPumpCoinMigrated | undefined;
-  onTokenSelect: (token: IPumpCoinMigrated) => void;
+  selectedToken: IPumpCoin | undefined;
+  onTokenSelect: (token: IPumpCoin) => void;
   amount?: string;
   readonly?: boolean
   value: number | string

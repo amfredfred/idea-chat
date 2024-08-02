@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { IPumpCoin } from "../../../common/types";
 
 interface HistoricalDataPoint {
     timestamp: number;
@@ -11,15 +12,15 @@ interface PumpChartState {
     status: 'idle' | 'pending' | 'error' | 'success'
     message: string | null,
     isPumpChartShown: boolean
-    mint: string | null
+    pumpItem: IPumpCoin | null
 }
 
 const initialState: PumpChartState = {
     data: [],
-    status: 'error',
+    status: 'pending',
     message: null,
     isPumpChartShown: false,
-    mint: null
+    pumpItem: null
 };
 
 
@@ -38,6 +39,9 @@ const pumpChartSlice = createSlice({
     reducers: {
         setPumpChartShown: (state, action: PayloadAction<boolean>) => {
             state.isPumpChartShown = action.payload
+        },
+        setPumpItem: (state, action: PayloadAction<IPumpCoin>) => {
+            state.pumpItem = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -58,5 +62,10 @@ const pumpChartSlice = createSlice({
         });
     },
 });
+
+export const {
+    setPumpItem,
+    setPumpChartShown
+} = pumpChartSlice.actions
 
 export default pumpChartSlice.reducer;

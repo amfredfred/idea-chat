@@ -3,13 +3,13 @@ import Typography from "@mui/material/Typography";
 import MessageIcon from '@mui/icons-material/Message';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import { IPumpCoin, IPumpCoinMigrated } from "../common/types";
+import { IPumpCoin  } from "../common/types";
 import { NavLink } from "react-router-dom";
 import { formatNumber } from "../utils/format";
 import { useAppDispatch } from "../libs/redux/hooks";
 import { setSelectedtokenToReceive } from "../libs/redux/slices/token-swap-slice";
 
-export default function PumpCardOld(pump: IPumpCoin | IPumpCoinMigrated) {
+export default function PumpCardOld(pump: IPumpCoin) {
 
   const pumpProgress = pump?.progress?.toFixed?.(1)
   const dispatch = useAppDispatch()

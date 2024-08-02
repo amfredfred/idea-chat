@@ -12,6 +12,7 @@ import { Connection } from '@solana/web3.js';
 import { toast } from 'react-toastify';
 import { useMediaQuery } from '@mui/material';
 import { getDimensions } from '../../utils';
+import { fetchHistoricalData } from '../../libs/redux/slices/pump-chart-slice';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -47,6 +48,10 @@ const TokenswapStack: React.FC = () => {
       }));
     }
   };
+
+  const handleLoadAndShowChart = () => {
+    dispatch(fetchHistoricalData(String(tokenToSend?.address)))
+  }
 
   const toggleMinimize = () => {
     setIsMinimized(prev => {
@@ -165,7 +170,7 @@ const TokenswapStack: React.FC = () => {
               <Settings className='text-yellow-100' />
             </IconButton>
 
-            <IconButton size="small" >
+            <IconButton size="small" onClick={handleLoadAndShowChart} >
               <CandlestickChartRounded className='text-yellow-100' />
             </IconButton>
 
