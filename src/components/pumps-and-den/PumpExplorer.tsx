@@ -1,13 +1,12 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import { useAppSelector } from "../../libs/redux/hooks";
 import { motion } from 'framer-motion'
-import PumpCard from "./PumpCard";
 import { Close, FilterAlt } from "@mui/icons-material";
 import { useState } from "react";
 import PumpFilter from "./PumpFilter";
+import PumpTokensGrid from "./PumpTokensGrid";
 
 export default function TokenExplorer() {
-  const pools = useAppSelector(state => state?.pumpSocket.pumpList?.migrated)
   const filters = useAppSelector(state => state.pumpSocket.searchParams.filter_listing)
   const theme = useAppSelector(state => state?.theme.current.styles)
   const [isFilterShown, setIsFilterShown] = useState(false)
@@ -45,11 +44,7 @@ export default function TokenExplorer() {
         </Box>
 
         <Box className='overflow-hidden h-full flex relative w-full'>
-          <Box className="flex flex-col gap-4 overflow-auto  no-scrollbar relative h-full w-full">
-            <Box className="grid grid-cols-1 md:grid-cols-3  sm:grid-cols-2 max-sm:grid-cols-1 motion.divide-x divide-grey-500 gap-4 " maxHeight='100%' flexGrow='1'>
-              {pools?.map(pump => <PumpCard key={pump.address} {...pump} />)}
-            </Box>
-          </Box>
+          <PumpTokensGrid />
           {isFilterShown && <PumpFilter onRequestClose={() => setIsFilterShown(false)} />}
         </Box>
       </Box>

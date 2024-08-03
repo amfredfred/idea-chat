@@ -18,8 +18,6 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
         filter_migrated: []
     });
 
-    console.log('HE LLO WORLD')
-
     const handleInputChange = (type: 'holders' | 'liquidity' | 'volume' | 'marketCap' | 'devHolding', field: 'min' | 'max') => (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value ? parseFloat(event.target.value) : null;
 
