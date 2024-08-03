@@ -43,18 +43,18 @@ export default function PumpChart() {
         >
             <Box className="md:col-span-2 flex flex-col gap-4 h-max ">
                 <Box className="w-full grid grid-cols-3 sm:p-4 h-max sm:border border-gray-500  max-sm:flex max-sm:flex-col " >
-                    <div className="flex items-center gap-2 col-span-2">
+                    <div className="flex items-center gap-2 col-span-2 max-w-[100%]  overflow-hidden">
                         <Box className="relative hover:cursor-pointer z-10">
                             <Box className="relative flex items-center z-[-2]" sx={{ width: 66, height: 66 }}>
                                 <img src={pumpItem?.logo} style={{ aspectRatio: '1/1' }} alt="Token Image" className="aspect-square rounded-full" />
                             </Box>
                         </Box>
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-1 max-w-[100%]">
                             <p className="text-[16px] max-sm:text-[12px] whitespace-nowrap max-lg:overflow-hidden text-ellipsis">
                                 {pumpItem?.symbol} ({pumpItem?.name})
                             </p>
                             <p title={pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
-                                className="text-[11px] max-sm:text-[9px] whitespace-nowrap  overflow-hidden max-lg:max-w-[60%]  w-[80%] text-ellipsis">
+                                className="text-[11px] max-sm:text-[9px] whitespace-nowrap  overflow-hidden    w-[80%] text-ellipsis">
                                 {pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
                             </p>
                         </div>

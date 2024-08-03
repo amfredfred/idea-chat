@@ -10,6 +10,16 @@
   src: url("../src/assets/fonts/JetBrainsMono-Bold.ttf") format("opentype");
 }
 
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .coming-soon-shadow {
   box-shadow: 0 0 20px #ffffff;
 }

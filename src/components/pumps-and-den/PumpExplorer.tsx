@@ -2,11 +2,14 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { useAppSelector } from "../../libs/redux/hooks";
 import { motion } from 'framer-motion'
 import PumpCard from "./PumpCard";
-import { FilterAlt } from "@mui/icons-material";
+import { Close, FilterAlt } from "@mui/icons-material";
+import { useState } from "react";
+import PumpFilter from "./PumpFilter";
 
 export default function TokenExplorer() {
   const pools = useAppSelector(state => state?.pumpSocket.pumpList?.migrated)
   const theme = useAppSelector(state => state?.theme.current.styles)
+  const [isFilterShown, setIsFilterShown] = useState(false)
 
   return (
     <motion.div
@@ -28,15 +31,18 @@ export default function TokenExplorer() {
             <Typography variant="body2" className=" text-[20px]" >Latest pump.fun tokens to hit raydium</Typography>
           </Box>
           <Box>
-            <IconButton sx={{ border: 'solid thin', borderColor: theme.textColor }}>
-              <FilterAlt sx={{ color: theme.textColor }} />
+            <IconButton onClick={() => setIsFilterShown(state => !state)} sx={{ border: 'solid thin', borderColor: theme.textColor }}>
+              {isFilterShown ? <Close sx={{ color: theme.textColor }} /> : <FilterAlt sx={{ color: theme.textColor }} />}
             </IconButton>
           </Box>
         </Box>
-        <Box className="flex flex-col gap-4 overflow-auto  no-scrollbar">
-          <Box className="grid grid-cols-1 md:grid-cols-3  sm:grid-cols-2 max-sm:grid-cols-1 motion.divide-x divide-grey-500 gap-4 " maxHeight='100%' flexGrow='1'>
-            {pools?.map(pump => <PumpCard key={pump.address} {...pump} />)}
+        <Box className='overflow-hidden h-full flex relative w-full'>
+          <Box className="flex flex-col gap-4 overflow-auto  no-scrollbar relative h-full w-full">
+            <Box className="grid grid-cols-1 md:grid-cols-3  sm:grid-cols-2 max-sm:grid-cols-1 motion.divide-x divide-grey-500 gap-4 " maxHeight='100%' flexGrow='1'>
+              {pools?.map(pump => <PumpCard key={pump.address} {...pump} />)}
+            </Box>
           </Box>
+          {isFilterShown && <PumpFilter onRequestClose={() => setIsFilterShown(false)} />}
         </Box>
       </Box>
     </motion.div>
