@@ -39,7 +39,7 @@ export default function Landing() {
   const isMobile = useMediaQuery("(max-width:768px)")
   const [showVerifying, setShowVerifying] = useState(false);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
-  const [bgSource, setBgSource] = useState(isMobile ? bgVideoMobile : bgVideoDesktop)
+  const [, setBgSource] = useState(isMobile ? bgVideoMobile : bgVideoDesktop) //bgSource
   const [isAccessDenied, setIsAccessDenied] = useState(false);
 
   useEffect(() => {
