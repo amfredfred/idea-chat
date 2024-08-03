@@ -7,11 +7,9 @@ import { useNavigate } from "react-router-dom"
 import bottle from "../assets/bottle.png";
 import winMusic from "../assets/win.mp3";
 import { SolanaConnect } from "../components/ConnectButton";
-import { Box, IconButton, useMediaQuery } from "@mui/material"
+import { Box, IconButton } from "@mui/material"
 import { VolumeOff, VolumeUp } from "@mui/icons-material"
 
-import bgVideoMobile from '../assets/videos/newBgMobile.mp4'
-import bgVideoDesktop from '../assets/videos/newBgMobile.mp4'
 import PoppinMessageBackgroundLayout from "../layouts/PoppinMessageBackgroundLayout"
 
 
@@ -37,34 +35,28 @@ export default function Landing() {
   const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const isMobile = useMediaQuery("(max-width:768px)")
   const [showVerifying, setShowVerifying] = useState(false);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
-  const [bgSource, setBgSource] = useState(isMobile ? bgVideoMobile : bgVideoDesktop)
   const [showWalletTransactionsError, setShowWalletTransactionsError] = useState(false);
   const [isAccessDenied, setIsAccessDenied] = useState(false);
 
-
-  useEffect(() => {
-    setBgSource(isMobile ? bgVideoMobile : bgVideoDesktop)
-  }, [isMobile])
-
-  const handlePlay = useCallback(async () => {
+  const handlePlay = async () => {
     if (audioRef.current && audioRef.current.src != winMusic)
       audioRef.current.src = winMusic
-    audioRef?.current?.play().then(() => setIsPlaying(true))
-  }, [audioRef]);
+    await audioRef?.current?.play()
+    setIsPlaying(true)
+  }
 
-  const handlePause = useCallback(async () => {
+  const handlePause = async () => {
     if (audioRef.current && !audioRef.current.paused) {
       audioRef?.current?.pause()
       setIsPlaying(false)
     }
-  }, [audioRef]);
+  }
 
   useEffect(() => {
     handlePlay()
-  }, [handlePlay]);
+  }, []);
 
   const handleWalletConnect = () => {
     if (wallet.connected) {
