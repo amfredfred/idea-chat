@@ -37,8 +37,8 @@ const socketIoSlice = createSlice({
         setPumpList: (state, action: PayloadAction<PumpSocketReceived['pumpList']>) => {
             state.pumpList = action.payload;
         },
-        setSearchParams: (state, action: PayloadAction<IPumpRequestParams>) => {
-            state.searchParams = action.payload
+        setSearchParams: (state, action: PayloadAction<IPumpRequestParams['filter_listing']>) => {
+            state.searchParams.filter_listing = action.payload
         },
         setPumpSocketState: (state, action: PayloadAction<PumpSocketStates>) => {
             state.socketState = action.payload;

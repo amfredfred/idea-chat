@@ -60,7 +60,8 @@ export type IPumpCoin = {
 export type IFilterTypes = {
   min: number | null;
   max: number | null;
-  type: 'holders' | 'liquidity' | 'volume' | 'marketCap' | 'devHolding';
+  name: 'holders' | 'liquidity' | 'volume' | 'marketCap' | 'devHolding' ; // General names
+  type: 'number' | 'percentage'; 
 }
 
 export type IPumpRequestParams = {

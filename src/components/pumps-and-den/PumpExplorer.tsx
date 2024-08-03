@@ -1,15 +1,18 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Chip, IconButton, Typography } from "@mui/material";
 import { useAppSelector } from "../../libs/redux/hooks";
 import { motion } from 'framer-motion'
 import { Close, FilterAlt } from "@mui/icons-material";
 import { useState } from "react";
 import PumpFilter from "./PumpFilter";
 import PumpTokensGrid from "./PumpTokensGrid";
+import { formatNumber } from "../../utils/format";
 
 export default function TokenExplorer() {
   const filters = useAppSelector(state => state.pumpSocket.searchParams.filter_listing)
   const theme = useAppSelector(state => state?.theme.current.styles)
   const [isFilterShown, setIsFilterShown] = useState(false)
+
+  const handleDelete = () => null
 
   console.log({ filters })
 
@@ -39,9 +42,26 @@ export default function TokenExplorer() {
           </Box>
         </Box>
 
-        <Box className=' py-4'>
-
+        {filters.length > 0 && <Box className='py-2 gap-4 flex flex-wrap w-full justify-start'>
+          {
+            filters.map(filter => {
+              return (
+                <Box className='gap-4 flex flex-wrap '>
+                  {filter.min && <Chip
+                    label={`${filter.name} (${formatNumber(Number(filter.max))}-${Number(filter.min)}${filter.type == 'percentage' ? '%' : ''})`}
+                    variant="outlined"
+                    // onClick={handleClick}
+                    onDelete={handleDelete}
+                    deleteIcon={<Close />}
+                    style={{ borderRadius: 3, color: theme.textColor, fontSize: 12 }}
+                  />
+                  }
+                </Box>
+              )
+            })
+          }
         </Box>
+        }
 
         <Box className='overflow-hidden h-full flex relative w-full'>
           <PumpTokensGrid />
