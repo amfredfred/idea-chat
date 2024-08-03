@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { TransactionsCountErrorIcon } from "../components/Icons"
 import { motion } from 'framer-motion'
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useNavigate } from "react-router-dom"
-// import bgVideo from "../assets/bg1.mp4";
+import bgVideo from "../assets/bg1.mp4";
 import bottle from "../assets/bottle.png";
 import winMusic from "../assets/win.mp3";
 import { SolanaConnect } from "../components/ConnectButton";
@@ -40,7 +40,6 @@ export default function Landing() {
   const [showVerifying, setShowVerifying] = useState(false);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
   const [bgSource, setBgSource] = useState(isMobile ? bgVideoMobile : bgVideoDesktop)
-  const [showWalletTransactionsError, setShowWalletTransactionsError] = useState(false);
   const [isAccessDenied, setIsAccessDenied] = useState(false);
 
   useEffect(() => {
@@ -80,7 +79,7 @@ export default function Landing() {
     <div className="relative w-full h-screen isolate bg-[#0000FF] ">
       <video
         className="absolute top-0 left-0 w-full h-full object-cover object-center -z-10 "
-        src={bgSource}
+        src={bgVideo} //bgSource
         autoPlay
         loop
         muted
@@ -115,7 +114,7 @@ export default function Landing() {
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className={`bg-white ${showVerifying ? "opacity-100" : "opacity-100"
-                  } coming-soon-shadow text-[#0000FF]  uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full flex flex-col gap-2 ${showWalletTransactionsError &&
+                  } coming-soon-shadow text-[#0000FF]  uppercase font-jbm text-[15px] lg:text-[24px] p-2 lg:p-4 w-[90%] mx-auto mt-5 sm:w-full flex flex-col gap-2 ${isAccessDenied &&
                   "bg-opacity-0 anti-coming-soon-shadow opacity-100"
                   }`}
               >
@@ -126,7 +125,7 @@ export default function Landing() {
                   />
                 )}
               </motion.div>
-            ) : showWalletTransactionsError && showVerifying ? (
+            ) : isAccessDenied && showVerifying ? (
               <></>
             ) : (
               <button

@@ -34,14 +34,12 @@ export const SolanaConnect: React.FC<SolanaConnectProps> = ({
             publicKey
           );
           const transactionsCount = confirmedSignatures.length;
-          if (transactionsCount >= 69) {
+          if (transactionsCount >= 555)  //69
             return navigate("/chat");
-          } else {
-            await disconnect()
-            setShowWalletTransactionsError(true);
-          }
+          await disconnect()
+          setShowWalletTransactionsError(true);
         } catch (error) {
-          console.error("Error fetching transaction count:", error);
+          console.log("Error fetching transaction count:", error);
           return 0;
         }
       };
