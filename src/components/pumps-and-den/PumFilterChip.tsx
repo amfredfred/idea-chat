@@ -16,11 +16,11 @@ export default function PumFilterChip({ type, name, max, min }: IFilterTypes) {
 
   return (
     <Chip
-      label={`${name} (${formatNumber(Number(min))}-${Number(max)}${type == 'percentage' ? '%' : ''})`}
+      label={`${name} (${formatNumber(Number(min))}-${formatNumber(Number(max))}${type == 'percentage' ? '%' : ''})`}
       variant="outlined"
       // onClick={handleClick}
       onDelete={() => handleDelete(name)}
-      deleteIcon={<Close />}
+      deleteIcon={<Close style={{ color:theme.textColor }} />}
       style={{ borderRadius: 3, color: theme.textColor, fontSize: 12 }}
     />
   )

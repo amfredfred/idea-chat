@@ -12,8 +12,6 @@ export default function TokenExplorer() {
   const theme = useAppSelector(state => state?.theme.current.styles)
   const [isFilterShown, setIsFilterShown] = useState(false)
 
-  console.log({ filters })
-
   return (
     <motion.div
       initial={{ x: -100, opacity: 0 }}
