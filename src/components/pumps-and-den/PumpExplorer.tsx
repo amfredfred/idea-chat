@@ -8,8 +8,11 @@ import PumpFilter from "./PumpFilter";
 
 export default function TokenExplorer() {
   const pools = useAppSelector(state => state?.pumpSocket.pumpList?.migrated)
+  const filters = useAppSelector(state => state.pumpSocket.searchParams.filter_listing)
   const theme = useAppSelector(state => state?.theme.current.styles)
   const [isFilterShown, setIsFilterShown] = useState(false)
+
+  console.log({ filters })
 
   return (
     <motion.div
@@ -36,6 +39,11 @@ export default function TokenExplorer() {
             </IconButton>
           </Box>
         </Box>
+
+        <Box className=' py-4'>
+
+        </Box>
+
         <Box className='overflow-hidden h-full flex relative w-full'>
           <Box className="flex flex-col gap-4 overflow-auto  no-scrollbar relative h-full w-full">
             <Box className="grid grid-cols-1 md:grid-cols-3  sm:grid-cols-2 max-sm:grid-cols-1 motion.divide-x divide-grey-500 gap-4 " maxHeight='100%' flexGrow='1'>

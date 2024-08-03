@@ -1,4 +1,4 @@
-export type IPumpCoin =  {
+export type IPumpCoin = {
   address: string
   associated_bonding_curve: string
   base_reserve: number
@@ -55,12 +55,18 @@ export type IPumpCoin =  {
   volume_6h: number
   volume_24h: number
   website: string
-} 
+}
+
+export type IFilterTypes = {
+  min: number | null;
+  max: number | null;
+  type: 'holders' | 'liquidity' | 'volume' | 'marketCap' | 'devHolding';
+}
 
 export type IPumpRequestParams = {
-  filter_listing: Record<string, string>,
-  filter_migrated: Record<string, string>
-}
+  filter_listing: Array<IFilterTypes>;
+  filter_migrated: Array<IFilterTypes>;
+};
 
 export type PumpDetail = {
   address: string

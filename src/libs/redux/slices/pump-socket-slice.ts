@@ -18,8 +18,8 @@ const initialState: PumpSocketState = {
     connected: false,
     pumpList: null,
     searchParams: {
-        filter_listing: {},
-        filter_migrated: {}
+        filter_listing: [],
+        filter_migrated: []
     },
     socketState: 'idle'
 };
