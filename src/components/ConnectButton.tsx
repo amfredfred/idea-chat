@@ -22,7 +22,7 @@ export const SolanaConnect: React.FC<SolanaConnectProps> = ({
 }) => {
   const connection = new Connection(RPC_URL);
   const navigate = useNavigate();
-  const { publicKey } = useWallet();
+  const { publicKey, disconnect } = useWallet();
 
   useEffect(() => {
     if (publicKey) {
@@ -34,11 +34,10 @@ export const SolanaConnect: React.FC<SolanaConnectProps> = ({
             publicKey
           );
           const transactionsCount = confirmedSignatures.length;
-
-          if (transactionsCount >= 0) {
-
+          if (transactionsCount >= 69) {
             return navigate("/chat");
           } else {
+            await disconnect()
             setShowWalletTransactionsError(true);
           }
         } catch (error) {
@@ -48,7 +47,7 @@ export const SolanaConnect: React.FC<SolanaConnectProps> = ({
       };
       getTransactionCount(publicKey.toString());
     }
-  }, [publicKey]);
+  }, [publicKey, setShowVerifying]);
 
   return (
     <WalletModalProvider>
