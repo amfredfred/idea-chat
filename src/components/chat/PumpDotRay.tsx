@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import TokenExplorer from '../pumps-and-den/TokenExplorer'
+import TokenExplorer from '../pumps-and-den/PumpExplorer'
 import { useAppSelector } from '../../libs/redux/hooks';
 import PumpChart from '../pumps-and-den/PumpChart';
 
