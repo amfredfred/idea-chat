@@ -54,7 +54,7 @@ export default function PumpChart() {
                                 {pumpItem?.symbol} ({pumpItem?.name})
                             </p>
                             <p title={pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
-                                className="text-[11px] max-sm:text-[9px] whitespace-nowrap max-lg:overflow-hidden max-lg:max-w-[60%] sm:w-[90%] text-ellipsis">
+                                className="text-[11px] max-sm:text-[9px] whitespace-nowrap  overflow-hidden max-lg:max-w-[60%]  w-[80%] text-ellipsis">
                                 {pumpItem?.description ?? `Bonding Curve Progress ${Number(pumpItem?.progress ?? 0) * 100}%`}
                             </p>
                         </div>

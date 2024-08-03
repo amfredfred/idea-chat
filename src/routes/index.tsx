@@ -1,4 +1,3 @@
-import App from "../App.tsx";
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Profile from "../components/Profile.tsx";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -10,6 +9,7 @@ import { connectSocket, emitEvent } from "../libs/redux/slices/pump-socket-slice
 import TokenswapStack from "../components/token-swap/TokenSwapStack.tsx";
 import { ToastContainer } from "react-toastify";
 import { Stack } from "@mui/material";
+import Landing from "../pages/Landing.tsx";
 const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 
 const connectWallet = async (wallet: any): Promise<boolean> => {
@@ -66,7 +66,7 @@ export default function RoutesPortal() {
     <Stack direction="column" overflow='hidden' position='relative' style={{ width: '100vw', height: '100vh', flexWrap: 'wrap', background: theme.bgColor }}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<Landing />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profile />} />
