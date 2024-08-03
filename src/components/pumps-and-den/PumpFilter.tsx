@@ -46,8 +46,8 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
     }, [onRequestClose]);
 
     const applyFilters = () => {
-        // onRequestClose()
-        dispatch(setSearchParams(filters['filter_listing']))
+        onRequestClose()
+        dispatch(setSearchParams(filters['filter_listing'].filter(item => item.min && item.max)))
     }
 
     return (
