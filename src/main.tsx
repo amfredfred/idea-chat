@@ -11,8 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./index.css";
 import { RecoilRoot } from "recoil";
 import { SolanaWalletProvider } from "./components/WalletProvider.tsx";
-import RoutesPortal from "./routes/index.tsx";
 import StoreProvider from "./providers/StoreProvider/index.tsx";
+import App from "./App.tsx";
 
 // import ErrorPage from "./components/Error.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <SolanaWalletProvider>
       <React.StrictMode>
         <StoreProvider>
-          <RoutesPortal />
+          <App />
         </StoreProvider>
       </React.StrictMode>
     </SolanaWalletProvider>
