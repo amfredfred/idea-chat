@@ -18,8 +18,8 @@ export default function TokenExplorer() {
         stiffness: 300,
         damping: 30,
       }}
-      className="container overflow-hidden mx-auto flex h-full"  >
-      <Box className="flex flex-col md:p-3 h-full  overflow-hidden w-full ">
+      className="container overflow-hidden mx-auto h-full"  >
+      <Box className="flex flex-col h-full  overflow-hidden w-full ">
         <Box className="flex items-center justify-between mb-4">
           <Box display='flex' flexDirection='column' gap='.6rem' alignContent='center'>
             <Box display='flex' gap='.6rem' alignContent='center' >
@@ -34,7 +34,7 @@ export default function TokenExplorer() {
           </Box>
         </Box>
         <Box className="flex flex-col gap-4 overflow-auto  no-scrollbar">
-          <Box className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 motion.divide-x divide-grey-500 gap-4 " maxHeight='100%' flexGrow='1'>
+          <Box className="grid grid-cols-1 md:grid-cols-3  sm:grid-cols-2 max-sm:grid-cols-1 motion.divide-x divide-grey-500 gap-4 " maxHeight='100%' flexGrow='1'>
             {pools?.map(pump => <PumpCard key={pump.address} {...pump} />)}
           </Box>
         </Box>

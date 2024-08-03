@@ -30,13 +30,13 @@ const Navbar = () => {
 
   const MobileNav = () => {
     return (
-      <div className="w-[90%] mx-auto flex justify-between items-center sticky">
+      <div className=" mx-auto flex justify-between items-center sticky w-full">
         <div>
           <img src={bottleIcon} className="h-[32px] w-auto" />
         </div>
         <div className="flex items-center gap-[10px]">
           <div className="h-[10px] w-[10px] bg-[#00FF00] rounded-full"></div>
-          <p>{liveUsersCount} Online</p>
+          <p style={{ color: websiteTheme.textColor }}>{liveUsersCount} Online</p>
         </div>
         <div className="flex justify-end opacity-80">
           <motion.button
