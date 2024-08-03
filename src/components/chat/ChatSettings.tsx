@@ -61,19 +61,24 @@ export default function ChatSettings() {
   const dispatch = useAppDispatch()
   const containerRef = useRef<HTMLDivElement>(null)
   const themes = useAppSelector(state => state.theme.themes)
-  const theme = useAppSelector(state => state.theme.current)
+  const theme = useAppSelector(state => state.theme.current.styles)
   const chatAudio = useAppSelector(state => state.chat.chatAudio)
   const settingsModal = useAppSelector(state => state.chat.settingsModal)
-  const closeMenu = useCallback(() => dispatch(setChatSettingsOpen(false)), [])
   const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen)
+  const closeMenu = useCallback(() => dispatch(setChatSettingsOpen(false)), [dispatch]);
 
   useEffect(() => {
-    document.addEventListener('mousedown', ({ target }) => {
-      if (target !== containerRef.current && !containerRef.current?.contains(target as Node))
-        closeMenu()
-    })
-    return document.removeEventListener('mousedown', () => {})
-  }, [closeMenu])
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        closeMenu();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [closeMenu]);
+
 
   if (!isChatSettingsOpen) return null
 
@@ -88,7 +93,8 @@ export default function ChatSettings() {
         damping: 30,
       }}
       ref={containerRef}
-      className={`${theme.styles.bgColor === "#ffffff"
+      // style={{ background: theme.bgColor }}
+      className={`${theme.bgColor === "#ffffff"
         ? "border border-black"
         : "border-none"
         }  p-5 rounded-[8px] flex flex-col md:right-[0] md:gap-[5px]  bg-white absolute md:bottom-[0] md:relative max-md:absolute  max-md:bottom-[110%] max-md:w-[361px]`}  >
@@ -194,13 +200,13 @@ export default function ChatSettings() {
             className=" uppercase font-jbm  p-[5px]   "
             style={{
               background:
-                theme.styles.bgColor === "#ffffff"
+                theme.bgColor === "#ffffff"
                   ? "black"
-                  : theme.styles.bgColor,
+                  : theme.bgColor,
               color:
-                theme.styles.bgColor === "#ffffff"
+                theme.bgColor === "#ffffff"
                   ? "white"
-                  : theme.styles.textColor,
+                  : theme.textColor,
             }}
           >
             profile
@@ -210,9 +216,9 @@ export default function ChatSettings() {
                      `}
             style={{
               color:
-                theme.styles.bgColor === "#ffffff"
+                theme.bgColor === "#ffffff"
                   ? "#000000"
-                  : theme.styles.bgColor,
+                  : theme.bgColor,
             }}
           >
             <Link to={"/"}>exit</Link>
