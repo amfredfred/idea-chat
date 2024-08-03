@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
-import Profile from "./components/Profile.tsx";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
 import Loading from "./components/Loading.tsx";
@@ -10,6 +9,7 @@ import TokenswapStack from "./components/token-swap/TokenSwapStack.tsx";
 import { ToastContainer } from "react-toastify";
 import { Stack } from "@mui/material";
 import Landing from "./pages/Landing.tsx";
+import Profile from "./pages/Profile.tsx";
 const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 
 const connectWallet = async (wallet: any): Promise<boolean> => {
