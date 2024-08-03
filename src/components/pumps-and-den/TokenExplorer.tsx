@@ -1,37 +1,10 @@
-import { useState } from "react";
-import TokensNewlyCreated from "./TokensNewlyCreated";
-import ToekensAboutToGraduate from "./ToekensAboutToGraduate";
-import TokensGraduated from "./TokensGraduated";
-import { Box, useMediaQuery } from "@mui/material";
+import { Box } from "@mui/material";
+import { useAppSelector } from "../../libs/redux/hooks";
 import { motion } from 'framer-motion'
+import PumpCard from "./PumpCard";
 
 export default function TokenExplorer() {
-  const isMobile = useMediaQuery("(max-width:768px)")
-  // const isTablet = useMediaQuery("(max-width:999px)")
-
-  const [selectedView, setSelectedView] = useState<'new' | 'about' | 'graduated'>('graduated');
-
-  const pumpsNavigation = (
-    <motion.div initial={{  opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 20,
-      }}
-      className='flex justify-between h-16'>
-      <Box className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => setSelectedView('new')}>
-        <small>New</small>
-      </Box>
-      <Box className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => setSelectedView('about')}>
-        <small>About To Graduate</small>
-      </Box>
-      <Box className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => setSelectedView('graduated')}>
-        <small>Graduated</small>
-      </Box>
-    </motion.div >
-  );
+  const pools = useAppSelector(state => state?.pumpSocket.pumpList?.migrated)
 
   return (
     <motion.div
@@ -44,18 +17,14 @@ export default function TokenExplorer() {
         damping: 30,
       }}
       className="container overflow-hidden mx-auto flex h-full"  >
-      <Box className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 motion.divide-x divide-grey-500 " maxHeight='100%' flexGrow='1'>
-        {isMobile ? (<>
-          {selectedView === 'new' && <TokensNewlyCreated />}
-          {selectedView === 'about' && <ToekensAboutToGraduate />}
-          {selectedView === 'graduated' && <TokensGraduated />}
-          {pumpsNavigation}
-        </>
-        ) : (<>
-          <TokensNewlyCreated />
-          <ToekensAboutToGraduate />
-          <TokensGraduated /></>
-        )}
+      <Box className="flex flex-col md:p-3 h-full  overflow-hidden w-full ">
+        <Box className="flex items-center justify-between  md:px-0 md:pt-0"><Box className="flex items-center pb-2"><span className="text-base leading-none size-4"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 12 12" fill="none"><g clipPath="url(#clip0_13111_31519)"><path d="M6 11.5C9.03757 11.5 11.5 9.03757 11.5 6C11.5 2.96243 9.03757 0.5 6 0.5C2.96243 0.5 0.5 2.96243 0.5 6C0.5 9.03757 2.96243 11.5 6 11.5Z" fill="#0D0D10" stroke="url(#paint0_linear_13111_31519)"></path><path d="M6.15163 3.42398C6.8211 2.75451 7.90653 2.75451 8.57604 3.42398C9.24546 4.09345 9.24546 5.17888 8.57604 5.84835L7.36381 7.06053L4.93945 4.63616L6.15163 3.42398Z" fill="#FFFEFF"></path><path d="M6.15163 3.42398C6.8211 2.75451 7.90653 2.75451 8.57604 3.42398C9.24546 4.09345 9.24546 5.17888 8.57604 5.84835L7.36381 7.06053L4.93945 4.63616L6.15163 3.42398Z" fill="url(#paint1_linear_13111_31519)"></path><path d="M5.84835 8.57404C5.17888 9.24355 4.09345 9.24355 3.42398 8.57404C2.75451 7.90458 2.75451 6.81915 3.42398 6.14968L4.63617 4.9375L7.06053 7.36187L5.84835 8.57404Z" fill="url(#paint2_linear_13111_31519)"></path></g><defs><linearGradient id="paint0_linear_13111_31519" x1="0.5" y1="-0.308512" x2="13.1469" y2="12.2185" gradientUnits="userSpaceOnUse"><stop stopColor="#FFFEE6"></stop><stop offset="0.315" stopColor="#9B742C"></stop><stop offset="0.635" stopColor="#A18643"></stop><stop offset="1" stopColor="#FDCB32"></stop></linearGradient><linearGradient id="paint1_linear_13111_31519" x1="5.97899" y1="2.92188" x2="5.8966" y2="7.81718" gradientUnits="userSpaceOnUse"><stop stopColor="#CDBA8A"></stop><stop offset="0.515" stopColor="#9B742C"></stop><stop offset="1" stopColor="#FDCB32"></stop></linearGradient><linearGradient id="paint2_linear_13111_31519" x1="3.96141" y1="4.9375" x2="3.87902" y2="9.83283" gradientUnits="userSpaceOnUse"><stop stopColor="#CDBA8A"></stop><stop offset="0.515" stopColor="#9B742C"></stop><stop offset="1" stopColor="#FDCB32"></stop></linearGradient><clipPath id="clip0_13111_31519"><rect width="12" height="12" fill="white"></rect></clipPath></defs></svg></span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="-translate-x-1"><g clipPath="url(#clip0_14669_146517)"><path d="M7.99998 15.4275C12.1027 15.4275 15.4286 12.1016 15.4286 7.99888C15.4286 3.8962 12.1027 0.570312 7.99998 0.570312C3.8973 0.570312 0.571411 3.8962 0.571411 7.99888C0.571411 12.1016 3.8973 15.4275 7.99998 15.4275Z" fill="#0D0D10" stroke="url(#paint0_linear_14669_146517)" strokeWidth="1.33333"></path><g clipPath="url(#clip1_14669_146517)"><path d="M11.9814 9.47778C12.0721 9.26178 11.813 9.07778 11.5956 9.17378C11.1612 9.36448 10.6918 9.46256 10.2174 9.46178C8.35737 9.46178 6.84981 7.98446 6.84981 6.16179C6.84912 5.5464 7.02397 4.94356 7.35381 4.42403C7.48003 4.22491 7.32848 3.94936 7.09736 4.00803C5.31557 4.46269 4 6.05024 4 7.93869C4 10.1818 5.85558 12 8.14493 12C9.87829 12 11.3627 10.9578 11.9814 9.47778Z" fill="url(#paint1_linear_14669_146517)"></path><path d="M11.1603 4.9279C11.2477 4.67027 10.9173 4.47952 10.7378 4.68362L10.4177 5.04777C10.288 5.19547 10.1174 5.30145 9.92745 5.35234C9.73754 5.40322 9.53682 5.39674 9.35061 5.3337L8.89135 5.17836C8.63382 5.09138 8.44316 5.42219 8.64767 5.6016L9.01173 5.9212C9.15944 6.05093 9.26542 6.22152 9.3163 6.4114C9.36718 6.6013 9.36069 6.80201 9.29764 6.98823L9.14226 7.44745C9.05486 7.70507 9.38527 7.89583 9.5647 7.69131L9.88474 7.32716C10.0145 7.17946 10.1851 7.07348 10.375 7.02259C10.5649 6.97171 10.7656 6.97819 10.9519 7.04123L11.4111 7.19657C11.6687 7.28396 11.8595 6.95356 11.6549 6.77375L11.2908 6.45414C11.1431 6.32441 11.0372 6.15383 10.9863 5.96394C10.9354 5.77404 10.9419 5.57333 11.0049 5.38712L11.1603 4.9279Z" fill="url(#paint2_linear_14669_146517)"></path></g></g><defs><linearGradient id="paint0_linear_14669_146517" x1="4.30318" y1="0.570313" x2="4.00743" y2="18.1437" gradientUnits="userSpaceOnUse"><stop stopColor="#CDBA8A"></stop><stop offset="0.515" stopColor="#9B742C"></stop><stop offset="1" stopColor="#FDCB32"></stop></linearGradient><linearGradient id="paint1_linear_14669_146517" x1="6.00941" y1="4" x2="5.85016" y2="13.4626" gradientUnits="userSpaceOnUse"><stop stopColor="#CDBA8A"></stop><stop offset="0.515" stopColor="#9B742C"></stop><stop offset="1" stopColor="#FDCB32"></stop></linearGradient><linearGradient id="paint2_linear_14669_146517" x1="9.3601" y1="4.59766" x2="9.2968" y2="8.35891" gradientUnits="userSpaceOnUse"><stop stopColor="#CDBA8A"></stop><stop offset="0.515" stopColor="#9B742C"></stop><stop offset="1" stopColor="#FDCB32"></stop></linearGradient><clipPath id="clip0_14669_146517"><rect width="16" height="16" fill="white"></rect></clipPath><clipPath id="clip1_14669_146517"><rect width="8" height="8" fill="white" transform="translate(4 4)"></rect></clipPath></defs></svg><span className="text-grey-50 text-sm font-medium ml-[6px]">Graduated</span></Box><button type="button" className="ant-btn ant-btn-default !h-[36px] w-[36px] md:w-auto !border-none !px-2 !bg-grey-500 hover:!bg-grey-600 !flex !gap-x-2"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 10" fill="none" className="text-grey-200"><path d="M14.375 0.5C14.5233 0.5 14.6683 0.543987 14.7917 0.626398C14.915 0.708809 15.0111 0.825943 15.0679 0.962988C15.1247 1.10003 15.1395 1.25083 15.1106 1.39632C15.0816 1.5418 15.0102 1.67544 14.9053 1.78033C14.8004 1.88522 14.6668 1.95665 14.5213 1.98559C14.3758 2.01453 14.225 1.99968 14.088 1.94291C13.9509 1.88614 13.8338 1.79001 13.7514 1.66668C13.669 1.54334 13.625 1.39834 13.625 1.25C13.625 1.05109 13.704 0.860322 13.8447 0.71967C13.9853 0.579018 14.1761 0.5 14.375 0.5ZM11.375 2H0.875C0.676087 2 0.485322 1.92098 0.344669 1.78033C0.204017 1.63968 0.125 1.44891 0.125 1.25C0.125 1.05109 0.204017 0.860322 0.344669 0.71967C0.485322 0.579018 0.676087 0.5 0.875 0.5H11.375C11.5739 0.5 11.7647 0.579018 11.9053 0.71967C12.046 0.860322 12.125 1.05109 12.125 1.25C12.125 1.44891 12.046 1.63968 11.9053 1.78033C11.7647 1.92098 11.5739 2 11.375 2ZM11.375 4.25C11.5233 4.25 11.6683 4.29399 11.7917 4.3764C11.915 4.45881 12.0111 4.57594 12.0679 4.71299C12.1247 4.85003 12.1395 5.00083 12.1106 5.14632C12.0816 5.2918 12.0102 5.42544 11.9053 5.53033C11.8004 5.63522 11.6668 5.70665 11.5213 5.73559C11.3758 5.76453 11.225 5.74968 11.088 5.69291C10.9509 5.63614 10.8338 5.54001 10.7514 5.41668C10.669 5.29334 10.625 5.14834 10.625 5C10.625 4.80109 10.704 4.61032 10.8447 4.46967C10.9853 4.32902 11.1761 4.25 11.375 4.25ZM8.375 8C8.52334 8 8.66834 8.04399 8.79168 8.1264C8.91501 8.20881 9.01114 8.32594 9.06791 8.46299C9.12467 8.60003 9.13953 8.75083 9.11059 8.89632C9.08165 9.0418 9.01022 9.17544 8.90533 9.28033C8.80044 9.38522 8.6668 9.45665 8.52132 9.48559C8.37583 9.51453 8.22503 9.49968 8.08799 9.44291C7.95094 9.38614 7.83381 9.29002 7.7514 9.16668C7.66899 9.04334 7.625 8.89834 7.625 8.75C7.625 8.55109 7.70402 8.36032 7.84467 8.21967C7.98532 8.07902 8.17609 8 8.375 8ZM0.875 4.25H8.375C8.57391 4.25 8.76468 4.32902 8.90533 4.46967C9.04598 4.61032 9.125 4.80109 9.125 5C9.125 5.19891 9.04598 5.38968 8.90533 5.53033C8.76468 5.67098 8.57391 5.75 8.375 5.75H0.875C0.676087 5.75 0.485322 5.67098 0.344669 5.53033C0.204017 5.38968 0.125 5.19891 0.125 5C0.125 4.80109 0.204017 4.61032 0.344669 4.46967C0.485322 4.32902 0.676087 4.25 0.875 4.25ZM0.875 8H5.375C5.57391 8 5.76468 8.07902 5.90533 8.21967C6.04598 8.36032 6.125 8.55109 6.125 8.75C6.125 8.94891 6.04598 9.13968 5.90533 9.28033C5.76468 9.42098 5.57391 9.5 5.375 9.5H0.875C0.676087 9.5 0.485322 9.42098 0.344669 9.28033C0.204017 9.13968 0.125 8.94891 0.125 8.75C0.125 8.55109 0.204017 8.36032 0.344669 8.21967C0.485322 8.07902 0.676087 8 0.875 8Z" fill="currentColor"></path></svg>
+          <Box className="text-grey-200 text-xs font-semibold hidden md:inline-flex">Filter</Box><Box className="hidden md:flex min-w-[18px] h-[18px] px-1 text-xs rounded bg-green-700 text-grey-50 items-center justify-center">9</Box></button></Box>
+        <Box className="flex flex-col gap-4 overflow-auto  no-scrollbar">
+          <Box className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-1 motion.divide-x divide-grey-500 gap-4 " maxHeight='100%' flexGrow='1'>
+            {pools?.map(pump => <PumpCard key={pump.address} {...pump} />)}
+          </Box>
+        </Box>
       </Box>
     </motion.div>
   )

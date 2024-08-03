@@ -37,7 +37,7 @@ const initialState: ChatState = {
         audio: 'win',
         motion: 'focused'
     },
-    isChatSettingsOpen: true,
+    isChatSettingsOpen: false,
     chatAudio: onMusic,
     isMusicPlaying: true,
     state: 'DEN',
