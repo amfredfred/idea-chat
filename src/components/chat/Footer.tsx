@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { IChatStates } from "../../common/types";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { setChatState } from "../../libs/redux/slices/chat-slice";
 
 const Footer = () => {
@@ -9,7 +9,11 @@ const Footer = () => {
   const chatState = useAppSelector(state => state.chat.state)
   const updateChatState = (state: IChatStates) => dispacth(setChatState(state))
   const websiteTheme = useAppSelector(state => state.theme.current.styles);
+  const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen);
+  const isMobile = useMediaQuery("(max-width:768px)")
   const buttons = ['DEN', 'PUMP.RAY', 'ALPHA']
+
+  if (isChatSettingsOpen && !isMobile) return
 
   return (
     <Box className={` max-sm:mx-auto  mr-auto h-11 flex justify-between rounded-md  max-sm:w-[361px] sm:w-[566px] border border-white overflow-hidden`}>  {

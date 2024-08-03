@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, useMediaQuery } from '@mui/material'
 import Focused from '../message-animations/Focused'
 import Chaos from '../message-animations/Chaos'
 import EquatorTest from '../message-animations/EquatorTest'
@@ -20,6 +20,7 @@ export default function DenChannel() {
   const settingsModal = useAppSelector(state => state.chat.settingsModal.motion)
   const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen)
   const typedMessage = useAppSelector(state => state.chat.typedMessage)
+  const isMobile = useMediaQuery("(max-width:768px)")
 
   const clickAnimation = {
     scale: 0.9,
@@ -54,8 +55,8 @@ export default function DenChannel() {
       </div>
       {/* -------------------------------------- */}
 
-      <Box alignItems='center' className="flex justify-between  relative gap-2 lg:gap-4 w-full " >
-        <AnimatePresence>
+      <Box alignItems='flex-end' className="flex justify-between  relative gap-2 lg:gap-4 w-full " >
+        {!(isChatSettingsOpen && !isMobile) && <AnimatePresence>
           <Box className="w-[60%] max-sm:flex-grow  sm:w-[566px] " maxWidth='100%' display='flex'>
             <motion.textarea
               initial={{ x: -100, opacity: 0 }}
@@ -77,25 +78,26 @@ export default function DenChannel() {
               rows={1}
             />
           </Box>
-        </AnimatePresence>
+
+          <Box className={`p-[10px] sm:p-[15px] ${theme.bgColor === "#ffffff"
+            ? "border border-black"
+            : "border-none"
+            } bg-white rounded-[4px] lg:rounded-[8px]  sm:block`}>
+            <motion.button
+              whileTap={clickAnimation}
+
+              onClick={handleSendMessage}    >
+              <Send style={{ color: theme.buttonColor }} />
+            </motion.button>
+          </Box>
+        </AnimatePresence>}
+
+        <ChatSettings />
 
         <Box className={`p-[10px] sm:p-[15px] ${theme.bgColor === "#ffffff"
           ? "border border-black"
           : "border-none"
-          } bg-white rounded-[4px] lg:rounded-[8px]  sm:block`}>
-          <motion.button
-            whileTap={clickAnimation}
-
-            onClick={handleSendMessage}    >
-            <Send style={{ color: theme.buttonColor }} />
-          </motion.button>
-        </Box>
-
-
-        <Box className={`p-[10px] sm:p-[15px] ${theme.bgColor === "#ffffff"
-          ? "border border-black"
-          : "border-none"
-          } bg-white rounded-[4px] sm:rounded-[8px] hidden sm:block`}>
+          } bg-white rounded-[4px] sm:rounded-[8px] hidden md:block`}>
           <motion.button
             whileTap={clickAnimation}
             onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}
@@ -103,8 +105,6 @@ export default function DenChannel() {
             {isChatSettingsOpen ? <Close style={{ color: theme.buttonColor }} /> : <Settings style={{ color: theme.buttonColor }} />}
           </motion.button>
         </Box>
-
-        <ChatSettings />
       </Box>
     </Box>
   )
