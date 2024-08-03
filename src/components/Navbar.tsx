@@ -64,7 +64,7 @@ const Navbar = () => {
         backgroundColor: websiteTheme.bgColor,
         color: websiteTheme.textColor,
       }}
-      className="flex z-20 text-[14px] sm:text-[16px] gap-4 lg:gap-6 xl:gap-8 lg:text-[18px] xl:text-[20px] w-full"
+      className="uppercase flex z-20 text-[14px] sm:text-[16px] gap-4 lg:gap-6 xl:gap-8 lg:text-[18px] xl:text-[20px] w-full"
     >
       <Box className="flex justify-between gap-4 overflow-hidden w-full">
         <div>

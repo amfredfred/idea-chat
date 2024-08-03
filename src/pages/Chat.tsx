@@ -1,6 +1,4 @@
-import Navbar from "../components/Navbar";
 import messageNotification from "../assets/message_notification.mp3";
-import MobileNav from "../components/MobileNav";
 import Footer from "../components/chat/Footer";
 import useChat from "../hooks/useChat";
 import { Box } from "@mui/material";
