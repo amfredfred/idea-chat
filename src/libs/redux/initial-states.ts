@@ -1,7 +1,7 @@
 import SolanaLogo from '../../assets/solana-sol-logo.png'
 import { Connection } from "@solana/web3.js";
 import { WalletContextState } from "@solana/wallet-adapter-react";
-import { IPumpCoin } from '../../common/types';
+import { IPumpToken } from '../../common/types';
 
 export interface IApp {
     isInitLoading: boolean,
@@ -77,13 +77,13 @@ export interface ISwapSettings {
 
 
 export interface TokenSwapState {
-    tokenToSend: IPumpCoin | undefined;
-    tokenToReceive: IPumpCoin | undefined;
+    tokenToSend: IPumpToken | undefined;
+    tokenToReceive: IPumpToken | undefined;
     amountToSend: number;
     amountToReceive: number;
     loading: boolean;
     error: string | null;
-    tokensList: IPumpCoin[],
+    tokensList: IPumpToken[],
     isVisible: boolean
 
     fetchTokenRateState: 'error' | 'success' | 'pending' | 'idle'

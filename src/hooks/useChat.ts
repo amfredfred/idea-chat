@@ -3,7 +3,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { setUserName, setProfilePic } from "../libs/redux/slices/user-profile-slice";
 import { setInitialMessages, addNewMessage } from "../libs/redux/slices/message-slice";
-import { setChatAudio, setMusicIsPlaying } from "../libs/redux/slices/audio-slice";
+import { setChatAudio } from "../libs/redux/slices/audio-slice";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import { Message } from "../libs/redux/slices/message-slice";
 
@@ -121,7 +121,7 @@ const useChat = () => {
     return {
         currentUserMessage,
         isSettingsOpen,
-        isMusicPlaying, 
+        isMusicPlaying,
         settingsModal,
         initialMessages,
         setInitialMessages,

@@ -10,7 +10,7 @@ import { ToastContainer } from "react-toastify";
 import { Box, Stack } from "@mui/material";
 import Landing from "./pages/Landing.tsx";
 import Profile from "./pages/Profile.tsx";
-import filtersSvg from "./assets/filters_applied-removebg-preview.png";
+// import filtersSvg from "./assets/wallet-bg-big.png";
 
 const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 
@@ -47,7 +47,7 @@ export default function App() {
   const searchParams = useAppSelector(state => state.pumpSocket.searchParams)
   const socketState = useAppSelector(state => state.pumpSocket.socketState)
   const theme = useAppSelector(state => state.theme.current.styles)
-  const chatState = useAppSelector(state => state.chat.state)
+  // const chatState = useAppSelector(state => state.chat.state)
 
   const dispatch = useAppDispatch()
 
@@ -73,12 +73,13 @@ export default function App() {
       <Box className="transition-colors duration-1000"
         sx={{
           direction: "column",
-          overflow: 'hidden',
+          // overflow: 'hidden',
           position: 'relative',
-          backgroundImage: chatState === 'PUMP.RAY' ? `url(${filtersSvg})` : '',
+          // backgroundImage: chatState === 'PUMP.RAY' ? `url(${filtersSvg})` : '',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat !important'
+          backgroundRepeat: 'no-repeat',
+          width: '100vw', height: '100vh', 
         }}>
         <BrowserRouter>
           <Routes>
@@ -89,9 +90,9 @@ export default function App() {
             </Route>
           </Routes>
         </BrowserRouter>
-        <TokenswapStack />
         <ToastContainer />
       </Box>
+      <TokenswapStack />
     </Stack>
   )
 }

@@ -29,7 +29,7 @@ const socketIoSlice = createSlice({
     initialState,
     reducers: {
         setSocket: (state, action: PayloadAction<Socket | null>) => {
-            state.socket = action.payload;
+            state.socket = action.payload as any;
         },
         setConnected: (state, action: PayloadAction<boolean>) => {
             state.connected = action.payload;
@@ -75,6 +75,7 @@ export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch
 };
 
 export const emitEvent = <K extends keyof PumpSocketSend>(event: K, data?: any) => (dispatch: AppDispatch, getState: () => { pumpSocket: PumpSocketState }) => {
+    dispatch
     const { socket } = getState().pumpSocket;
     if (socket) {
         socket.emit(event, data);
@@ -82,6 +83,7 @@ export const emitEvent = <K extends keyof PumpSocketSend>(event: K, data?: any) 
 };
 
 export const onEvent = <K extends keyof PumpSocketReceived>(event: K, callback: (data: PumpSocketReceived[K]) => void) => (dispatch: AppDispatch, getState: () => { pumpSocket: PumpSocketState }) => {
+    dispatch
     const { socket } = getState().pumpSocket;
     if (socket) {
         const typedCallback: (data: any) => void = (data) => callback(data as PumpSocketReceived[K]);

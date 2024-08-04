@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IPumpCoin } from "../../../common/types";
+import {  IPumpTokenChartDetail } from "../../../common/types";
 
 interface HistoricalDataPoint {
     timestamp: number;
@@ -12,7 +12,7 @@ interface PumpChartState {
     status: 'idle' | 'pending' | 'error' | 'success'
     message: string | null,
     isPumpChartShown: boolean
-    pumpItem: IPumpCoin | null
+    pumpItem: IPumpTokenChartDetail | null
 }
 
 const initialState: PumpChartState = {
@@ -29,6 +29,8 @@ export const fetchHistoricalData = createAsyncThunk(
     async (tokenAddress: string, thumApi) => {
         const response = await axios.get(`https://api.helius.com/v0/historical/${tokenAddress}`);
         thumApi
+
+        // IPumpTokenChartDetail
         return response.data;
     }
 );
@@ -39,9 +41,6 @@ const pumpChartSlice = createSlice({
     reducers: {
         setPumpChartShown: (state, action: PayloadAction<boolean>) => {
             state.isPumpChartShown = action.payload
-        },
-        setPumpItem: (state, action: PayloadAction<IPumpCoin>) => {
-            state.pumpItem = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -54,6 +53,8 @@ const pumpChartSlice = createSlice({
             state.status = 'success';
             state.isPumpChartShown = true
             state.data = action.payload;
+
+            // state.pumpItem = 
         });
         builder.addCase(fetchHistoricalData.rejected, (state, action) => {
             state.status = 'error';
@@ -63,8 +64,7 @@ const pumpChartSlice = createSlice({
     },
 });
 
-export const {
-    setPumpItem,
+export const { 
     setPumpChartShown
 } = pumpChartSlice.actions
 

@@ -26,6 +26,7 @@ export default function PumpChart() {
     const [value, setValue] = useState('1');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        event
         setValue(newValue);
     };
 

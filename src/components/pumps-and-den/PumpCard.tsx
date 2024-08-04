@@ -1,14 +1,14 @@
 import { websiteThemeState } from "../../atoms/website-theme";
 import { useRecoilValue } from "recoil";
-import { IPumpCoin } from "../../common/types";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-slice";
 import { formatNumber } from "../../utils/format";
 import { Box, Button, CircularProgress, LinearProgress } from "@mui/material";
 import { CandlestickChartRounded } from "@mui/icons-material";
-import { fetchHistoricalData, setPumpItem } from "../../libs/redux/slices/pump-chart-slice";
+import { fetchHistoricalData } from "../../libs/redux/slices/pump-chart-slice";
+import { IPumpToken } from "../../common/types";
 
-export default function PumpCard(pump: IPumpCoin) {
+export default function PumpCard(pump: IPumpToken) {
   const websiteTheme = useRecoilValue(websiteThemeState);
 
   // const pumpProgress = pump?.progress?.toFixed?.(1)
@@ -19,7 +19,6 @@ export default function PumpCard(pump: IPumpCoin) {
   const pumpItem = useAppSelector(state => state.pumpChart.pumpItem)
 
   const handleLoadAndShowChart = () => {
-    dispatch(setPumpItem(pump))
     dispatch(fetchHistoricalData(pump.address))
   }
 
@@ -51,15 +50,15 @@ export default function PumpCard(pump: IPumpCoin) {
         <div className=" flex justify-between w-[100%] mx-auto">
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">mcap</p>
-            <p className=" text-[16px] ">${formatNumber(pump?.usd_market_cap)}</p>
+            <p className=" text-[16px] ">${formatNumber(pump?.marketCap)}</p>
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">holders</p>
-            <p className=" text-[16px] ">{formatNumber(pump?.holder_count ?? 0)}</p>
+            <p className=" text-[16px] ">{formatNumber(pump?.holdersCount ?? 0)}</p>
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">volume</p>
-            <p className=" text-[16px] ">${formatNumber(pump?.usd_market_cap) ?? 0}</p>
+            <p className=" text-[16px] ">${formatNumber(pump?.marketTradingVolume) ?? 0}</p>
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">dev</p>
@@ -76,9 +75,9 @@ export default function PumpCard(pump: IPumpCoin) {
 
         <Box display='flex' gap='1rem' alignItems='center' justifyContent='space-between'>
           <Button onClick={handleLoadAndShowChart}
-            
+
             // disabled={pumpChartStatus === 'pending'}
-            
+
             className=' bg-red-400 flex' variant="outlined"
             style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden' }} >
             Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}

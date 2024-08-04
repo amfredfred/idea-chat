@@ -12,7 +12,7 @@ import { Connection } from '@solana/web3.js';
 import { toast } from 'react-toastify';
 import { useMediaQuery } from '@mui/material';
 import { getDimensions } from '../../utils';
-import { fetchHistoricalData, setPumpItem } from '../../libs/redux/slices/pump-chart-slice';
+import { fetchHistoricalData } from '../../libs/redux/slices/pump-chart-slice';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -50,7 +50,6 @@ const TokenswapStack: React.FC = () => {
   };
 
   const handleLoadAndShowChart = () => {
-    dispatch(setPumpItem(tokenToSend as any))
     dispatch(fetchHistoricalData(String(tokenToSend?.address)))
   }
 
@@ -137,7 +136,10 @@ const TokenswapStack: React.FC = () => {
   return (
     <Draggable
       position={position}
-      onStop={(e, data) => setPosition({ x: data.x, y: data.y })}
+      onStop={(e, data) => {
+        e
+        setPosition({ x: data.x, y: data.y })
+      }}
       disabled={isMobile} // Disable dragging on mobile devices
     >
       <Box
