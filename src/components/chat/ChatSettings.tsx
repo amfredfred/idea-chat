@@ -14,7 +14,7 @@ import synthMusic from "../../assets/synth.mp3";
 import ambientMusic from "../../assets/ambient.mp3";
 import { useCallback, useEffect, useRef } from "react";
 import { motion } from 'framer-motion'
-import { Box, FormControlLabel, Switch } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Android12Switch } from "../CustomSwitches";
 
 const musics = [
@@ -104,14 +104,14 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
 `}  >
 
       <Box className='grid grid-cols-6 items-center w-full'>
-        <div className="col-span-1 max-md:col-span-6">
+        <div className="col-span-1 max-md:col-span-6 lg:mb-6">
           <p style={{ color: theme.buttonColor }} className=" text-[12px] lg:text-[16px]">Visual</p>
         </div>
         <div className="grid grid-cols-5  col-span-5  gap-3 max-md:col-span-6 max-md:mt-2">
           {themes.map((iTheme, index) => (
             <div
               key={`theme-${index}`}
-              className=" flex flex-col lg:items-center  col-span-1 gap-2"
+              className=" flex flex-col md:items-center  col-span-1 gap-2"
               onClick={() => dispatch(setTheme(iTheme.name))}   >
               <div className={`
                   ${iTheme.styles.bgColor === theme.bgColor
@@ -125,7 +125,7 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
               </div>
               <p
                 style={{ color: iTheme.styles.bgColor === theme.bgColor ? '#0000FF' : 'black' }}
-                className="text-[12px]">
+                className="text-[12px]  text-center">
                 {iTheme.name}
               </p>
             </div>
@@ -135,33 +135,21 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
       <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden " />
       {/* --------------------------------------------- */}
       <Box className='grid grid-cols-6 items-center w-full max-md:mt-2'>
-        <div className=" col-span-1 flex flex-col max-md:flex-row max-sm:justify-between  gap-[10px] cursor-pointer  max-md:col-span-6">
+        <div className=" col-span-1 flex flex-col max-md:flex-row max-sm:justify-between cursor-pointer  max-md:col-span-6 lg:mb-6">
           <Box className='flex gap-1 justify-between items-center'>
-            <p style={{ color: theme.buttonColor }} className="  text-[12px] lg:text-[16px] max-[max-content]">Audio</p>
-            <FormControlLabel
-              checked={isMusicPlaying}
-              onChange={handleMusicPlayPause}
-              control={<Android12Switch defaultChecked />}
-              label=''
-            />
+            <p style={{ color: theme.buttonColor }} className="text-[12px] lg:text-[16px] max-[max-content]">Audio</p>
+            <Android12Switch defaultChecked onChange={handleMusicPlayPause} checked={isMusicPlaying} />
           </Box>
-
           <Box className='flex gap-1 justify-between items-center'>
-            <p style={{ color: theme.buttonColor }} className="  text-[12px] lg:text-[16px] max-[max-content]">MSG</p>
-            <FormControlLabel
-              // checked={isMusicPlaying}
-              // onChange={}
-              control={<Android12Switch defaultChecked />}
-              label=''
-              style={{ margin: 0 }}
-            />
+            <p style={{ color: theme.buttonColor }} className="text-[12px] lg:text-[16px] max-[max-content] mr-5 max-md:mr-0">MSG</p>
+            <Android12Switch defaultChecked onChange={undefined} checked={undefined} />
           </Box>
         </div>
         <div className="col-span-5 grid grid-cols-5 gap-3 max-md:col-span-6 max-md:mt-2 items-center">
           {musics.map((music, index) => (
             <div
               key={`music-${index}`}
-              className="flex flex-col lg:items-center col-span-1 gap-2"
+              className="flex flex-col md:items-center col-span-1 gap-2"
               onClick={() => dispatch(setChatAudio(music.source))} >
               <div
                 className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${chatAudio === music.source
@@ -172,7 +160,7 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
               </div>
               <p
                 style={{ color: chatAudio === music.source ? '#0000FF' : 'black' }}
-                className="text-[12px]">
+                className="text-[12px]  text-center">
                 {music.name}
               </p>
             </div>
@@ -182,14 +170,14 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
       <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden" />
       {/* ------------------------------- */}
       <Box className='grid grid-cols-6  w-full items-center'>
-        <p style={{ color: theme.buttonColor }} className=" w-[18%] text-[12px] lg:text-[16px] col-span-1 max-md:col-span-6">
+        <p style={{ color: theme.buttonColor }} className=" w-[18%] text-[12px] lg:text-[16px] col-span-1 max-md:col-span-6 lg:mb-6">
           Motion
         </p>
         <div className=" grid w-full grid-cols-5 gap-3 col-span-5 max-md:col-span-6 max-md:mt-2">
           {motions.map((motion, index) => (
             <div
               key={`motion-${index}`}
-              className="flex flex-col lg:items-center  col-span-1 gap-2"
+              className="flex flex-col md:items-center  col-span-1 gap-2 "
               onClick={() => dispatch(setWebsiteMotion(motion.motion))}>
               <div
                 className={` bg-[#white] ${settingsModal.motion === motion.motion
@@ -202,7 +190,7 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
               </div>
               <p
                 style={{ color: settingsModal.motion === motion.motion ? '#0000FF' : 'black' }}
-                className="text-[12px]">
+                className="text-[12px]  text-center">
                 {motion.name}
               </p>
             </div>
@@ -211,10 +199,9 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
         </div>
       </Box>
 
-      <div className="lg:hidden flex flex-col gap-[15px] mt-[15px] w-full">
-        <button
+      <div className="lg:hidden uppercase grid grid-cols-2 gap-[15px] mt-[15px] w-full font-jbm">
+        <Button
           onClick={() => navigate("/profile")}
-          className=" uppercase font-jbm  p-[5px]   "
           style={{
             background:
               theme.bgColor === "#ffffff"
@@ -227,19 +214,14 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
           }}
         >
           profile
-        </button>
-        <button
-          className={`  uppercase font-jbm  
-                     `}
+        </Button>
+        <Button
           style={{
-            color:
-              theme.bgColor === "#ffffff"
-                ? "#000000"
-                : theme.bgColor,
+            color: 'red'
           }}
         >
           <Link to={"/"}>exit</Link>
-        </button>
+        </Button>
       </div>
     </motion.div>
   )

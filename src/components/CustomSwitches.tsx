@@ -31,6 +31,6 @@ export const Android12Switch = styled(Switch)(({ theme }) => ({
         height: 12,
         margin: 2,
         marginTop: 4,
-        paddingLeft:4
+        paddingLeft: 4,
     },
 }));
