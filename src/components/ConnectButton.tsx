@@ -34,7 +34,7 @@ export const SolanaConnect: React.FC<SolanaConnectProps> = ({
             publicKey
           );
           const transactionsCount = confirmedSignatures.length;
-          if (transactionsCount >= 43)  //69
+          if (transactionsCount >= import.meta.env.VITE_REQUIRED_TNX_COUNT)
             return navigate("/chat");
           await disconnect()
           setShowWalletTransactionsError(true);
