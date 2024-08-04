@@ -3,15 +3,14 @@ import { TransactionsCountErrorIcon } from "../components/Icons"
 import { motion } from 'framer-motion'
 import { useWallet } from "@solana/wallet-adapter-react"
 import { useNavigate } from "react-router-dom"
-import bgVideo from "../assets/bg1.mp4";
 import bottle from "../assets/bottle.png";
 import winMusic from "../assets/win.mp3";
 import { SolanaConnect } from "../components/ConnectButton";
 import { Box, IconButton, useMediaQuery } from "@mui/material"
 import { VolumeOff, VolumeUp } from "@mui/icons-material"
 
-import bgVideoMobile from '../assets/videos/newBgMobile.mp4'
-import bgVideoDesktop from '../assets/videos/newBgVideo.mp4'
+import bgVideoMobile from '../assets/videos/mobile-blue-bg.mp4'
+import bgVideoDesktop from '../assets/videos/pc-blue-bg.mp4'
 
 
 const MessageAcessDenied = () => {
@@ -39,7 +38,7 @@ export default function Landing() {
   const isMobile = useMediaQuery("(max-width:768px)")
   const [showVerifying, setShowVerifying] = useState(false);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
-  const [, setBgSource] = useState(isMobile ? bgVideoMobile : bgVideoDesktop) //bgSource
+  const [bgSource, setBgSource] = useState(isMobile ? bgVideoMobile : bgVideoDesktop) 
   const [isAccessDenied, setIsAccessDenied] = useState(false);
 
   useEffect(() => {
@@ -79,7 +78,7 @@ export default function Landing() {
     <div className="relative w-full h-screen isolate bg-[#0000FF] ">
       <video
         className="absolute top-0 left-0 w-full h-full object-cover object-center -z-10 "
-        src={bgVideo} //bgSource
+        src={bgSource} 
         autoPlay
         loop
         muted
