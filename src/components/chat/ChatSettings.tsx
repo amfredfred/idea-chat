@@ -153,6 +153,7 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
               // onChange={}
               control={<Android12Switch defaultChecked />}
               label=''
+              style={{ margin: 0 }}
             />
           </Box>
         </div>
