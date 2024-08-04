@@ -7,10 +7,10 @@ import { useAppDispatch, useAppSelector } from "./libs/redux/hooks.ts";
 import { connectSocket, emitEvent } from "./libs/redux/slices/pump-socket-slice.ts";
 import TokenswapStack from "./components/token-swap/TokenSwapStack.tsx";
 import { ToastContainer } from "react-toastify";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Landing from "./pages/Landing.tsx";
 import Profile from "./pages/Profile.tsx";
-import filtersSvg from "./assets/failters-bg.svg";
+import filtersSvg from "./assets/filters_applied-removebg-preview.png";
 
 const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 
@@ -66,27 +66,32 @@ export default function App() {
   }
 
   return (
-    <Stack
-      // className="transition-colors duration-1000"
-      direction="column" overflow='hidden' position='relative'
-      style={{
-        width: '100vw', height: '100vh', flexWrap: 'wrap',
-        background: chatState === 'PUMP.RAY' ? `url(${filtersSvg})` : theme.bgColor,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/profile" element={<Profile />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-      <TokenswapStack />
-      <ToastContainer />
+    <Stack style={{
+      width: '100vw', height: '100vh', flexWrap: 'wrap',
+      background: theme.bgColor,
+    }}>
+      <Box className="transition-colors duration-1000"
+        sx={{
+          direction: "column",
+          overflow: 'hidden',
+          position: 'relative',
+          backgroundImage: chatState === 'PUMP.RAY' ? `url(${filtersSvg})` : '',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat !important'
+        }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/chat" element={<Chat />} />
+              <Route path="/profile" element={<Profile />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+        <TokenswapStack />
+        <ToastContainer />
+      </Box>
     </Stack>
   )
 }
