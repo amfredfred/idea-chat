@@ -39,27 +39,30 @@ const TokenSelection: React.FC<{
                     <Box display='flex' flexDirection='column' gap='.5rem' width='100%' className=' no-scrollbar' overflow='auto'>
                         {tokensList?.map?.((token,) => (
                             <MenuItem key={token.address} onClick={() => onTokenSelect(token)} value={token.symbol} style={{ paddingInline: 0, borderRadius: '10px' }}   >
-                                <Box display='flex' alignItems='center' flexDirection='row' width='100%' >
-                                    <img
-                                        className="w-7 h-7 mr-2 rounded-full aspect-square"
-                                        src={token.logo}
-                                        alt={`${token.symbol} token`}
-                                    />
-                                    <Box display='flex' alignItems='center' justifyContent='space-between' width='100%'>
-                                        <Box display='flex' flexDirection='column'>
-                                            <small style={{ fontSize: 12 }}>{token.symbol}</small>
-                                            <strong style={{ fontSize: 10, opacity: .6 }}>{token.name}</strong>
-                                        </Box>
-                                        <Box display='flex' gap={'.4rem'} alignItems='center' flexDirection='column'>
-                                            {token?.address && <a
-                                                target='_blank'
-                                                href={`https://solscan.io/token/${token.address}`}
-                                                style={{ borderRadius: '50px', fontSize: 11 }}>
-                                                {shortenString(token.address)} <LaunchIcon style={{ fontSize: 11 }} />
-                                            </a>}
-                                            {/* <strong style={{ fontSize: 10, opacity: .6 }}>MC - $12</strong> */}
+                                <Box display='flex' flexDirection='column' width='100%'  gap='1rem'>
+                                    <Box display='flex' alignItems='center' flexDirection='row' width='100%' >
+                                        <img
+                                            className="w-7 h-7 mr-2 rounded-full aspect-square"
+                                            src={token.logo}
+                                            alt={`${token.symbol} token`}
+                                        />
+                                        <Box display='flex' alignItems='center' justifyContent='space-between' width='100%'>
+                                            <Box display='flex' flexDirection='column'>
+                                                <small style={{ fontSize: 12 }}>{token.symbol}</small>
+                                                <strong style={{ fontSize: 10, opacity: .6 }}>{token.name}</strong>
+                                            </Box>
+                                            <Box display='flex' gap={'.4rem'} alignItems='center' flexDirection='column'>
+                                                {token?.address && <a
+                                                    target='_blank'
+                                                    href={`https://solscan.io/token/${token.address}`}
+                                                    style={{ borderRadius: '50px', fontSize: 11 }}>
+                                                    {shortenString(token.address)} <LaunchIcon style={{ fontSize: 11 }} />
+                                                </a>}
+                                                {/* <strong style={{ fontSize: 10, opacity: .6 }}>MC - $12</strong> */}
+                                            </Box>
                                         </Box>
                                     </Box>
+                                    {/* <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#ffff] to-transparent  " /> */}
                                 </Box>
                             </MenuItem>
                         ))}

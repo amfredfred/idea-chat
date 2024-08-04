@@ -17,11 +17,9 @@ const audioSlice = createSlice({
         setChatAudio(state, action: PayloadAction<string>) {
             state.chatAudio = action.payload;
         },
-        setMusicIsPlaying(state, action: PayloadAction<boolean>) {
-            state.isMusicPlaying = action.payload;
-        }
+      
     }
 });
 
-export const { setChatAudio, setMusicIsPlaying } = audioSlice.actions;
+export const { setChatAudio, } = audioSlice.actions;
 export default audioSlice.reducer;

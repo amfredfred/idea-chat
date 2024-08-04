@@ -121,8 +121,7 @@ const useChat = () => {
     return {
         currentUserMessage,
         isSettingsOpen,
-        isMusicPlaying,
-        setMusicIsPlaying,
+        isMusicPlaying, 
         settingsModal,
         initialMessages,
         setInitialMessages,

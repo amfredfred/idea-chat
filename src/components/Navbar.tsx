@@ -60,8 +60,7 @@ const Navbar = () => {
     <MobileNav />
   ) : (
     <Box
-      style={{
-        backgroundColor: websiteTheme.bgColor,
+      style={{ 
         color: websiteTheme.textColor,
       }}
       className="uppercase flex  text-[14px] sm:text-[16px] gap-4 lg:gap-6 xl:gap-8 lg:text-[18px] xl:text-[20px] w-full"

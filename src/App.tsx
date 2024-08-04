@@ -10,6 +10,8 @@ import { ToastContainer } from "react-toastify";
 import { Stack } from "@mui/material";
 import Landing from "./pages/Landing.tsx";
 import Profile from "./pages/Profile.tsx";
+import filtersSvg from "./assets/failters-bg.svg";
+
 const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 
 const connectWallet = async (wallet: any): Promise<boolean> => {
@@ -45,6 +47,7 @@ export default function App() {
   const searchParams = useAppSelector(state => state.pumpSocket.searchParams)
   const socketState = useAppSelector(state => state.pumpSocket.socketState)
   const theme = useAppSelector(state => state.theme.current.styles)
+  const chatState = useAppSelector(state => state.chat.state)
 
   const dispatch = useAppDispatch()
 
@@ -63,7 +66,16 @@ export default function App() {
   }
 
   return (
-    <Stack direction="column" overflow='hidden' position='relative' style={{ width: '100vw', height: '100vh', flexWrap: 'wrap', background: theme.bgColor }}>
+    <Stack
+      // className="transition-colors duration-1000"
+      direction="column" overflow='hidden' position='relative'
+      style={{
+        width: '100vw', height: '100vh', flexWrap: 'wrap',
+        background: chatState === 'PUMP.RAY' ? `url(${filtersSvg})` : theme.bgColor,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />

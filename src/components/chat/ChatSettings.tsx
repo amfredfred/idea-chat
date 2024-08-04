@@ -3,7 +3,6 @@ import { setTheme } from "../../libs/redux/slices/theme-slice";
 import { Link, useNavigate } from "react-router-dom";
 import { setChatSettingsOpen, setChatAudio, setWebsiteMotion } from "../../libs/redux/slices/chat-slice";
 import synthIcon from "../../assets/synth.svg";
-import audioIcon from "../../assets/audio.svg";
 import slideIcon from "../../assets/slide.svg";
 import onIcon from "../../assets/on.svg";
 import ambientIcon from "../../assets/ambient.svg";
@@ -15,6 +14,8 @@ import synthMusic from "../../assets/synth.mp3";
 import ambientMusic from "../../assets/ambient.mp3";
 import { useCallback, useEffect, useRef } from "react";
 import { motion } from 'framer-motion'
+import { Box, FormControlLabel, Switch } from "@mui/material";
+import { Android12Switch } from "../CustomSwitches";
 
 const musics = [
   {
@@ -55,7 +56,7 @@ const motions = [{
   motion: "equator"
 }]
 
-export default function ChatSettings() {
+export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) {
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -65,6 +66,7 @@ export default function ChatSettings() {
   const chatAudio = useAppSelector(state => state.chat.chatAudio)
   const settingsModal = useAppSelector(state => state.chat.settingsModal)
   const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen)
+  const isMusicPlaying = useAppSelector(state => state.chat.isMusicPlaying)
   const closeMenu = useCallback(() => dispatch(setChatSettingsOpen(false)), [dispatch]);
 
   useEffect(() => {
@@ -97,133 +99,146 @@ export default function ChatSettings() {
       className={`${theme.bgColor === "#ffffff"
         ? "border border-black"
         : "border-none"
-        }  p-5 rounded-[8px] flex flex-col md:right-[0] md:gap-[5px]  bg-white absolute md:bottom-[0] md:relative max-md:absolute  max-md:bottom-[110%] max-md:w-[361px]`}  >
-      <div className=" flex  rounded-[8px] flex-col ">
-        <div className=" w-[15%]  ">
-          <p className=" text-[12px] lg:text-[16px]">Visual</p>
-        </div>
-        <div className=" flex items-center justify-between w-full gap-3">
-          <div className="  w-full flex justify-between lg:justify-around">
-            {themes.map((theme, index) => (
-              <div
-                key={`theme-${index}`}
-                className=" flex flex-col items-center"
-                onClick={() => dispatch(setTheme(theme.name))}   >
-                <div className={theme.class}>
-                  <p>dont sin</p>
-                  <p>dont sin</p>
-                  <p>dont sin</p>
-                </div>
-                <p
-                  className={`text-[10px] lg:text-[16px] ${settingsModal.visual === theme.name
-                    ? "text-[#0000FF]"
-                    : "text-black"
-                    }   rounded-[2px] p-[4px] lg:border-none lg:p-0`}
-                >
-                  {theme.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+        }  p-5 rounded-[8px] max-md:gap-2 flex flex-col md:right-[0] md:gap-[1.5rem]  bg-white absolute md:bottom-[0] md:relative max-md:absolute  max-md:bottom-[110%] max-md:w-[361px]
 
+`}  >
+
+      <Box className='grid grid-cols-6 items-center w-full'>
+        <div className="col-span-1 max-md:col-span-6">
+          <p style={{ color: theme.buttonColor }} className=" text-[12px] lg:text-[16px]">Visual</p>
+        </div>
+        <div className="grid grid-cols-5  col-span-5  gap-3 max-md:col-span-6 max-md:mt-2">
+          {themes.map((iTheme, index) => (
+            <div
+              key={`theme-${index}`}
+              className=" flex flex-col lg:items-center  col-span-1 gap-2"
+              onClick={() => dispatch(setTheme(iTheme.name))}   >
+              <div className={`
+                  ${iTheme.styles.bgColor === theme.bgColor
+                  ? " border-[#0000FF]"
+                  : " border-black"
+                } border lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer
+                  ${iTheme.class} `}>
+                <p>dont sin</p>
+                <p>dont sin</p>
+                <p>dont sin</p>
+              </div>
+              <p
+                style={{ color: iTheme.styles.bgColor === theme.bgColor ? '#0000FF' : 'black' }}
+                className="text-[12px]">
+                {iTheme.name}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Box>
       <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden " />
       {/* --------------------------------------------- */}
-      <div className=" flex  flex-col   rounded-[8px]">
-        <div
-          className=" flex items-center gap-[10px] cursor-pointer mr-[5px] "
-        // onClick={chat.handleMusicPlayPause}
-        >
-          <p className="  text-[12px] lg:text-[16px]">Audio</p>
-          <img src={audioIcon} className=" mt-[-3px]" />
+      <Box className='grid grid-cols-6 items-center w-full max-md:mt-2'>
+        <div className=" col-span-1 flex flex-col max-md:flex-row max-sm:justify-between  gap-[10px] cursor-pointer  max-md:col-span-6">
+          <Box className='flex gap-1 justify-between items-center'>
+            <p style={{ color: theme.buttonColor }} className="  text-[12px] lg:text-[16px] max-[max-content]">Audio</p>
+            <FormControlLabel
+              checked={isMusicPlaying}
+              onChange={handleMusicPlayPause}
+              control={<Android12Switch defaultChecked />}
+              label=''
+            />
+          </Box>
+
+          <Box className='flex gap-1 justify-between items-center'>
+            <p style={{ color: theme.buttonColor }} className="  text-[12px] lg:text-[16px] max-[max-content]">MSG</p>
+            <FormControlLabel
+              // checked={isMusicPlaying}
+              // onChange={}
+              control={<Android12Switch defaultChecked />}
+              label=''
+            />
+          </Box>
         </div>
-        <div className=" w-full flex lg:justify-around justify-between gap-3">
+        <div className="col-span-5 grid grid-cols-5 gap-3 max-md:col-span-6 max-md:mt-2 items-center">
           {musics.map((music, index) => (
             <div
               key={`music-${index}`}
-              className=" flex flex-col items-center justify-center"
+              className="flex flex-col lg:items-center col-span-1 gap-2"
               onClick={() => dispatch(setChatAudio(music.source))} >
               <div
                 className={`  bg-[#ffffff] text-white text-[10px] p-2 border ${chatAudio === music.source
                   ? "border-[#0000FF]"
                   : "border-black"
-                  }  h-[45px] w-[45px] lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`}
-              >
-                <img src={music.icon} className=" w-[100%] h-auto" />
+                  } lg:h-[65px] lg:w-[65px] rounded-[3px] cursor-pointer flex items-center justify-center`} >
+                <img src={music.icon} className="  aspect-square" />
               </div>
               <p
-                className={`text-[10px] lg:text-[16px] ${chatAudio === music.source
-                  ? "text-[#0000FF]"
-                  : "text-black"
-                  } p-[4px] rounded-[2px] lg:border-none`}
-              >
+                style={{ color: chatAudio === music.source ? '#0000FF' : 'black' }}
+                className="text-[12px]">
                 {music.name}
               </p>
             </div>
           ))}
         </div>
-      </div>
+      </Box>
       <div className=" w-[100%] h-[1px] bg-gradient-to-r from-[#0000FF] to-transparent lg:hidden" />
       {/* ------------------------------- */}
-      <div className=" flex flex-col   rounded-[8px]">
-        <p className=" w-[18%] text-[12px] lg:text-[16px]">
+      <Box className='grid grid-cols-6  w-full items-center'>
+        <p style={{ color: theme.buttonColor }} className=" w-[18%] text-[12px] lg:text-[16px] col-span-1 max-md:col-span-6">
           Motion
         </p>
-        <div className=" flex w-full lg:justify-around  sm:gap-[40px] lg:gap-0 gap-3">
+        <div className=" grid w-full grid-cols-5 gap-3 col-span-5 max-md:col-span-6 max-md:mt-2">
           {motions.map((motion, index) => (
             <div
               key={`motion-${index}`}
-              className=" flex flex-col items-center"
-              onClick={() => dispatch(setWebsiteMotion(motion.motion))}
-            >
+              className="flex flex-col lg:items-center  col-span-1 gap-2"
+              onClick={() => dispatch(setWebsiteMotion(motion.motion))}>
               <div
                 className={` bg-[#white] ${settingsModal.motion === motion.motion
                   ? "text-[#0000FF] border border-[#0000FF]"
                   : "text-black border border-black"
-                  }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`}
-              >
+                  }  lg:text-[10px] p-[5px] lg:p-2 rounded-[3px] text-[8px] cursor-pointer`} >
                 <p>dont sin</p>
                 <p>dont sin</p>
                 <p>dont sin</p>
               </div>
-              <p className=" text-[10px] lg:text-[16px] p-[4px] rounded-[2px] lg:border-none">
+              <p
+                style={{ color: settingsModal.motion === motion.motion ? '#0000FF' : 'black' }}
+                className="text-[12px]">
                 {motion.name}
               </p>
             </div>
           ))}
 
         </div>
-        <div className="lg:hidden flex flex-col gap-[15px] mt-[15px] w-full">
-          <button
-            onClick={() => navigate("/profile")}
-            className=" uppercase font-jbm  p-[5px]   "
-            style={{
-              background:
-                theme.bgColor === "#ffffff"
-                  ? "black"
-                  : theme.bgColor,
-              color:
-                theme.bgColor === "#ffffff"
-                  ? "white"
-                  : theme.textColor,
-            }}
-          >
-            profile
-          </button>
-          <button
-            className={`  uppercase font-jbm  
+      </Box>
+
+      <div className="lg:hidden flex flex-col gap-[15px] mt-[15px] w-full">
+        <button
+          onClick={() => navigate("/profile")}
+          className=" uppercase font-jbm  p-[5px]   "
+          style={{
+            background:
+              theme.bgColor === "#ffffff"
+                ? "black"
+                : theme.bgColor,
+            color:
+              theme.bgColor === "#ffffff"
+                ? "white"
+                : theme.textColor,
+          }}
+        >
+          profile
+        </button>
+        <button
+          className={`  uppercase font-jbm  
                      `}
-            style={{
-              color:
-                theme.bgColor === "#ffffff"
-                  ? "#000000"
-                  : theme.bgColor,
-            }}
-          >
-            <Link to={"/"}>exit</Link>
-          </button>
-        </div>
+          style={{
+            color:
+              theme.bgColor === "#ffffff"
+                ? "#000000"
+                : theme.bgColor,
+          }}
+        >
+          <Link to={"/"}>exit</Link>
+        </button>
       </div>
     </motion.div>
   )

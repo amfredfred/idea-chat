@@ -9,7 +9,7 @@ import { Close, Send, Settings } from '@mui/icons-material'
 import { setChatSettingsOpen, setTypedMessage } from '../../libs/redux/slices/chat-slice'
 
 
-export default function DenChannel() {
+export default function DenChannel({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) {
 
   const totalWidth = window.innerWidth;
   const totalHeight = window.innerHeight;
@@ -92,7 +92,7 @@ export default function DenChannel() {
           </Box>
         </AnimatePresence>}
 
-        <ChatSettings />
+        <ChatSettings handleMusicPlayPause={handleMusicPlayPause} />
 
         <Box className={`p-[10px] sm:p-[15px] ${theme.bgColor === "#ffffff"
           ? "border border-black"
