@@ -1,5 +1,5 @@
 import { Box, Button } from '@mui/material';
-import { PieChart, Pie, Cell, Label, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Label } from 'recharts';
 import MapIcon from '@mui/icons-material/Map';
 import { useAppSelector } from '../../libs/redux/hooks';
 
@@ -17,7 +17,7 @@ export default function PumpHolders() {
 
     return (
         <Box className='flex-col gap-4 m-auto flex justify-center' width={'100%'} alignItems='center'>
-            <Box sx={{ width: '100%', backgroundColor: '#000000', borderRadius: '10px' }}>
+            <Box>
                 <PieChart width={300} height={300}>
                     <Pie
                         data={pieData}
@@ -52,7 +52,7 @@ export default function PumpHolders() {
                     {pieData?.map(data => (
                         <Box className='flex items-start justify-start gap-1'>
                             <Box className='w-3 aspect-square mt-1' sx={{ background: data.color }} />
-                            <Box display='flex'   flexDirection='column' >
+                            <Box display='flex' flexDirection='column' >
                                 <span className=' text-[14px]'>{data.label}</span>
                                 <span className=' text-[14px]'>{data.value}%</span>
                             </Box>
