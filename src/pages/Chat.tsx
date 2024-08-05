@@ -1,6 +1,5 @@
 import messageNotification from "../assets/message_notification.mp3";
 import Footer from "../components/chat/Footer";
-import useChat from "../hooks/useChat";
 import { Box } from "@mui/material";
 import { IChatStates } from "../common/types";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
@@ -20,6 +19,7 @@ const Chat = () => {
 
   const dispatch = useAppDispatch()
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const notificationRef = useRef<HTMLAudioElement | null>(null);
   const chatState = useAppSelector(state => state.chat.state)
   const isMusicPlaying = useAppSelector(state => state.chat.isMusicPlaying)
   const theme = useAppSelector((state) => state.theme.current);
@@ -59,7 +59,6 @@ const Chat = () => {
     handlePlay();
   }, [chatAudio, audioRef]);
 
-  const chat = useChat()
   return (
     <ContainedLayout>
       <Box
@@ -81,7 +80,7 @@ const Chat = () => {
           <Box alignItems='center' display='flex' margin='auto' flexDirection='column' gap='1rem' width={700} maxWidth={'100vw'} paddingBottom='1rem' >
             <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
               {chatState == 'DEN' ? <DenChannel handleMusicPlayPause={handleMusicPlayPause} /> : null}
-              <audio ref={chat.notificationRef} hidden>
+              <audio ref={notificationRef} hidden>
                 <source src={notificationSounds?.[chatState]} type="audio/mpeg" />
                 <source src={notificationSounds?.[chatState]} type="audio/mp3" />
                 Your browser does not support the audio element.

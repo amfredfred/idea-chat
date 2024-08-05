@@ -25,8 +25,7 @@ export default function PumpHolders() {
                         cy="50%"
                         innerRadius={90}
                         dataKey="value"
-                        endAngle={450}
-                    >
+                        endAngle={450}>
                         {pieData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
@@ -39,10 +38,7 @@ export default function PumpHolders() {
                                 fill: theme.textColor,
                                 width: 20
                             }}
-
-                            allowReorder="yes"
-
-                        >
+                            allowReorder="yes">
                             {`${dominantSection.value.toFixed(2)}%\n${dominantSection.label}`}
                         </Label>
                     </Pie>

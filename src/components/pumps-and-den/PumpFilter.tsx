@@ -1,7 +1,7 @@
 import { Box, Button, Input } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { IPumpRequestParams } from '../../common/types';
+import { IFilterTypes, IPumpRequestParams } from '../../common/types';
 import { setSearchParams } from '../../libs/redux/slices/pump-socket-slice';
 
 export default function PumpFilter({ onRequestClose }: { onRequestClose: () => void }) {
@@ -22,7 +22,7 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
         filter_migrated: []
     });
 
-    const handleInputChange = (name: 'holders' | 'liquidity' | 'volume' | 'marketCap' | 'devHolding', field: 'min' | 'max') => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (name: IFilterTypes['name'], field: 'min' | 'max') => (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value ? parseFloat(event.target.value) : null;
         setFilters(prevFilters => ({
             ...prevFilters,
