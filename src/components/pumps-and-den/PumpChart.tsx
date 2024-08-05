@@ -29,8 +29,6 @@ export default function PumpChart() {
         setValue(newValue);
     };
 
-    console.log({ pumpItem })
-
     return (
         <motion.div
             initial={{ x: 100, opacity: 0 }}

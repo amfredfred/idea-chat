@@ -2,18 +2,21 @@ import { Box } from '@mui/material'
 import { formatNumber } from '../../utils/format'
 import { useAppSelector } from '../../libs/redux/hooks'
 import { calculatePumpTokenChanges, shortenString } from '../../utils'
+import { ReactNode } from 'react'
+import CopyTextButton from '../buttons/CopyTextButton'
 
 export default function PumpStats() {
 
     const pumpItem = useAppSelector(state => state.pumpChart.pumpItem)
+    const theme = useAppSelector(state => state.theme.current.styles)
     const percentage_changes = calculatePumpTokenChanges(pumpItem as any);
 
-    const InfoItem = ({ left, right }: { left: string, right: string }) =>
+    const InfoItem = ({ left, right }: { left: ReactNode, right: ReactNode }) =>
         <Box display='flex' alignItems='center' justifyContent='space-between'>
-            <Box>
+            <Box style={{ color: theme.textColor }}>
                 {left}
             </Box>
-            <Box>
+            <Box style={{ color: theme.textColor }}>
                 {right}
             </Box>
         </Box>
@@ -22,25 +25,25 @@ export default function PumpStats() {
         <Box className='flex flex-col gap-4 '>
             <Box className='flex justify-between centre text-center'>
                 <Box className='flex flex-col'>
-                    <strong>5m</strong>
-                    <small>{percentage_changes.change5m}%</small>
+                    <strong style={{ color: theme.textColor }}>5m</strong>
+                    <small style={{ color: theme.textColor }}>{percentage_changes.change5m}%</small>
                 </Box>
                 <Box className='flex flex-col'>
-                    <strong>1h</strong>
-                    <small>{percentage_changes.change1h}%</small>
+                    <strong style={{ color: theme.textColor }}>1h</strong>
+                    <small style={{ color: theme.textColor }}>{percentage_changes.change1h}%</small>
                 </Box>
                 <Box className='flex flex-col'>
-                    <strong>6h</strong>
-                    <small>{percentage_changes.change6h}%</small>
+                    <strong style={{ color: theme.textColor }}>6h</strong>
+                    <small style={{ color: theme.textColor }}>{percentage_changes.change6h}%</small>
                 </Box>
                 <Box className='flex flex-col'>
-                    <strong>24h</strong>
-                    <small>{percentage_changes.change24h}%</small>
+                    <strong style={{ color: theme.textColor }}>24h</strong>
+                    <small style={{ color: theme.textColor }}>{percentage_changes.change24h}%</small>
                 </Box>
             </Box>
             <div className="bg-gradient-center-white"></div>
             <Box display='flex' className=' flex-col  gap-4' width={'100%'}>
-                <InfoItem left="ADDRESS" right={shortenString(String(pumpItem?.address))} />
+                <InfoItem left="ADDRESS" right={<CopyTextButton buttonText={shortenString(String(pumpItem?.address))} textToCopy={String(pumpItem?.address)} />} />
                 <div className="bg-gradient-center-white"></div>
                 <InfoItem left="PRICE" right={`$${formatNumber(pumpItem?.price ?? 0)}`} />
                 <div className="bg-gradient-center-white"></div>

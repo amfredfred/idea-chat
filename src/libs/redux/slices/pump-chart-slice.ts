@@ -29,7 +29,6 @@ export const fetchPumpTokenDetails = createAsyncThunk(
     async (tokenAddress: string, thumApi) => {
         try {
             const res = await axios.get<{ token_details: PumpTokenItem }>(`${API_URL}/fetch-token-details?mint=${tokenAddress}`);
-            console.log(res.data)
             return res.data.token_details;
         } catch (error) {
             return thumApi.rejectWithValue(error)
@@ -49,8 +48,7 @@ const pumpChartSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchPumpTokenDetails.pending, (state, { payload }) => {
-            console.log({ payload })
+        builder.addCase(fetchPumpTokenDetails.pending, (state) => {
             state.isPumpChartShown = false
             state.status = 'pending';
         });
@@ -59,11 +57,9 @@ const pumpChartSlice = createSlice({
             state.isPumpChartShown = true
             // state.data = action.payload;
             state.pumpItem = action.payload
-            console.log(action)
         });
         builder.addCase(fetchPumpTokenDetails.rejected, (state, action) => {
             state.status = 'error';
-            console.log({ action })
             // state.isPumpChartShown = true
             state.message = action.error.message || 'Failed to fetch historical data';
         });

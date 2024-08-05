@@ -52,7 +52,6 @@ export function calculatePercentageChange(currentPrice: number, pastPrice: numbe
     return ((currentPrice - pastPrice) / pastPrice) * 100;
 }
 
-
 export function calculatePumpTokenChanges(token: PumpTokenItem): { change5m: string, change1h: string, change6h: string, change24h: string } {
     const change5m = formatNumber(calculatePercentageChange(token.price, token.price_5m));
     const change1h = formatNumber(calculatePercentageChange(token.price, token.price_1h));
