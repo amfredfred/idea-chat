@@ -1,4 +1,4 @@
-import { Box, Divider } from '@mui/material'
+import { Box } from '@mui/material'
 import { formatNumber } from '../../utils/format'
 import { useAppSelector } from '../../libs/redux/hooks'
 import { shortenString } from '../../utils'
@@ -18,20 +18,41 @@ export default function PumpStats() {
         </Box>
 
     return (
-        <Box display='flex' className=' flex-col  gap-4' width={'100%'}>
-            <InfoItem left="ADDRESS" right={shortenString(String(pumpItem?.address))} />
-            <Divider />
-            <InfoItem left="PRICE" right={`$${formatNumber(pumpItem?.price ?? 0)}`} />
-            <Divider />
-            <InfoItem left="MCAP" right={`$${formatNumber(pumpItem?.market_cap ?? 0)}`} />
-            <Divider />
-            <InfoItem left="LIQUIDITY" right={formatNumber(Number(pumpItem?.total_supply))} />
-            <Divider />
-            <InfoItem left="VOLUME" right={`${formatNumber(pumpItem?.volume_24h ?? 0)}`} />
-            <Divider />
-            <InfoItem left="HOLDERS" right={`${formatNumber(pumpItem?.holder_count ?? 0)}`} />
-            <Divider />
-            <InfoItem left="DEV" right="LOCKED" />
+        <Box className='flex flex-col gap-4 '>
+            <Box className='flex justify-between centre text-center'>
+                <Box className='flex flex-col'>
+                    <strong>5m</strong>
+                    <p>{formatNumber(pumpItem?.volume_5m ?? 0)}</p>
+                </Box>
+                <Box className='flex flex-col'>
+                    <strong>1h</strong>
+                    <p>{formatNumber(pumpItem?.volume_1h ?? 0)}</p>
+                </Box>
+                <Box className='flex flex-col'>
+                    <strong>6h</strong>
+                    <p>{formatNumber(pumpItem?.volume_6h ?? 0)}</p>
+                </Box>
+                <Box className='flex flex-col'>
+                    <strong>24h</strong>
+                    <p>{formatNumber(pumpItem?.volume_24h ?? 0)}</p>
+                </Box>
+            </Box>
+            <div className="bg-gradient-center-white"></div>
+            <Box display='flex' className=' flex-col  gap-4' width={'100%'}>
+                <InfoItem left="ADDRESS" right={shortenString(String(pumpItem?.address))} />
+                <div className="bg-gradient-center-white"></div>
+                <InfoItem left="PRICE" right={`$${formatNumber(pumpItem?.price ?? 0)}`} />
+                <div className="bg-gradient-center-white"></div>
+                <InfoItem left="MCAP" right={`$${formatNumber(pumpItem?.market_cap ?? 0)}`} />
+                <div className="bg-gradient-center-white"></div>
+                <InfoItem left="LIQUIDITY" right={formatNumber(Number(pumpItem?.total_supply))} />
+                <div className="bg-gradient-center-white"></div>
+                <InfoItem left="VOLUME" right={`${formatNumber(pumpItem?.volume_24h ?? 0)}`} />
+                <div className="bg-gradient-center-white"></div>
+                <InfoItem left="HOLDERS" right={`${formatNumber(pumpItem?.holder_count ?? 0)}`} />
+                <div className="bg-gradient-center-white"></div>
+                <InfoItem left="DEV" right="LOCKED" />
+            </Box>
         </Box>
     )
 }
