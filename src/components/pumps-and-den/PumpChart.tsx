@@ -1,5 +1,4 @@
 import { Box, Button, Tab } from "@mui/material";
-import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setPumpChartShown } from "../../libs/redux/slices/pump-chart-slice";
 import { ArrowBack } from "@mui/icons-material";
@@ -15,6 +14,7 @@ import PumpfunButton from "../buttons/PumpfunButton";
 import React, { useState } from "react";
 import PumpHolders from "./PumpHolders";
 import PumpStats from "./PumpStats";
+import PumpChartEmbed from "./PumpChartEmbed";
 
 export default function PumpChart() {
 
@@ -69,12 +69,14 @@ export default function PumpChart() {
                         </Box>
                     </Box>
                 </Box>
-                <Box className="w-full lg:h-[390px] overflow-hidden aspect-video" border='solid thin white'>
-                    <AdvancedRealTimeChart theme="dark" autosize />
+                <Box className="w-full lg:h-[390px] overflow-hidden aspect-video sm:border border-gray-500" >
+                    <PumpChartEmbed src={`https://gmgn.ai/sol/token/${pumpItem?.address}?embled=1`}    />
                 </Box>
                 <Box className="w-full">
                     <Box className="grid grid-cols-3 gap-4">
-                        <Button variant="outlined" className="flex align-middle gap-2 justify-center" onClick={() => dispatch(setPumpChartShown(false))}>
+                        <Button variant="outlined" className="flex align-middle gap-2 justify-center"
+                            style={{ alignItems: 'center', borderRadius: 0, overflow: 'hidden', color: theme.textColor, borderColor: theme.textColor, }}
+                            onClick={() => dispatch(setPumpChartShown(false))}>
                             <ArrowBack /> Back
                         </Button>
                         <Button style={{ color: theme.buttonColor, background: theme.textColor }} disableElevation variant="contained" className="flex col-span-2 align-middle gap-2 justify-center" onClick={atClickBuy}>
@@ -83,7 +85,7 @@ export default function PumpChart() {
                     </Box>
                 </Box>
             </Box>
-            <Box className="p-4 md:col-span-1 lg:w-full lg:h-full border-gray-500 border "   borderBottom={0} >
+            <Box className="p-4 md:col-span-1 lg:w-full lg:h-full border-gray-500 border " borderBottom={0} >
                 <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={value} >
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

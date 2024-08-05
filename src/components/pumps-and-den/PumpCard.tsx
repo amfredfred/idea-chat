@@ -74,7 +74,7 @@ export default function PumpCard(pump: PumpTokenItem) {
 
             // disabled={pumpChartStatus === 'pending'}
 
-            className=' bg-red-400 flex' variant="outlined"
+            className='flex' variant="outlined"
             style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden', color: theme.textColor, borderColor: theme.textColor, }} >
             Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}
           </Button>
