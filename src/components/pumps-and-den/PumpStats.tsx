@@ -41,20 +41,20 @@ export default function PumpStats() {
                     <small style={{ color: theme.textColor }}>{percentage_changes.change24h}%</small>
                 </Box>
             </Box>
-            <div className="bg-gradient-center-white"></div>
+            <div style={{ backgroundImage: `linear-gradient(to right, transparent, ${theme.textColor}, transparent)`, height: 1 }}></div>
             <Box display='flex' className=' flex-col  gap-4' width={'100%'}>
                 <InfoItem left="ADDRESS" right={<CopyTextButton buttonText={shortenString(String(pumpItem?.address))} textToCopy={String(pumpItem?.address)} />} />
-                <div className="bg-gradient-center-white"></div>
+                <div style={{ backgroundImage: `linear-gradient(to right, transparent, ${theme.textColor}, transparent)`, height: 1 }}></div>
                 <InfoItem left="PRICE" right={`$${formatNumber(pumpItem?.price ?? 0)}`} />
-                <div className="bg-gradient-center-white"></div>
+                <div style={{ backgroundImage: `linear-gradient(to right, transparent, ${theme.textColor}, transparent)`, height: 1 }}></div>
                 <InfoItem left="MCAP" right={`$${formatNumber(pumpItem?.market_cap ?? 0)}`} />
-                <div className="bg-gradient-center-white"></div>
+                <div style={{ backgroundImage: `linear-gradient(to right, transparent, ${theme.textColor}, transparent)`, height: 1 }}></div>
                 <InfoItem left="LIQUIDITY" right={`$${formatNumber(Number(pumpItem?.pool_info.liquidity))}`} />
-                <div className="bg-gradient-center-white"></div>
+                <div style={{ backgroundImage: `linear-gradient(to right, transparent, ${theme.textColor}, transparent)`, height: 1 }}></div>
                 <InfoItem left="VOLUME" right={`$${formatNumber(pumpItem?.volume_24h ?? 0)}`} />
-                <div className="bg-gradient-center-white"></div>
+                <div style={{ backgroundImage: `linear-gradient(to right, transparent, ${theme.textColor}, transparent)`, height: 1 }}></div>
                 <InfoItem left="HOLDERS" right={`${formatNumber(pumpItem?.holder_count ?? 0)}`} />
-                <div className="bg-gradient-center-white"></div>
+                <div style={{ backgroundImage: `linear-gradient(to right, transparent, ${theme.textColor}, transparent)`, height: 1 }}></div>
                 <InfoItem left="DEV" right="LOCKED" />
             </Box>
         </Box>

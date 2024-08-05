@@ -83,7 +83,7 @@ export default function PumpChart() {
                     </Box>
                 </Box>
             </Box>
-            <Box className="p-4 md:col-span-1 lg:w-full lg:h-full " border='solid thin white' borderBottom={0} >
+            <Box className="p-4 md:col-span-1 lg:w-full lg:h-full border-gray-500 border "   borderBottom={0} >
                 <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={value} >
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
