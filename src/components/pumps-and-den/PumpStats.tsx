@@ -22,19 +22,19 @@ export default function PumpStats() {
             <Box className='flex justify-between centre text-center'>
                 <Box className='flex flex-col'>
                     <strong>5m</strong>
-                    <p>{formatNumber(pumpItem?.volume_5m ?? 0)}</p>
+                    <small>{formatNumber(pumpItem?.volume_5m ?? 0)}</small>
                 </Box>
                 <Box className='flex flex-col'>
                     <strong>1h</strong>
-                    <p>{formatNumber(pumpItem?.volume_1h ?? 0)}</p>
+                    <small>{formatNumber(pumpItem?.volume_1h ?? 0)}</small>
                 </Box>
                 <Box className='flex flex-col'>
                     <strong>6h</strong>
-                    <p>{formatNumber(pumpItem?.volume_6h ?? 0)}</p>
+                    <small>{formatNumber(pumpItem?.volume_6h ?? 0)}</small>
                 </Box>
                 <Box className='flex flex-col'>
                     <strong>24h</strong>
-                    <p>{formatNumber(pumpItem?.volume_24h ?? 0)}</p>
+                    <small>{formatNumber(pumpItem?.volume_24h ?? 0)}</small>
                 </Box>
             </Box>
             <div className="bg-gradient-center-white"></div>
