@@ -1,39 +1,68 @@
-import { Map } from '@mui/icons-material'
-import { Box, Button } from '@mui/material'
-import { PieChart } from '@mui/x-charts'
-import { useAppSelector } from '../../libs/redux/hooks'
+import { Box, Button } from '@mui/material';
+import { PieChart, Pie, Cell, Label, Legend } from 'recharts';
+import MapIcon from '@mui/icons-material/Map';
+import { useAppSelector } from '../../libs/redux/hooks';
 
 export default function PumpHolders() {
-
-    const pumpHolders = useAppSelector(app => app.pumpChart.pumpItem?.holders_info)
+    const pumpHolders = useAppSelector(state => state.pumpChart.pumpItem?.holders_info);
+    const theme = useAppSelector(state => state.theme.current.styles)
 
     const pieData = [
-        { value: pumpHolders?.top10_holders_percentage.data ?? 0, label: 'TOP 10', color: '#00FF00', },
-        { value: pumpHolders?.top50_holders_percentage.data ?? 0, label: 'TOP 50', color: '#FFFFFF' },
-        { value: pumpHolders?.others_holders_percentage.data ?? 0, label: 'OTHERS', color: '#F7FF05' }
-    ]
+        { value: Number(pumpHolders?.top10_holders_percentage.data ?? 0), label: 'TOP 10', color: '#00FF00' },
+        { value: Number(pumpHolders?.top50_holders_percentage.data ?? 0), label: 'TOP 50', color: '#FFFFFF' },
+        { value: Number(pumpHolders?.others_holders_percentage.data ?? 0), label: 'OTHERS', color: '#F7FF05' }
+    ];
+
+    const dominantSection = pieData.reduce((max, data) => (data.value > max.value ? data : max), pieData[0]);
 
     return (
-        <Box className=' flex-col  gap-4 m-auto  flex justify-center  ' width={'100%'} alignItems='center'>
-            <Box sx={{ width: '100%' }}>
-                <PieChart
-                    height={300}
-                    className=' m-auto   flex centre justify-center'
-                    series={[
-                        {
-                            startAngle: -280,
-                            data: pieData,
-                            innerRadius: 90,
-                            arcLabel: (params) => params.label ?? '',
-                            cx: 150,
-                            cy: 150,
-                        },
-                    ]}
-                />
+        <Box className='flex-col gap-4 m-auto flex justify-center' width={'100%'} alignItems='center'>
+            <Box sx={{ width: '100%', backgroundColor: '#000000', borderRadius: '10px' }}>
+                <PieChart width={300} height={300}>
+                    <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={90}
+                        dataKey="value"
+                        endAngle={450}
+                    >
+                        {pieData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                        <Label
+                            position={'center'}
+                            style={{
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                fill: theme.textColor,
+                                width: 20
+                            }}
+
+                            allowReorder="yes"
+
+                        >
+                            {`${dominantSection.value.toFixed(2)}%\n${dominantSection.label}`}
+                        </Label>
+                    </Pie>
+
+                </PieChart>
+                <Box className='flex gap-2 items-center justify-evenly '>
+                    {pieData?.map(data => (
+                        <Box className='flex items-start justify-start gap-1'>
+                            <Box className='w-3 aspect-square mt-1' sx={{ background: data.color }} />
+                            <Box display='flex'   flexDirection='column' >
+                                <span className=' text-[14px]'>{data.label}</span>
+                                <span className=' text-[14px]'>{data.value}%</span>
+                            </Box>
+                        </Box>
+                    ))}
+                </Box>
             </Box>
-            <Button variant="outlined" className="flex align-middle gap-2 justify-center  w-full"   >
-                <Map /> View on bubblemaps
+            <Button variant="outlined" className="flex align-middle gap-2 justify-center w-full" sx={{ color: theme.textColor, borderColor: theme.textColor }}>
+                <MapIcon /> View on bubblemaps
             </Button>
         </Box>
-    )
+    );
 }
