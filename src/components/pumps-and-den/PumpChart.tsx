@@ -24,6 +24,8 @@ export default function PumpChart() {
     const atClickBuy = () => dispatch(setSelectedtokenToReceive(pumpItem));
     const [value, setValue] = useState('1');
 
+    console.log(pumpItem?.holders_info)
+
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         event
         setValue(newValue);

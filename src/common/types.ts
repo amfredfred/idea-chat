@@ -1,3 +1,20 @@
+interface TokenHolderPercentageData {
+  description: string;
+  data: number;
+}
+
+interface TokenHolderSummary {
+  top10_with_percentage: TokenHolderPercentageData;
+  top50_with_percentage: TokenHolderPercentageData;
+  others_with_percentage: TokenHolderPercentageData;
+  top10_supply_percentage: TokenHolderPercentageData;
+  top50_supply_percentage: TokenHolderPercentageData;
+  others_supply_percentage: TokenHolderPercentageData;
+  top10_holders_percentage: TokenHolderPercentageData;
+  top50_holders_percentage: TokenHolderPercentageData;
+  others_holders_percentage: TokenHolderPercentageData;
+}
+
 export type PumpTokenItem = {
   address: string;
   symbol: string;
@@ -128,6 +145,7 @@ export type PumpTokenItem = {
   dexscr_ad: number;
   dexscr_update_link: number;
   cto_flag: number;
+  holders_info: TokenHolderSummary
 }
 
 
