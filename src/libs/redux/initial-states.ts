@@ -1,12 +1,12 @@
 import SolanaLogo from '../../assets/solana-sol-logo.png'
 import { Connection } from "@solana/web3.js";
 import { WalletContextState } from "@solana/wallet-adapter-react";
-import { IPumpToken } from '../../common/types';
+import { PumpTokenItem } from '../../common/types';
 
 export interface IApp {
     isInitLoading: boolean,
     isLoading: boolean,
-    
+
 }
 
 export interface SwapInfo {
@@ -77,13 +77,13 @@ export interface ISwapSettings {
 
 
 export interface TokenSwapState {
-    tokenToSend: IPumpToken | undefined;
-    tokenToReceive: IPumpToken | undefined;
+    tokenToSend: PumpTokenItem | undefined;
+    tokenToReceive: PumpTokenItem | undefined;
     amountToSend: number;
     amountToReceive: number;
     loading: boolean;
     error: string | null;
-    tokensList: IPumpToken[],
+    tokensList: PumpTokenItem[],
     isVisible: boolean
 
     fetchTokenRateState: 'error' | 'success' | 'pending' | 'idle'

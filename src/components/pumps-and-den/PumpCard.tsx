@@ -5,10 +5,10 @@ import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-sl
 import { formatNumber } from "../../utils/format";
 import { Box, Button, CircularProgress, LinearProgress } from "@mui/material";
 import { CandlestickChartRounded } from "@mui/icons-material";
-import { fetchHistoricalData } from "../../libs/redux/slices/pump-chart-slice";
-import { IPumpToken } from "../../common/types";
+import { fetchPumpTokenDetails } from "../../libs/redux/slices/pump-chart-slice";
+import { PumpTokenItem } from "../../common/types";
 
-export default function PumpCard(pump: IPumpToken) {
+export default function PumpCard(pump: PumpTokenItem) {
   const websiteTheme = useRecoilValue(websiteThemeState);
 
   // const pumpProgress = pump?.progress?.toFixed?.(1)
@@ -19,7 +19,7 @@ export default function PumpCard(pump: IPumpToken) {
   const pumpItem = useAppSelector(state => state.pumpChart.pumpItem)
 
   const handleLoadAndShowChart = () => {
-    dispatch(fetchHistoricalData(pump.address))
+    dispatch(fetchPumpTokenDetails(pump.address))
   }
 
   return (
@@ -45,20 +45,20 @@ export default function PumpCard(pump: IPumpToken) {
           </div>
         </div>
 
-        <LinearProgress variant="determinate" style={{ color: '#00FF00', height: '1rem', borderRadius: '50px' }} value={Number(pump?.progress ?? 1) * 100} />
+        <LinearProgress variant="determinate" style={{ color: '#00FF00', height: '1rem', borderRadius: '50px' }} value={Number(pump?.price ?? 1) * 100} />
 
         <div className=" flex justify-between w-[100%] mx-auto">
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">mcap</p>
-            <p className=" text-[16px] ">${formatNumber(pump?.marketCap)}</p>
+            <p className=" text-[16px] ">${formatNumber(pump?.market_cap)}</p>
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">holders</p>
-            <p className=" text-[16px] ">{formatNumber(pump?.holdersCount ?? 0)}</p>
+            <p className=" text-[16px] ">{formatNumber(pump?.holder_count ?? 0)}</p>
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">volume</p>
-            <p className=" text-[16px] ">${formatNumber(pump?.marketTradingVolume) ?? 0}</p>
+            <p className=" text-[16px] ">${formatNumber(pump?.buy_volume_24h) ?? 0}</p>
           </div>
           <div className=" flex flex-col  text-center">
             <p className=" text-[12px] ">dev</p>
@@ -82,8 +82,8 @@ export default function PumpCard(pump: IPumpToken) {
             style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden' }} >
             Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}
           </Button>
-          <Button onClick={Number(pump?.progress ?? 1) >= 1 ? atClickBuy : atClickApeBlindly} title="Hello wolr" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none' }} >
-            {Number(pump?.progress ?? 1) >= 1 ? 'Buy' : 'APE BLINDLY'}
+          <Button onClick={Number(pump?.price ?? 1) >= 1 ? atClickBuy : atClickApeBlindly} title="Hello wolr" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none' }} >
+            {Number(pump?.price ?? 1) >= 1 ? 'Buy' : 'APE BLINDLY'}
           </Button>
         </Box>
       </div>

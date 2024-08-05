@@ -1,32 +1,135 @@
-export type IPumpToken = {
-  name: string;
-  marketCap: number;
-  marketTradingVolume: number;
-  holdersCount: number;
-  tradingVolume: number;
-  devStatus: string;
-  twitter: string;
-  telegram: string;
-  website: string;
+export type PumpTokenItem = {
   address: string;
-  created_timestamp: number;
-  logo: string;
-  progress: number;
-  decimals: number;
   symbol: string;
-}
-
-export type IPumpTokenChartDetail = IPumpToken & {
-  description: string;
+  name: string;
+  decimals: number;
   price: number;
-  totalSupply: number
-
-  volume1h: number
-  volume1m: number
-  volume5m: number
-  volume6h: number
-  volume24h: number
+  logo: string;
+  price_1m: number;
+  price_5m: number;
+  price_1h: number;
+  price_6h: number;
+  price_24h: number;
+  volume_24h: number;
+  swaps_5m: number;
+  swaps_1h: number;
+  swaps_6h: number;
+  swaps_24h: number;
+  liquidity: number;
+  max_supply: number;
+  total_supply: number;
+  holder_count: number;
+  biggest_pool_address: string;
+  chain: string;
+  creation_timestamp: number;
+  open_timestamp: number;
+  circulating_supply: number | null;
+  high_price: number | null;
+  high_price_timestamp: number | null;
+  low_price: number | null;
+  low_price_timestamp: number | null;
+  buys_1m: number;
+  sells_1m: number;
+  swaps_1m: number;
+  volume_1m: number;
+  buy_volume_1m: number;
+  sell_volume_1m: number;
+  net_in_volume_1m: number;
+  buys_5m: number;
+  sells_5m: number;
+  volume_5m: number;
+  buy_volume_5m: number;
+  sell_volume_5m: number;
+  net_in_volume_5m: number;
+  buys_1h: number;
+  sells_1h: number;
+  volume_1h: number;
+  buy_volume_1h: number;
+  sell_volume_1h: number;
+  net_in_volume_1h: number;
+  buys_6h: number;
+  sells_6h: number;
+  volume_6h: number;
+  buy_volume_6h: number;
+  sell_volume_6h: number;
+  net_in_volume_6h: number;
+  buys_24h: number;
+  sells_24h: number;
+  buy_volume_24h: number;
+  sell_volume_24h: number;
+  net_in_volume_24h: number;
+  fdv: number;
+  market_cap: number;
+  circulating_market_cap: number | null;
+  link: {
+    geckoterminal: string;
+    gmgn: string;
+  };
+  social_links: {
+    id: number;
+    chain: string;
+    address: string;
+    twitter_username: string | null;
+    website: string;
+    telegram: string;
+    bitbucket: string | null;
+    discord: string | null;
+    description: string;
+    facebook: string | null;
+    github: string | null;
+    instagram: string | null;
+    linkedin: string | null;
+    medium: string | null;
+    reddit: string | null;
+    tiktok: string | null;
+    youtube: string | null;
+    updated_at: number;
+  };
+  hot_level: number;
+  is_show_alert: boolean;
+  buy_tax: number | null;
+  sell_tax: number | null;
+  is_honeypot: number | null;
+  renounced: number | null;
+  top_10_holder_rate: number;
+  renounced_mint: number;
+  renounced_freeze_account: number;
+  burn_ratio: string;
+  burn_status: string;
+  pool_info: {
+    address: string;
+    quote_address: string;
+    quote_symbol: string;
+    liquidity: number;
+    base_reserve: string;
+    quote_reserve: string;
+    initial_liquidity: number;
+    initial_base_reserve: string;
+    initial_quote_reserve: string;
+    creation_timestamp: number;
+    base_reserve_value: number;
+    quote_reserve_value: number;
+  };
+  launchpad: string;
+  launchpad_status: number;
+  rug_ratio: number | null;
+  holder_rugged_num: number | null;
+  holder_token_num: number | null;
+  rugged_tokens: any[];
+  creator_address: string;
+  creator_balance: number;
+  creator_token_balance: string;
+  creator_close: boolean;
+  creator_percentage: string;
+  creator_token_status: string;
+  dev_token_burn_amount: string;
+  dev_token_burn_ratio: number;
+  twitter_name_change_history: any[];
+  dexscr_ad: number;
+  dexscr_update_link: number;
+  cto_flag: number;
 }
+
 
 export type IFilterTypes = {
   min: number | null;
@@ -48,8 +151,8 @@ export type PumpSocketSend = {
 
 export type PumpSocketReceived = {
   pumpList: {
-    pump: IPumpToken[],
-    migrated: IPumpToken[]
+    pump: PumpTokenItem[],
+    migrated: PumpTokenItem[]
   };
 }
 
@@ -67,8 +170,8 @@ export type UseSocketReturn<T = any> = {
 export type ITokenSwapInputProps = {
   side: 'receive' | 'pay';
   onChange: (value: number | string) => void;
-  selectedToken: IPumpToken | undefined;
-  onTokenSelect: (token: IPumpToken) => void;
+  selectedToken: PumpTokenItem | undefined;
+  onTokenSelect: (token: PumpTokenItem) => void;
   amount?: string;
   readonly?: boolean
   value: number | string

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import {  IPumpTokenChartDetail } from "../../../common/types";
+import { PumpTokenItem } from "../../../common/types";
 
 interface HistoricalDataPoint {
     timestamp: number;
@@ -12,7 +12,7 @@ interface PumpChartState {
     status: 'idle' | 'pending' | 'error' | 'success'
     message: string | null,
     isPumpChartShown: boolean
-    pumpItem: IPumpTokenChartDetail | null
+    pumpItem: PumpTokenItem | null
 }
 
 const initialState: PumpChartState = {
@@ -23,15 +23,17 @@ const initialState: PumpChartState = {
     pumpItem: null
 };
 
-
-export const fetchHistoricalData = createAsyncThunk(
-    'pump_chart/fetchHistoricalData',
+const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
+export const fetchPumpTokenDetails = createAsyncThunk(
+    'pump_chart/fetchPumpTokenDetails',
     async (tokenAddress: string, thumApi) => {
-        const response = await axios.get(`https://api.helius.com/v0/historical/${tokenAddress}`);
-        thumApi
-
-        // IPumpTokenChartDetail
-        return response.data;
+        try {
+            const res = await axios.get<{ token_details: PumpTokenItem }>(`${API_URL}/fetch-token-details?mint=${tokenAddress}`);
+            console.log(res.data)
+            return res.data.token_details;
+        } catch (error) {
+            return thumApi.rejectWithValue(error)
+        }
     }
 );
 
@@ -44,27 +46,31 @@ const pumpChartSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchHistoricalData.pending, (state, { payload }) => {
+        builder.addCase(fetchPumpTokenDetails.pending, (state, { payload }) => {
             console.log({ payload })
             state.isPumpChartShown = false
             state.status = 'pending';
         });
-        builder.addCase(fetchHistoricalData.fulfilled, (state, action: PayloadAction<HistoricalDataPoint[]>) => {
+        builder.addCase(fetchPumpTokenDetails.fulfilled, (state, action: PayloadAction<PumpTokenItem>) => {
             state.status = 'success';
             state.isPumpChartShown = true
-            state.data = action.payload;
+            // state.data = action.payload;
+            state.pumpItem = action.payload
+
+            console.log(action)
 
             // state.pumpItem = 
         });
-        builder.addCase(fetchHistoricalData.rejected, (state, action) => {
+        builder.addCase(fetchPumpTokenDetails.rejected, (state, action) => {
             state.status = 'error';
-            state.isPumpChartShown = true
+            console.log({ action })
+            // state.isPumpChartShown = true
             state.message = action.error.message || 'Failed to fetch historical data';
         });
     },
 });
 
-export const { 
+export const {
     setPumpChartShown
 } = pumpChartSlice.actions
 
