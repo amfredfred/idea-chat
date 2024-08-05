@@ -1,5 +1,3 @@
-import { websiteThemeState } from "../../atoms/website-theme";
-import { useRecoilValue } from "recoil";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-slice";
 import { formatNumber } from "../../utils/format";
@@ -9,8 +7,7 @@ import { fetchPumpTokenDetails, setPumpTokenItem } from "../../libs/redux/slices
 import { PumpTokenItem } from "../../common/types";
 
 export default function PumpCard(pump: PumpTokenItem) {
-  const websiteTheme = useRecoilValue(websiteThemeState);
-
+  const theme = useAppSelector(state => state.theme.current.styles);
   const dispatch = useAppDispatch()
   const atClickBuy = () => dispatch(setSelectedtokenToReceive(pump))
   const pumpChartStatus = useAppSelector(state => state.pumpChart.status);
@@ -25,8 +22,8 @@ export default function PumpCard(pump: PumpTokenItem) {
     <div
       className="border-[1px] rounded-[4px] border-white font-jbm w-full mx-auto isolate "
       style={{
-        borderColor: websiteTheme.textColor,
-        color: websiteTheme.textColor,
+        borderColor: theme.textColor,
+        color: theme.textColor,
       }}
     >
       <div className=" flex flex-col gap-[20px] p-[10px] ">
@@ -44,7 +41,7 @@ export default function PumpCard(pump: PumpTokenItem) {
           </div>
         </div>
 
-        <LinearProgress variant="determinate" style={{ color: '#00FF00', height: '1rem', borderRadius: '50px' }} value={Number(pump?.price ?? 1) * 100} />
+        <LinearProgress  variant="determinate" style={{ background: theme.textColor, height: '1rem', borderRadius: '50px', border:'solid thin' }} value={Number(pump?.price ?? 1) * 100} />
 
         <div className=" flex justify-between w-[100%] mx-auto">
           <div className=" flex flex-col  text-center">
@@ -68,7 +65,7 @@ export default function PumpCard(pump: PumpTokenItem) {
         <div
           className=" h-[1px] w-[100%] mx-auto"
           style={{
-            background: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.textColor}, ${websiteTheme.bgColor})`,
+            background: `linear-gradient(to right, ${theme.bgColor}, ${theme.textColor}, ${theme.bgColor})`,
           }}
         />
 
@@ -78,10 +75,10 @@ export default function PumpCard(pump: PumpTokenItem) {
             // disabled={pumpChartStatus === 'pending'}
 
             className=' bg-red-400 flex' variant="outlined"
-            style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden' }} >
+            style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden', color: theme.textColor, borderColor: theme.textColor, }} >
             Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}
           </Button>
-          <Button onClick={atClickBuy} title="Hello wolr" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none' }} >
+          <Button onClick={atClickBuy} title="Buy" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none', background: theme.textColor,color:theme.bgColor }} >
             Buy
           </Button>
         </Box>
