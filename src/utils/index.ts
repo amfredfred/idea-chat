@@ -1,4 +1,6 @@
 import { MutableRefObject } from "react";
+import { PumpTokenItem } from "../common/types";
+import { formatNumber } from "./format";
 
 export const promise = (seconds: number = 3) => new Promise((resolved) => setTimeout(resolved, seconds * 1000))
 export const parseEther = (amount: number, decimals: number) => amount / 10 ** decimals;
@@ -41,3 +43,21 @@ export const checkOverlap = (rect1: DOMRect, rect2: DOMRect): boolean => {
         rect1.top > rect2.bottom
     );
 };
+
+
+export function calculatePercentageChange(currentPrice: number, pastPrice: number | null): number {
+    if (pastPrice === null || pastPrice === 0) {
+        return 0;
+    }
+    return ((currentPrice - pastPrice) / pastPrice) * 100;
+}
+
+
+export function calculatePumpTokenChanges(token: PumpTokenItem): { change5m: string, change1h: string, change6h: string, change24h: string } {
+    const change5m = formatNumber(calculatePercentageChange(token.price, token.price_5m));
+    const change1h = formatNumber(calculatePercentageChange(token.price, token.price_1h));
+    const change6h = formatNumber(calculatePercentageChange(token.price, token.price_6h));
+    const change24h = formatNumber(calculatePercentageChange(token.price, token.price_24h));
+
+    return { change5m, change1h, change6h, change24h };
+}

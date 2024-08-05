@@ -1,11 +1,12 @@
 import { Box } from '@mui/material'
 import { formatNumber } from '../../utils/format'
 import { useAppSelector } from '../../libs/redux/hooks'
-import { shortenString } from '../../utils'
+import { calculatePumpTokenChanges, shortenString } from '../../utils'
 
 export default function PumpStats() {
 
     const pumpItem = useAppSelector(state => state.pumpChart.pumpItem)
+    const percentage_changes = calculatePumpTokenChanges(pumpItem as any);
 
     const InfoItem = ({ left, right }: { left: string, right: string }) =>
         <Box display='flex' alignItems='center' justifyContent='space-between'>
@@ -22,19 +23,19 @@ export default function PumpStats() {
             <Box className='flex justify-between centre text-center'>
                 <Box className='flex flex-col'>
                     <strong>5m</strong>
-                    <small>{formatNumber(pumpItem?.volume_5m ?? 0)}</small>
+                    <small>{percentage_changes.change5m}%</small>
                 </Box>
                 <Box className='flex flex-col'>
                     <strong>1h</strong>
-                    <small>{formatNumber(pumpItem?.volume_1h ?? 0)}</small>
+                    <small>{percentage_changes.change1h}%</small>
                 </Box>
                 <Box className='flex flex-col'>
                     <strong>6h</strong>
-                    <small>{formatNumber(pumpItem?.volume_6h ?? 0)}</small>
+                    <small>{percentage_changes.change6h}%</small>
                 </Box>
                 <Box className='flex flex-col'>
                     <strong>24h</strong>
-                    <small>{formatNumber(pumpItem?.volume_24h ?? 0)}</small>
+                    <small>{percentage_changes.change24h}%</small>
                 </Box>
             </Box>
             <div className="bg-gradient-center-white"></div>
@@ -45,9 +46,9 @@ export default function PumpStats() {
                 <div className="bg-gradient-center-white"></div>
                 <InfoItem left="MCAP" right={`$${formatNumber(pumpItem?.market_cap ?? 0)}`} />
                 <div className="bg-gradient-center-white"></div>
-                <InfoItem left="LIQUIDITY" right={formatNumber(Number(pumpItem?.total_supply))} />
+                <InfoItem left="LIQUIDITY" right={`$${formatNumber(Number(pumpItem?.pool_info.liquidity))}`} />
                 <div className="bg-gradient-center-white"></div>
-                <InfoItem left="VOLUME" right={`${formatNumber(pumpItem?.volume_24h ?? 0)}`} />
+                <InfoItem left="VOLUME" right={`$${formatNumber(pumpItem?.volume_24h ?? 0)}`} />
                 <div className="bg-gradient-center-white"></div>
                 <InfoItem left="HOLDERS" right={`${formatNumber(pumpItem?.holder_count ?? 0)}`} />
                 <div className="bg-gradient-center-white"></div>
