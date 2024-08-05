@@ -23,13 +23,13 @@ export default function PumpStats() {
             <Divider />
             <InfoItem left="PRICE" right={`$${formatNumber(pumpItem?.price ?? 0)}`} />
             <Divider />
-            <InfoItem left="MCAP" right={`$${formatNumber(pumpItem?.marketCap ?? 0)}`} />
+            <InfoItem left="MCAP" right={`$${formatNumber(pumpItem?.market_cap ?? 0)}`} />
             <Divider />
-            <InfoItem left="LIQUIDITY" right={formatNumber(Number(pumpItem?.totalSupply))} />
+            <InfoItem left="LIQUIDITY" right={formatNumber(Number(pumpItem?.total_supply))} />
             <Divider />
-            <InfoItem left="VOLUME" right={`${formatNumber(pumpItem?.tradingVolume ?? 0)}`} />
+            <InfoItem left="VOLUME" right={`${formatNumber(pumpItem?.volume_24h ?? 0)}`} />
             <Divider />
-            <InfoItem left="HOLDERS" right={`${formatNumber(pumpItem?.holdersCount ?? 0)}`} />
+            <InfoItem left="HOLDERS" right={`${formatNumber(pumpItem?.holder_count ?? 0)}`} />
             <Divider />
             <InfoItem left="DEV" right="LOCKED" />
         </Box>

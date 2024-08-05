@@ -5,20 +5,19 @@ import { setSelectedtokenToReceive } from "../../libs/redux/slices/token-swap-sl
 import { formatNumber } from "../../utils/format";
 import { Box, Button, CircularProgress, LinearProgress } from "@mui/material";
 import { CandlestickChartRounded } from "@mui/icons-material";
-import { fetchPumpTokenDetails } from "../../libs/redux/slices/pump-chart-slice";
+import { fetchPumpTokenDetails, setPumpTokenItem } from "../../libs/redux/slices/pump-chart-slice";
 import { PumpTokenItem } from "../../common/types";
 
 export default function PumpCard(pump: PumpTokenItem) {
   const websiteTheme = useRecoilValue(websiteThemeState);
 
-  // const pumpProgress = pump?.progress?.toFixed?.(1)
   const dispatch = useAppDispatch()
   const atClickBuy = () => dispatch(setSelectedtokenToReceive(pump))
-  const atClickApeBlindly = () => { console.log('atApeBlindly') }
   const pumpChartStatus = useAppSelector(state => state.pumpChart.status);
   const pumpItem = useAppSelector(state => state.pumpChart.pumpItem)
 
   const handleLoadAndShowChart = () => {
+    dispatch(setPumpTokenItem(pump))
     dispatch(fetchPumpTokenDetails(pump.address))
   }
 
@@ -82,8 +81,8 @@ export default function PumpCard(pump: PumpTokenItem) {
             style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden' }} >
             Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}
           </Button>
-          <Button onClick={Number(pump?.price ?? 1) >= 1 ? atClickBuy : atClickApeBlindly} title="Hello wolr" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none' }} >
-            {Number(pump?.price ?? 1) >= 1 ? 'Buy' : 'APE BLINDLY'}
+          <Button onClick={atClickBuy} title="Hello wolr" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none' }} >
+            Buy
           </Button>
         </Box>
       </div>

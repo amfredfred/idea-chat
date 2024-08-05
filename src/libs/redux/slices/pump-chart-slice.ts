@@ -43,6 +43,9 @@ const pumpChartSlice = createSlice({
     reducers: {
         setPumpChartShown: (state, action: PayloadAction<boolean>) => {
             state.isPumpChartShown = action.payload
+        },
+        setPumpTokenItem: (state, action: PayloadAction<PumpTokenItem>) => {
+            state.pumpItem = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -56,10 +59,7 @@ const pumpChartSlice = createSlice({
             state.isPumpChartShown = true
             // state.data = action.payload;
             state.pumpItem = action.payload
-
             console.log(action)
-
-            // state.pumpItem = 
         });
         builder.addCase(fetchPumpTokenDetails.rejected, (state, action) => {
             state.status = 'error';
@@ -71,7 +71,8 @@ const pumpChartSlice = createSlice({
 });
 
 export const {
-    setPumpChartShown
+    setPumpChartShown,
+    setPumpTokenItem
 } = pumpChartSlice.actions
 
 export default pumpChartSlice.reducer;
