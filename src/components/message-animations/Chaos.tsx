@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAppSelector } from "../../libs/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { Message } from "../../libs/redux/slices/chat-slice";
+import { addNewMessage } from "../../libs/redux/slices/chat-slice";
 
 // MessageComponent
 interface MessageProps {
@@ -91,8 +92,10 @@ const Chaos: React.FC = () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const containerRef = useRef<HTMLDivElement>(null);
+  // const initialMessages = useAppSelector(state => state.chat.initialMessages);
   const [messages, setMessages] = useState<Message[]>([]);
   const newMessage = useAppSelector(state => state.chat.newMessage);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (newMessage && containerRef.current) {
@@ -127,6 +130,23 @@ const Chaos: React.FC = () => {
       }
     }
   }, [newMessage, width, height]);
+
+  // Simulate new message creation
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const newMsg: Message = {
+        _id: `${Date.now()}`,
+        username: "User" + Math.floor(Math.random() * 1000),
+        message: "This is a test message",
+        profilePic: "https://via.placeholder.com/50",
+        // createdAt: new Date().toISOString(),
+        position: { x: 0, y: 0 } // placeholder
+      };
+      dispatch(addNewMessage(newMsg));
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [dispatch]);
 
   return (
     <div
