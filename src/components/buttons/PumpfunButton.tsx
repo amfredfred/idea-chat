@@ -12,7 +12,7 @@ export default function PumpfunButton({ mintAddress }: { mintAddress: string | u
     return (
         <Link target='_blank' to={`${mintAddress}`}>
             <IconButton style={{ border: 'solid thin red', borderColor: theme.textColor }}>
-                <img src={PillSVG} style={{ width:16 }} />
+                <img src={PillSVG} style={{ width: 14 }} />
             </IconButton>
         </Link>
     )

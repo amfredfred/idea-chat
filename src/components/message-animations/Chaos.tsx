@@ -79,40 +79,6 @@ const Chaos: React.FC = () => {
     return () => window.removeEventListener('resize', updateDimensions);
   }, [updateDimensions]);
 
-  const adjustPosition = (newMsgPos: { x: number; y: number }, existingMessages: Message[], messageHeight: number, messageWidth: number) => {
-    let collisionDetected;
-    const zones = ['left', 'center', 'right'];
-    do {
-      collisionDetected = false;
-      for (const msg of existingMessages) {
-        if (checkCollision(newMsgPos, msg.position, messageHeight, messageWidth)) {
-          // Adjust position to left, center, or right
-          const zoneWidth = dimensions.width / 3;
-          if (zones.includes('left') && newMsgPos.x < zoneWidth) {
-            newMsgPos.x = Math.random() * (zoneWidth - messageWidth);
-          } else if (zones.includes('center') && newMsgPos.x < 2 * zoneWidth) {
-            newMsgPos.x = zoneWidth + Math.random() * (zoneWidth - messageWidth);
-          } else if (zones.includes('right')) {
-            newMsgPos.x = 2 * zoneWidth + Math.random() * (zoneWidth - messageWidth);
-          }
-          newMsgPos.y = Math.random() * (dimensions.height - messageHeight);
-          collisionDetected = true;
-          break;
-        }
-      }
-    } while (collisionDetected);
-    return newMsgPos;
-  };
-
-  const checkCollision = (newMsgPos: { x: number; y: number }, existingMsgPos: { x: number; y: number }, messageHeight: number, messageWidth: number) => {
-    return (
-      newMsgPos.x < existingMsgPos.x + messageWidth &&
-      newMsgPos.x + messageWidth > existingMsgPos.x &&
-      newMsgPos.y < existingMsgPos.y + messageHeight &&
-      newMsgPos.y + messageHeight > existingMsgPos.y
-    );
-  };
-
   useEffect(() => {
     if (newMessage && containerRef.current) {
       const messageHeight = 100;
@@ -126,7 +92,7 @@ const Chaos: React.FC = () => {
       }
 
       if (latestMessage) {
-        let messageWithPosition = {
+        const messageWithPosition = {
           ...latestMessage,
           position: {
             x: Math.random() * (dimensions.width - messageWidth),
@@ -134,7 +100,6 @@ const Chaos: React.FC = () => {
           },
         };
 
-        messageWithPosition.position = adjustPosition(messageWithPosition.position, messages, messageHeight, messageWidth);
 
         setMessages((prevMessages) => {
           let updatedMessages = [...prevMessages, messageWithPosition];
@@ -174,7 +139,7 @@ const Chaos: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative overflow-auto bg-red-950 rounded-2xl max-w-full"
+      className="relative bg-red-950 rounded-2xl  w-full h-full overflow-hidden"
     >
       <AnimatePresence>
         {messages.map((message) => (

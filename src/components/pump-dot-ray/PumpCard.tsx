@@ -5,6 +5,10 @@ import { Box, Button, CircularProgress, LinearProgress } from "@mui/material";
 import { CandlestickChartRounded } from "@mui/icons-material";
 import { fetchPumpTokenDetails, setPumpTokenItem } from "../../libs/redux/slices/pump-chart-slice";
 import { PumpTokenItem } from "../../common/types";
+import TelegramButton from "../buttons/TelegramButton";
+import WebsiteButton from "../buttons/WebsiteButton";
+import PumpfunButton from "../buttons/PumpfunButton";
+import XButton from "../buttons/XButton";
 
 export default function PumpCard(pump: PumpTokenItem) {
   const theme = useAppSelector(state => state.theme.current.styles);
@@ -69,11 +73,27 @@ export default function PumpCard(pump: PumpTokenItem) {
           }}
         />
 
+        <Box className=' flex justify-between items-center '>
+          <Box display='flex' alignItems='center' gap='.3rem'>
+            <TelegramButton url={pump?.social_links?.telegram} />
+            <XButton username={`${pump?.social_links.twitter_username}`} />
+            <WebsiteButton url={pump?.social_links?.website} />
+          </Box>
+          <Box display='flex' alignItems='center' gap='.3rem'>
+            <PumpfunButton mintAddress={pump?.address} />
+          </Box>
+        </Box>
+
+        <div
+          className=" h-[1px] w-[100%] mx-auto"
+          style={{
+            background: `linear-gradient(to right, ${theme.bgColor}, ${theme.textColor}, ${theme.bgColor})`,
+          }}
+        />
+
         <Box display='flex' gap='1rem' alignItems='center' justifyContent='space-between'>
           <Button onClick={handleLoadAndShowChart}
-
-            // disabled={pumpChartStatus === 'pending'}
-
+            disabled={pumpChartStatus === 'pending'}
             className='flex' variant="outlined"
             style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden', color: theme.textColor, borderColor: theme.textColor, }} >
             Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}
