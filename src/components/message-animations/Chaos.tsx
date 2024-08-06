@@ -30,11 +30,11 @@ const Chaos: React.FC = () => {
 
     switch (lastPosition) {
       case 'left':
-        newPosition = { x: columnWidth + (columnWidth - messageWidth) / 4, y: Math.random() * (dimensions.height - messageHeight) };
+        newPosition = { x: columnWidth + (columnWidth - messageWidth) / 3, y: Math.random() * (dimensions.height - messageHeight) };
         setLastPosition('center');
         break;
       case 'center':
-        newPosition = { x: 2 * columnWidth + (columnWidth - messageWidth) / 8, y: Math.random() * (dimensions.height - messageHeight) };
+        newPosition = { x: 2 * columnWidth + ((columnWidth - messageWidth) / 6), y: Math.random() * (dimensions.height - messageHeight) };
         setLastPosition('right');
         break;
       case 'right':
