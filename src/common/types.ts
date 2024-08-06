@@ -152,7 +152,7 @@ export type PumpTokenItem = {
 export type IFilterTypes = {
   min: number | null;
   max: number | null;
-  name: 'holders' | 'liquidity' | 'volume' | 'market cap' | 'dev holding'; // General names
+  name: 'holders' | 'liquidity' | 'volume' | 'market_cap' //| 'dev holding';
   type: 'number' | 'percentage';
 }
 

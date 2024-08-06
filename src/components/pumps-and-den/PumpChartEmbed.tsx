@@ -6,7 +6,7 @@ interface PumpChartEmbedProps {
     src: string;
     backgroundColor?: string;
     style?: React.CSSProperties;
-    [key: string]: any; // To allow any additional props
+    [key: string]: any;
 }
 
 const PumpChartEmbed: React.FC<PumpChartEmbedProps> = ({ src, backgroundColor = 'transparent', style = {}, ...props }) => {
@@ -52,7 +52,7 @@ const PumpChartEmbed: React.FC<PumpChartEmbedProps> = ({ src, backgroundColor = 
                     ...style,
                 }}
                 src={src}
-                title="Dynamic Iframe"
+                title={`Chart`}
                 onLoad={handleLoad}
                 {...props}
             ></iframe>

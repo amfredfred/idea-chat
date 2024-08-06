@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import io, { Socket } from 'socket.io-client';
 import { AppDispatch } from '../store';
-import { IPumpRequestParams, PumpSocketReceived, PumpSocketSend } from '../../../common/types';
+import { IFilterTypes, IPumpRequestParams, PumpSocketReceived, PumpSocketSend, PumpTokenItem } from '../../../common/types';
 
 type PumpSocketStates = 'idle' | 'error' | 'receiving' | 'ready'
 
@@ -38,7 +38,7 @@ const socketIoSlice = createSlice({
             state.pumpList = action.payload;
         },
         setSearchParams: (state, action: PayloadAction<IPumpRequestParams['filter_listing']>) => {
-            state.searchParams.filter_listing = action.payload
+            (state.searchParams.filter_listing = action.payload)
         },
         setPumpSocketState: (state, action: PayloadAction<PumpSocketStates>) => {
             state.socketState = action.payload;
@@ -47,6 +47,52 @@ const socketIoSlice = createSlice({
 });
 
 export const { setSocket, setConnected, setPumpList, setPumpSocketState, setSearchParams } = socketIoSlice.actions;
+
+export const filterAndSortPumpList = (pumpList: PumpTokenItem[] | undefined, filters: IFilterTypes[]): PumpTokenItem[] => {
+    if (!pumpList) return []
+    const filteredPumpList = pumpList.filter(item => {
+        return filters.every(filter => {
+            const value = getFilterValue(item, filter.name);
+            if (value === undefined) return false;
+            if (filter.min !== null && value < filter.min) return false;
+            if (filter.max !== null && value > filter.max) return false;
+            return true;
+        });
+    });
+    const sortedPumpList = filteredPumpList.sort((a, b) => {
+        for (const filter of filters) {
+            const aValue = getFilterValue(a, filter.name);
+            const bValue = getFilterValue(b, filter.name);
+
+            if (aValue !== undefined && bValue !== undefined) {
+                if (filter.type === 'number' || filter.type === 'percentage') {
+                    if (aValue > bValue) return 1;
+                    if (aValue < bValue) return -1;
+                }
+            }
+        }
+        return 0;
+    });
+
+    return sortedPumpList;
+};
+
+const getFilterValue = (item: PumpTokenItem, filterName: IFilterTypes['name']): number | undefined => {
+    switch (filterName) {
+        case 'holders':
+            return item.holder_count;
+        case 'liquidity':
+            return item.liquidity;
+        case 'volume':
+            return item.volume_24h;
+        case 'market_cap':
+            return item.market_cap;
+        // case 'dev holding':
+        //     return item.creator_balance; // Assuming `creator_balance` is what is meant by 'dev holding'
+        default:
+            return undefined;
+    }
+};
 
 export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch) => {
     const socketInstance = io(serverUrl, {

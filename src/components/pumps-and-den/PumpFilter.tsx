@@ -15,8 +15,8 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
             { name: 'holders', type: 'number', min: null, max: null },
             { name: 'liquidity', type: 'number', min: null, max: null },
             { name: 'volume', type: 'number', min: null, max: null },
-            { name: 'market cap', type: 'number', min: null, max: null },
-            { name: 'dev holding', type: 'percentage', min: null, max: null },
+            { name: 'market_cap', type: 'number', min: null, max: null },
+            // { name: 'dev holding', type: 'percentage', min: null, max: null },
             // ...currentFilters.filter_listing
         ],
         filter_migrated: []
@@ -61,7 +61,7 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
                         <Box key={filter.name} className='grid grid-cols-5 items-center '>
                             <Box
                                 sx={{ color: theme.bgColor }}
-                                className="whitespace-nowrap col-span-3 text-[14px] uppercase">{filter.name}</Box>
+                                className="whitespace-nowrap col-span-3 text-[14px] uppercase">{filter.name?.replace?.('_', ' ')}</Box>
                             <Box display='flex' alignItems='center' justifyContent='space-between' className='col-span-2' gap='.6rem'>
                                 <Input
                                     placeholder='min'
