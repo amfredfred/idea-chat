@@ -5,6 +5,10 @@ interface ThemeStyles {
     bgColor: string;
     textColor: string;
     buttonColor: string;
+    pump_card_bg: string;
+    menu_bg: string,
+    active_color: string,
+    inactive_color: string
 }
 
 interface Theme {
@@ -23,8 +27,12 @@ const virtuals: Theme[] = [
         name: 'rem',
         styles: {
             bgColor: "#0000FF",
-            textColor: "#ffffff",
+            textColor: "#FFFF",
             buttonColor: "#0000FF",
+            pump_card_bg: '#100F0D',
+            menu_bg: '#FFFF',
+            active_color: '#0000FF',
+            inactive_color: '#100F0D'
         },
         class: 'bg-[#0000FF] text-white p-[5px] lg:p-2 rounded-[3px] text-[8px] lg:text-[10px] cursor-pointer'
     },
@@ -34,6 +42,10 @@ const virtuals: Theme[] = [
             bgColor: "#000000",
             textColor: "#00FF00",
             buttonColor: "#000000",
+            pump_card_bg: '',
+            menu_bg: '',
+            active_color: '',
+            inactive_color: ''
         },
         class: 'bg-[#000000] text-[#00FF00] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
     },
@@ -43,6 +55,10 @@ const virtuals: Theme[] = [
             bgColor: "#00FF00",
             textColor: "#000000",
             buttonColor: "#00FF00",
+            pump_card_bg: '',
+            menu_bg: '',
+            active_color: '',
+            inactive_color: ''
         },
         class: 'bg-[#00FF00] text-[#000000] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
     },
@@ -52,6 +68,10 @@ const virtuals: Theme[] = [
             bgColor: "#FF5959",
             textColor: "#ffffff",
             buttonColor: "#000000",
+            pump_card_bg: '',
+            menu_bg: '',
+            active_color: '',
+            inactive_color: ''
         },
         class: 'bg-[#FF5959] text-[#3D3D3D] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
     },
@@ -61,6 +81,10 @@ const virtuals: Theme[] = [
             bgColor: "#ffffff",
             textColor: "#000000",
             buttonColor: "#000000",
+            pump_card_bg: '',
+            menu_bg: '',
+            active_color: '',
+            inactive_color: ''
         },
         class: 'bg-[#ffffff] text-[#000000] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] border border-black cursor-pointer'
     }

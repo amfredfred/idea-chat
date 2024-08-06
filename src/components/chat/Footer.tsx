@@ -33,7 +33,7 @@ const Footer = ({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) 
       <Box alignItems='flex-start' className="flex justify-between relative gap-2 lg:gap-4 m-auto  max-sm:w-full" >
         {!(isChatSettingsOpen && !isMobile) && <AnimatePresence>
           <Box className="w-[60%] max-sm:flex-grow  sm:w-[566px] flex-col gap-4" maxWidth='100%' display='flex'>
-            {chatState == 'DEN' && <motion.textarea
+            {chatState == 'DEN' && !isChatSettingsOpen && <motion.textarea
               initial={{ x: -100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -100, opacity: 0 }}
