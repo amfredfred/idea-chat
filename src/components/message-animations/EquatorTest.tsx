@@ -16,8 +16,9 @@ const Slider = React.memo(({ messages = [], scrollDirection }: SlidePorps) => {
       autoFill
       direction={scrollDirection}
       key={messages.map(msg => msg._id).join()}
+      className=" overflow-hidden h-max"
     >
-      <div className="flex gap-[30px] w-full overflow-auto">
+      <div className="flex gap-[30px] h-full">
         {messages.map((msg: Message) => (
           <React.Fragment key={msg._id}>
             <div className="flex items-center gap-[5px]">
@@ -27,7 +28,7 @@ const Slider = React.memo(({ messages = [], scrollDirection }: SlidePorps) => {
               <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden border-[0.5px]" style={{ borderColor: websiteTheme.textColor }}>
                 <img src={msg.profilePic} className="object-cover w-full h-full" alt={msg.username} />
               </div>
-              <p className="text-[13px] lg:text-[18px] xl:text-[20px] max-w-[550px] my-auto">
+              <p className="text-[11px] lg:text-[13px] xl:text-[16px] max-w-[550px] my-auto">
                 {msg.message}
               </p>
             </div>
