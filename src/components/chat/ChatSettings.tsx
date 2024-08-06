@@ -220,7 +220,7 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
             color: 'red'
           }}
         >
-          <Link to={"/"}>exit</Link>
+          <Link to={"/"}>disconnect</Link>
         </Button>
       </div>
     </motion.div>

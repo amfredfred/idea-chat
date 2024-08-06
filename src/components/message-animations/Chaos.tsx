@@ -3,17 +3,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { Message } from "../../libs/redux/slices/chat-slice";
 import { addNewMessage } from "../../libs/redux/slices/chat-slice";
-import ChaosMessageComponent from "../ChaosMessageComponent";
 import debounce from "lodash.debounce";
+import { Box } from "@mui/material";
 
 const Chaos: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const websiteTheme = useAppSelector(state => state.theme.current.styles);
   const [messages, setMessages] = useState<Message[]>([]);
   const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
-  const [lastPosition, setLastPosition] = useState<'left' | 'center' | 'right'>('right');
+  const [lastPosition, setLastPosition] = useState<'left' | 'right' | 'center'>('right');
   const newMessage = useAppSelector(state => state.chat.newMessage);
   const dispatch = useAppDispatch();
-  const maxItems = 10;
+  const maxItems = 7;
   const messageWidth = 200;
   const messageHeight = 100;
 
@@ -24,27 +25,69 @@ const Chaos: React.FC = () => {
     }
   }, 100);
 
+  const isSmallScreen = dimensions.width < 600;
+
+  /**
+   * 
+   * @description what is up dev? it is hard to do this -> don`t touch anything 😥
+   */
   const getNextPosition = () => {
     const columnWidth = dimensions.width / 3;
+    const variation = 15; // Variations in pixel
+
     let newPosition;
 
-    switch (lastPosition) {
-      case 'left':
-        newPosition = { x: columnWidth + (columnWidth - messageWidth) / 3, y: Math.random() * (dimensions.height - messageHeight) };
-        setLastPosition('center');
-        break;
-      case 'center':
-        newPosition = { x: 2 * columnWidth + ((columnWidth - messageWidth) / 6), y: Math.random() * (dimensions.height - messageHeight) };
+    if (isSmallScreen) {
+      // Two-line positioning for small screens with slight overlap in the center
+      if (lastPosition === 'left') {
+        newPosition = {
+          x: -variation + Math.random() * (variation * 2), // Slight horizontal variation for left
+          y: Math.random() * (dimensions.height - messageHeight)
+        };
         setLastPosition('right');
-        break;
-      case 'right':
-      default:
-        newPosition = { x: ((columnWidth - messageWidth) / 2) - (columnWidth - messageWidth) / 2, y: Math.random() * (dimensions.height - messageHeight) };
+      } else {
+        newPosition = {
+          x: (dimensions.width - messageWidth) + (variation - Math.random() * (variation * 5)), // Slight horizontal variation for right
+          y: Math.random() * (dimensions.height - messageHeight)
+        };
         setLastPosition('left');
-        break;
+      }
+    } else {
+      // Three-column positioning for larger screens
+      switch (lastPosition) {
+        case 'left':
+          newPosition = {
+            x: columnWidth + (columnWidth - messageWidth) / 3 + Math.random() * (variation * 2) - variation, // Centered with variation for left
+            y: Math.random() * (dimensions.height - messageHeight)
+          };
+          setLastPosition('center');
+          break;
+        case 'center':
+          newPosition = {
+            x: 2 * columnWidth + (columnWidth - messageWidth) / 6, // Center position for larger screens
+            y: Math.random() * (dimensions.height - messageHeight)
+          };
+          setLastPosition('right');
+          break;
+        case 'right':
+        default:
+          newPosition = {
+            x: ((columnWidth - messageWidth) / 2) - (columnWidth - messageWidth) / 2 + Math.random() * (variation * 2) - variation, // Centered with variation for right
+            y: Math.random() * (dimensions.height - messageHeight)
+          };
+          setLastPosition('left');
+          break;
+      }
     }
+
+    // Ensure new position is within view
+    newPosition.x = Math.max(0, Math.min(newPosition.x, dimensions.width - messageWidth));
+    newPosition.y = Math.max(0, Math.min(newPosition.y, dimensions.height - messageHeight));
+
     return newPosition;
   };
+
+
 
   const checkOverlap = (newPosition: { x: number; y: number }) => {
     if (newPosition.x < 0 || newPosition.x + messageWidth > dimensions.width || newPosition.y < 0 || newPosition.y + messageHeight > dimensions.height) {
@@ -53,13 +96,13 @@ const Chaos: React.FC = () => {
 
     return messages.some(message => {
       const dx = newPosition.x - message.position.x;
-      const dy = newPosition.y - message.position.y ;
+      const dy = newPosition.y - message.position.y;
       return Math.abs(dx) < messageWidth && Math.abs(dy) < messageHeight;
     });
   };
 
   const updateMessageList = (newMessage: Message | Message[]) => {
-    const messageLimit = window.innerWidth >= 1024 ? maxItems : 7;
+    const messageLimit = isSmallScreen ? 5 : maxItems; // Modified
     const latestMessage = Array.isArray(newMessage) ? newMessage[newMessage.length - 1] : newMessage;
 
     if (latestMessage) {
@@ -101,7 +144,7 @@ const Chaos: React.FC = () => {
         position: { x: 0, y: 0 }
       };
       dispatch(addNewMessage(newMsg));
-    }, 100);
+    }, 1000);
 
     return () => clearInterval(intervalId);
   }, [dispatch]);
@@ -124,17 +167,33 @@ const Chaos: React.FC = () => {
               stiffness: 300,
               damping: 20
             }}
-            className="absolute text-white p-2 rounded-lg max-w-xs"
+            className="absolute   p-2 rounded-lg max-w-xs"
             style={{
               left: message.position.x,
               top: message.position.y,
             }}
           >
-            <ChaosMessageComponent
-              message={message.message}
-              profilePic={message.profilePic}
-              username={message.username}
-            />
+            <motion.div
+              className="flex w-max max-w-[calc(30vw)] max-sm:max-w-[calc(30vw)] gap-3 items-center max-sm:items-start"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}  >
+              <p className="text-[11px]  max-sm:hidden  text-nowrap "
+                style={{ color: websiteTheme.textColor }}  >
+                {message?.username}
+              </p>
+              <img src={message?.profilePic} className="object-cover rounded-full w-[30px] h-[30px]  aspect-square" alt={message?.username} />
+              <Box className='flex max-sm:flex-col items-start'>
+                <p className="text-[11px] hidden  max-sm:block line-clamp-1 text-ellipsis "
+                  style={{ color: websiteTheme.textColor }}  >
+                  {message?.username}
+                </p>
+                <p className="text-[10px] lg:text-[12px] line-clamp-3 max-sm:line-clamp-4">
+                  {message?.message}
+                </p>
+              </Box>
+            </motion.div>
           </motion.div>
         ))}
       </AnimatePresence>
