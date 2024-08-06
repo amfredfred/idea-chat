@@ -41,7 +41,7 @@ export default function PumpCard(pump: PumpTokenItem) {
           </div>
         </div>
 
-        <LinearProgress  variant="determinate" style={{ background: theme.textColor, height: '1rem', borderRadius: '50px', border:'solid thin' }} value={Number(pump?.price ?? 1) * 100} />
+        <LinearProgress variant="determinate" style={{ background: theme.textColor, height: '1rem', borderRadius: '50px', border: 'solid thin' }} value={Number(pump?.price ?? 1) * 100} />
 
         <div className=" flex justify-between w-[100%] mx-auto">
           <div className=" flex flex-col  text-center">
@@ -57,8 +57,8 @@ export default function PumpCard(pump: PumpTokenItem) {
             <p className=" text-[16px] ">${formatNumber(pump?.buy_volume_24h) ?? 0}</p>
           </div>
           <div className=" flex flex-col  text-center">
-            <p className=" text-[12px] ">dev</p>
-            {/* <p className=" text-[16px] ">{ pump?.}</p> */}
+            <p className=" text-[12px] ">liquidity</p>
+            <p className=" text-[16px] ">${formatNumber(pump.liquidity)}</p>
           </div>
         </div>
 
@@ -78,7 +78,7 @@ export default function PumpCard(pump: PumpTokenItem) {
             style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden', color: theme.textColor, borderColor: theme.textColor, }} >
             Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}
           </Button>
-          <Button onClick={atClickBuy} title="Buy" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none', background: theme.textColor,color:theme.bgColor }} >
+          <Button onClick={atClickBuy} title="Buy" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none', background: theme.textColor, color: theme.bgColor }} >
             Buy
           </Button>
         </Box>

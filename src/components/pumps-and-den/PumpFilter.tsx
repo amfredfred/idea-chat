@@ -4,21 +4,30 @@ import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { IFilterTypes, IPumpRequestParams } from '../../common/types';
 import { setSearchParams } from '../../libs/redux/slices/pump-socket-slice';
 
+const deduplicateFilters = (filters: IFilterTypes[]): IFilterTypes[] => {
+    const filterMap = new Map<string, IFilterTypes>();
+    filters.forEach(filter => {
+        filterMap.set(filter.name, filter);
+    });
+    return Array.from(filterMap.values());
+};
+
 export default function PumpFilter({ onRequestClose }: { onRequestClose: () => void }) {
 
     const theme = useAppSelector(state => state.theme.current.styles);
-    // const currentFilters = useAppSelector(state => state.pumpSocket.searchParams);
     const dispatch = useAppDispatch()
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const currentFilters = useAppSelector(state => state.pumpSocket.searchParams);
     const [filters, setFilters] = useState<IPumpRequestParams>({
-        filter_listing: [
+        filter_listing: deduplicateFilters([
             { name: 'holders', type: 'number', min: null, max: null },
             { name: 'liquidity', type: 'number', min: null, max: null },
             { name: 'volume', type: 'number', min: null, max: null },
             { name: 'market_cap', type: 'number', min: null, max: null },
             // { name: 'dev holding', type: 'percentage', min: null, max: null },
-            // ...currentFilters.filter_listing
-        ],
+            ...currentFilters.filter_listing
+        ]),
         filter_migrated: []
     });
 

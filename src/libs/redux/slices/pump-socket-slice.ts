@@ -3,6 +3,27 @@ import io, { Socket } from 'socket.io-client';
 import { AppDispatch } from '../store';
 import { IFilterTypes, IPumpRequestParams, PumpSocketReceived, PumpSocketSend, PumpTokenItem } from '../../../common/types';
 
+const saveFiltersToLocalStorage = (filters: IFilterTypes[]) => {
+    try {
+        localStorage.setItem('_p_f', btoa(JSON.stringify(filters)));
+    } catch (error) {
+        console.error('Error saving filters to local storage', error);
+    }
+};
+
+const loadFiltersFromLocalStorage = (): IFilterTypes[] => {
+    try {
+        const serializedFilters = localStorage.getItem('_p_f');
+        if (serializedFilters === null) {
+            return [];
+        }
+        return JSON.parse(atob(serializedFilters));
+    } catch (error) {
+        console.error('Error loading filters from local storage', error);
+        return [];
+    }
+};
+
 type PumpSocketStates = 'idle' | 'error' | 'receiving' | 'ready'
 
 interface PumpSocketState {
@@ -18,7 +39,7 @@ const initialState: PumpSocketState = {
     connected: false,
     pumpList: null,
     searchParams: {
-        filter_listing: [],
+        filter_listing: loadFiltersFromLocalStorage(),
         filter_migrated: []
     },
     socketState: 'idle'
@@ -38,7 +59,7 @@ const socketIoSlice = createSlice({
             state.pumpList = action.payload;
         },
         setSearchParams: (state, action: PayloadAction<IPumpRequestParams['filter_listing']>) => {
-            (state.searchParams.filter_listing = action.payload)
+            saveFiltersToLocalStorage((state.searchParams.filter_listing = action.payload));
         },
         setPumpSocketState: (state, action: PayloadAction<PumpSocketStates>) => {
             state.socketState = action.payload;
@@ -50,6 +71,7 @@ export const { setSocket, setConnected, setPumpList, setPumpSocketState, setSear
 
 export const filterAndSortPumpList = (pumpList: PumpTokenItem[] | undefined, filters: IFilterTypes[]): PumpTokenItem[] => {
     if (!pumpList) return []
+
     const filteredPumpList = pumpList.filter(item => {
         return filters.every(filter => {
             const value = getFilterValue(item, filter.name);
@@ -59,6 +81,7 @@ export const filterAndSortPumpList = (pumpList: PumpTokenItem[] | undefined, fil
             return true;
         });
     });
+
     const sortedPumpList = filteredPumpList.sort((a, b) => {
         for (const filter of filters) {
             const aValue = getFilterValue(a, filter.name);
@@ -76,7 +99,6 @@ export const filterAndSortPumpList = (pumpList: PumpTokenItem[] | undefined, fil
 
     return sortedPumpList;
 };
-
 const getFilterValue = (item: PumpTokenItem, filterName: IFilterTypes['name']): number | undefined => {
     switch (filterName) {
         case 'holders':
