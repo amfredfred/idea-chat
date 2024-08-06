@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Loading from "./components/Loading.tsx";
 import Chat from "./pages/Chat.tsx";
 import { useAppDispatch, useAppSelector } from "./libs/redux/hooks.ts";
@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import { Box, Stack } from "@mui/material";
 import Landing from "./pages/Landing.tsx";
 import Profile from "./pages/Profile.tsx";
+import { loadInitialMessages } from "./libs/redux/slices/chat-slice.ts";
 // import filtersSvg from "./assets/wallet-bg-big.png";
 
 const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
@@ -49,6 +50,7 @@ export default function App() {
   // const chatState = useAppSelector(state => state.chat.state)
 
   const dispatch = useAppDispatch()
+  const loadMessages = useCallback(async () => dispatch(loadInitialMessages()), [dispatch])
 
   useEffect(() => {
     return () => {
@@ -58,7 +60,8 @@ export default function App() {
 
   useEffect(() => {
     dispatch(emitEvent('requestPumpList'))
-  }, [connected, dispatch])
+    loadMessages()
+  }, [connected, dispatch, loadMessages])
 
   if (socketState !== 'receiving') {
     return <Loading />
@@ -78,7 +81,7 @@ export default function App() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          width: '100vw', height: '100vh', 
+          width: '100vw', height: '100vh',
         }}>
         <BrowserRouter>
           <Routes>

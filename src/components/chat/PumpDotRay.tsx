@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
-import TokenExplorer from '../pumps-and-den/PumpExplorer'
+import TokenExplorer from '../pump-dot-ray/PumpExplorer'
 import { useAppSelector } from '../../libs/redux/hooks';
-import PumpChart from '../pumps-and-den/PumpChart';
+import PumpChart from '../pump-dot-ray/PumpChart';
 
 export default function PumpDotRay() {
 

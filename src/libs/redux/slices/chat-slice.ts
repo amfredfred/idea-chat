@@ -109,7 +109,6 @@ const chatSlice = createSlice({
                 state.isLoadingInitialMessages = true
             })
             .addCase(loadInitialMessages.fulfilled, (state, action: PayloadAction<Message[]>) => {
-                console.log(action)
                 state.initialMessages = action.payload;
                 state.isLoadingInitialMessages = false
             })

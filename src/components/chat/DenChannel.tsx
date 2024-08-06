@@ -6,8 +6,8 @@ import ChatSettings from './ChatSettings'
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks'
 import { Close, Send, Settings } from '@mui/icons-material'
-import { loadInitialMessages, setChatSettingsOpen, setTypedMessage } from '../../libs/redux/slices/chat-slice'
-import { useCallback, useEffect } from 'react'
+import { setChatSettingsOpen, setTypedMessage } from '../../libs/redux/slices/chat-slice'
+import { useCallback } from 'react'
 import { emitChatEvent } from '../../libs/redux/slices/chat-socket-slice'
 
 
@@ -25,17 +25,12 @@ export default function DenChannel({ handleMusicPlayPause }: { handleMusicPlayPa
     transition: { type: "spring", stiffness: 400, damping: 10 },
   };
 
-  const loadMessages = useCallback(async () => dispatch(loadInitialMessages()), [dispatch])
   const handleSendMessage = useCallback(() => dispatch(emitChatEvent('sendMessage', typedMessage)), [typedMessage, dispatch])
 
-  useEffect(() => {
-    loadMessages()
-  }, [loadMessages])
-
   return (
-    <Box className='flex flex-col justify-center h-full overflow-hidden' >
+    <Box className='flex flex-col justify-center h-full overflow-hidden w-full' >
 
-      <Box className="relative overflow-y-auto w-full  bg-green-900 no-scrollbar">
+      <Box className="relative overflow-y-auto w-full no-scrollbar " flexGrow='1'>
         {settingsModal === "focused" ? <Focused /> : settingsModal === "chaos" ? <Chaos /> : <EquatorTest />}
       </Box>
 
