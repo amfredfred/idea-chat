@@ -99,7 +99,7 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
       className={`${theme.bgColor === "#ffffff"
         ? "border border-black"
         : "border-none"
-        }  p-5 rounded-[8px] max-md:gap-2 flex flex-col md:right-[0] md:gap-[1.5rem]  bg-white absolute md:bottom-[0] md:relative max-md:absolute  max-md:bottom-[110%] max-md:w-[361px]
+        } z-10 p-5 max-sm:w-full rounded-[8px] max-md:gap-2 flex flex-col md:right-[0] md:gap-[1.5rem]  bg-white absolute md:bottom-[0] md:relative max-md:absolute  max-md:bottom-[110%] max-md:w-[361px]
 
 `}  >
 

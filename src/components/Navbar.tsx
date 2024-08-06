@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, IconButton, useMediaQuery } from "@mui/material";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SettingsClosed from "./SettingsClosed";
@@ -7,6 +7,7 @@ import bottleIcon from "../assets/bottle.png";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import { setChatSettingsOpen } from "../libs/redux/slices/chat-slice";
+import { GraphicEq } from "@mui/icons-material";
 
 const Navbar = () => {
   const isMobile = useMediaQuery("(max-width:768px)");
@@ -38,18 +39,25 @@ const Navbar = () => {
           <div className="h-[10px] w-[10px] bg-[#00FF00] rounded-full"></div>
           <p style={{ color: websiteTheme.textColor }}>{liveUsersCount} Online</p>
         </div>
-        <div className="flex justify-end opacity-80">
+        <div className=" grid grid-cols-4 opacity-80 gap-2">
+          <motion.div
+            whileTap={clickAnimation}
+            className={`p-[5px] col-span-2 rounded-[4px] lg:rounded-[8px] `}  >
+            <IconButton>
+              <GraphicEq style={{ color: websiteTheme.textColor }} />
+            </IconButton>
+          </motion.div>
           <motion.button
             whileTap={clickAnimation}
-            style={{ borderColor: websiteTheme.textColor }}
-            className={`p-[5px] rounded-[4px] lg:rounded-[8px] lg:hidden border-[1px]`}
-            onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}
+            className={`p-[5px] col-span-2 rounded-[4px] lg:rounded-[8px] `}
           >
-            {isChatSettingsOpen ? (
-              <SettingsClosed color={websiteTheme.textColor} />
-            ) : (
-              <SettingsIcon color={websiteTheme.textColor} />
-            )}
+            <IconButton onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}>
+              {isChatSettingsOpen ? (
+                <SettingsClosed color={websiteTheme.textColor} />
+              ) : (
+                <SettingsIcon color={websiteTheme.textColor} />
+              )}
+            </IconButton>
           </motion.button>
         </div>
       </div>
@@ -60,7 +68,7 @@ const Navbar = () => {
     <MobileNav />
   ) : (
     <Box
-      style={{ 
+      style={{
         color: websiteTheme.textColor,
       }}
       className="uppercase flex  text-[14px] sm:text-[16px] gap-4 lg:gap-6 xl:gap-8 lg:text-[18px] xl:text-[20px] w-full"

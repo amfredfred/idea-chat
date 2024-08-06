@@ -72,21 +72,9 @@ const Chat = () => {
         </audio>
 
         <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
-          {chatState == 'PUMP.RAY' ? <PumpChannel /> : chatState == 'DEN' ? <DenChannel handleMusicPlayPause={handleMusicPlayPause} /> : null}
+          {chatState == 'PUMP.RAY' ? <PumpChannel /> : chatState == 'DEN' ? <DenChannel /> : null}
         </Box>
-
-        <Box className='w-full  '>
-          <Box alignItems='center' display='flex' margin='auto' flexDirection='column' gap='1rem' width={700} maxWidth={'100vw'} paddingBottom='1rem' >
-            <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
-              <audio ref={notificationRef} hidden>
-                <source src={notificationSounds?.[chatState]} type="audio/mpeg" />
-                <source src={notificationSounds?.[chatState]} type="audio/mp3" />
-                Your browser does not support the audio element.
-              </audio>
-            </Box>
-            <Footer />
-          </Box>
-        </Box>
+        <Footer handleMusicPlayPause={handleMusicPlayPause} />
       </Box>
     </ContainedLayout>
   );
