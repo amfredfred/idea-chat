@@ -59,6 +59,11 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
         dispatch(setSearchParams(filters['filter_listing'].filter(item => item.min && item.max)))
     }
 
+    const resetFilters = () => {
+        onRequestClose()
+        dispatch(setSearchParams([]))
+    }
+
     return (
         <Box
             className='absolute right-0 top-0 w-[361px] max-w-[100%]  max-sm:bottom-0 max-sm:top-auto max-sm:w-full isolate'>
@@ -96,7 +101,7 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
                     </Box>
                 ))}
                 <Box className='flex justify-between items-center gap-4'>
-                    <Button onClick={() => dispatch(setSearchParams([]))}
+                    <Button onClick={resetFilters}
                         sx={{ flexGrow: 1, padding: '.5rem', color: '#FF0017', background: 'transparent' }}
                         disableElevation>
                         <strong >Reset</strong>

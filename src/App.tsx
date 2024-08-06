@@ -44,7 +44,6 @@ const ProtectedRoute: React.FC = () => {
 
 export default function App() {
   const connected = useAppSelector(state => state.pumpSocket.connected)
-  const searchParams = useAppSelector(state => state.pumpSocket.searchParams)
   const socketState = useAppSelector(state => state.pumpSocket.socketState)
   const theme = useAppSelector(state => state.theme.current.styles)
   // const chatState = useAppSelector(state => state.chat.state)
@@ -58,8 +57,8 @@ export default function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(emitEvent('requestPumpList', searchParams))
-  }, [connected, searchParams, dispatch])
+    dispatch(emitEvent('requestPumpList'))
+  }, [connected, dispatch])
 
   if (socketState !== 'receiving') {
     return <Loading />
