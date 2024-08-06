@@ -17,7 +17,7 @@ interface PumpChartState {
 
 const initialState: PumpChartState = {
     data: [],
-    status: 'pending',
+    status: 'idle',
     message: null,
     isPumpChartShown: false,
     pumpItem: null

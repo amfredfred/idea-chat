@@ -52,6 +52,7 @@ export default function App() {
   const dispatch = useAppDispatch()
   const loadMessages = useCallback(async () => dispatch(loadInitialMessages()), [dispatch])
 
+
   useEffect(() => {
     return () => {
       dispatch(connectSocket(API_URL))
@@ -81,7 +82,7 @@ export default function App() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          width: '100vw', height: '100vh',
+          width: '100vw', height: '100vh', 
         }}>
         <BrowserRouter>
           <Routes>

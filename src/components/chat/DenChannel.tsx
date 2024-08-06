@@ -9,10 +9,9 @@ export default function DenChannel() {
 
   return (
     <Box className='flex flex-col justify-center h-full overflow-hidden w-full ' >
-      <Box className="relative overflow-y-auto w-full no-scrollbar h-full bg-green-950" flexGrow='1'>
+      <Box className="relative overflow-y-auto w-full no-scrollbar h-full" flexGrow='1'>
         {settingsModal === "focused" ? <Focused /> : settingsModal === "chaos" ? <Chaos /> : <EquatorTest />}
       </Box>
-      {/* -------------------------------------- */}
     </Box>
   )
 }

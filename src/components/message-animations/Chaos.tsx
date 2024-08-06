@@ -1,137 +1,107 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { Message } from "../../libs/redux/slices/chat-slice";
 import { addNewMessage } from "../../libs/redux/slices/chat-slice";
-
-interface MessageProps {
-  message: string;
-  username: string;
-  profilePic: string;
-}
-
-const MessageComponent: React.FC<MessageProps> = ({ username, message, profilePic }) => {
-  const websiteTheme = useAppSelector(state => state.theme.current.styles);
-
-  return (
-    <motion.div
-      className="w-[90%] lg:w-[80%] mx-auto flex flex-col gap-[15px] lg:gap-[20px]"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -50 }}
-      transition={{ type: "spring", stiffness: 100, damping: 20 }}
-    >
-      <div className="hidden lg:flex gap-2 lg:gap-5 xl:gap-10 items-center mt-2 lg:mt-5 xl:mt-5">
-        <div className="flex items-center gap-[10px] w-[30%] lg:w-[20%] justify-end">
-          <p
-            className="text-[12px] lg:text-[14px] xl:text-[16px] text-right text-wrap w-[50px] sm:w-[70%]"
-            style={{ color: websiteTheme.textColor }}
-          >
-            {username}
-          </p>
-          <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden">
-            <img src={profilePic} className="object-cover w-full h-full" />
-          </div>
-        </div>
-        <div className="w-[70%] lg:w-[60%]">
-          <p className="text-[13px] lg:text-[18px] xl:text-[20px]">
-            {message}
-          </p>
-        </div>
-      </div>
-      <div className="lg:hidden flex gap-[10px]">
-        <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[30px] h-[30px] overflow-hidden">
-          <img src={profilePic} className="object-cover w-full h-full" />
-        </div>
-        <div>
-          <p className="text-[12px] lg:text-[14px] xl:text-[16px]" style={{ color: websiteTheme.textColor }}>
-            {username}
-          </p>
-          <div className="lg:w-[60%]">
-            <p className="text-[15px] lg:text-[18px] xl:text-[20px]" style={{ color: websiteTheme.textColor }}>
-              {message}
-            </p>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
+import ChaosMessageComponent from "../ChaosMessageComponent";
+import debounce from "lodash.debounce";
 
 const Chaos: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const [lastPosition, setLastPosition] = useState<'left' | 'center' | 'right'>('right');
   const newMessage = useAppSelector(state => state.chat.newMessage);
   const dispatch = useAppDispatch();
+  const maxItems = 10;
+  const messageWidth = 200;
+  const messageHeight = 100;
 
-  // Handle container dimension updates
-  const updateDimensions = useCallback(() => {
+  const updateDimensions = debounce(() => {
     if (containerRef.current) {
       const { width, height } = containerRef.current.getBoundingClientRect();
       setDimensions({ width, height });
     }
-  }, []);
+  }, 100);
+
+  const getNextPosition = () => {
+    const columnWidth = dimensions.width / 3;
+    let newPosition;
+
+    switch (lastPosition) {
+      case 'left':
+        newPosition = { x: columnWidth + (columnWidth - messageWidth) / 4, y: Math.random() * (dimensions.height - messageHeight) };
+        setLastPosition('center');
+        break;
+      case 'center':
+        newPosition = { x: 2 * columnWidth + (columnWidth - messageWidth) / 8, y: Math.random() * (dimensions.height - messageHeight) };
+        setLastPosition('right');
+        break;
+      case 'right':
+      default:
+        newPosition = { x: ((columnWidth - messageWidth) / 2) - (columnWidth - messageWidth) / 2, y: Math.random() * (dimensions.height - messageHeight) };
+        setLastPosition('left');
+        break;
+    }
+    return newPosition;
+  };
+
+  const checkOverlap = (newPosition: { x: number; y: number }) => {
+    if (newPosition.x < 0 || newPosition.x + messageWidth > dimensions.width || newPosition.y < 0 || newPosition.y + messageHeight > dimensions.height) {
+      return true;
+    }
+
+    return messages.some(message => {
+      const dx = newPosition.x - message.position.x;
+      const dy = newPosition.y - message.position.y ;
+      return Math.abs(dx) < messageWidth && Math.abs(dy) < messageHeight;
+    });
+  };
+
+  const updateMessageList = (newMessage: Message | Message[]) => {
+    const messageLimit = window.innerWidth >= 1024 ? maxItems : 7;
+    const latestMessage = Array.isArray(newMessage) ? newMessage[newMessage.length - 1] : newMessage;
+
+    if (latestMessage) {
+      let newPosition = getNextPosition();
+      let retries = 0;
+      const maxRetries = 10;
+
+      while (checkOverlap(newPosition) && retries < maxRetries) {
+        newPosition = getNextPosition();
+        retries++;
+      }
+
+      setMessages(prevMessages => {
+        const updatedMessages = [...prevMessages, { ...latestMessage, position: newPosition }];
+        return updatedMessages.length > messageLimit ? updatedMessages.slice(-messageLimit) : updatedMessages;
+      });
+    }
+  };
 
   useEffect(() => {
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
-  }, [updateDimensions]);
+  }, []);
 
   useEffect(() => {
-    if (newMessage && containerRef.current) {
-      const messageHeight = 100;
-      const messageWidth = 200;
-
-      let latestMessage;
-      if (Array.isArray(newMessage)) {
-        latestMessage = newMessage[newMessage.length - 1];
-      } else {
-        latestMessage = newMessage;
-      }
-
-      if (latestMessage) {
-        const messageWithPosition = {
-          ...latestMessage,
-          position: {
-            x: Math.random() * (dimensions.width - messageWidth),
-            y: Math.random() * (dimensions.height - messageHeight),
-          },
-        };
-
-
-        setMessages((prevMessages) => {
-          let updatedMessages = [...prevMessages, messageWithPosition];
-          // Enforce message limit
-          const messageLimit = window.innerWidth >= 1024 ? 20 : 7; // 20 for desktop, 5-7 for mobile
-          if (updatedMessages.length > messageLimit) {
-            updatedMessages = updatedMessages.slice(-messageLimit);
-          }
-          return updatedMessages;
-        });
-
-        setTimeout(() => {
-          setMessages((prevMessages) =>
-            prevMessages.filter((msg) => msg._id !== latestMessage._id)
-          );
-        }, 3000 + Math.random() * 1000);
-      }
+    if (newMessage) {
+      updateMessageList(newMessage);
     }
-  }, [newMessage, dimensions, messages]);
+  }, [newMessage]);
 
-  // Simulate new message creation
   useEffect(() => {
     const intervalId = setInterval(() => {
       const newMsg: Message = {
         _id: `${Date.now()}`,
         username: "User-" + Math.floor(Math.random() * 1000),
-        message: "This is a test message",
+        message: `Submit your own private work, something you haven't shown to anyone. Omit your name from the submission if you like. Let us set it free. It wants to be free.`,
         profilePic: "https://via.placeholder.com/50",
-        position: { x: 0, y: 0 } // placeholder
+        position: { x: 0, y: 0 }
       };
       dispatch(addNewMessage(newMsg));
-    }, 2000);
+    }, 100);
 
     return () => clearInterval(intervalId);
   }, [dispatch]);
@@ -139,10 +109,10 @@ const Chaos: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative bg-red-950 rounded-2xl  w-full h-full overflow-hidden"
+      className="relative rounded-2xl w-full h-full overflow-hidden"
     >
       <AnimatePresence>
-        {messages.map((message) => (
+        {messages.map(message => (
           <motion.div
             key={message._id}
             initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
@@ -160,7 +130,7 @@ const Chaos: React.FC = () => {
               top: message.position.y,
             }}
           >
-            <MessageComponent
+            <ChaosMessageComponent
               message={message.message}
               profilePic={message.profilePic}
               username={message.username}

@@ -44,12 +44,12 @@ const initialState: ChatState = {
     settingsModal: {
         visual: 'rem',
         audio: 'win',
-        motion: null
+        motion: 'chaos'
     },
     isChatSettingsOpen: false,
     chatAudio: onMusic,
     isMusicPlaying: false,
-    state: 'PUMP.RAY',
+    state: 'DEN',
     typedMessage: '',
     isLoadingInitialMessages: false
 };
