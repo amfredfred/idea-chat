@@ -1,172 +1,98 @@
-import { useState, useEffect, useCallback ,useMemo} from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Marquee from "react-fast-marquee";
-import { websiteThemeState } from "../../atoms/website-theme";
-import { useRecoilValue } from "recoil";
 import React from "react";
-interface Message {
-  _id: any;
-  message: string;
-  username: string;
-  profilePic: string;
-}
+import { Message } from "../../libs/redux/slices/chat-slice";
+import { useAppSelector } from "../../libs/redux/hooks";
 
+type SlidePorps = { messages: Message[]; scrollDirection: "left" | "right" }
 
-const Slider = React.memo(
-  ({
-    messages,
-    scrollDirection,
-  }: {
-    messages: Message[];
-    scrollDirection: "left" | "right";
-  }) => {
-    const websiteTheme = useRecoilValue(websiteThemeState);
-    return (
-      <Marquee
-        className=""
-        speed={40}
-        delay={0}
-        autoFill
-        direction={scrollDirection}
-        key={messages.map((msg) => msg._id).join()}
-        
-      >
-        <div className="flex gap-[30px] w-full overflow-auto ">
-          {messages.map((msg: Message) => (
-            <>
-              <div className=" flex items-center gap-[5px]  ">
-                <p
-                  className=" text-[12px] lg:text-[14px] xl:text-[16px] "
-                  style={{
-                    color: websiteTheme.textColor,
-                  }}
-                >
-                  {msg.username}
-                </p>
-                <div
-                  //  style={{borderColor:websiteTheme.textColor}}
-                  className=" rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden  border-[0.5px]"
-                >
-                  <img
-                    src={msg.profilePic}
-                    className=" object-cover w-full h-full"
-                  />
-                </div>
-                <p className="  text-[13px] lg:text-[18px] xl:text-[20px] max-w-[550px]  my-auto">
-                  {msg.message}
-                </p>
+const Slider = React.memo(({ messages = [], scrollDirection }: SlidePorps) => {
+  const websiteTheme = useAppSelector(state => state.theme.current.styles);
+
+  return (
+    <Marquee
+      speed={40}
+      delay={0}
+      autoFill
+      direction={scrollDirection}
+      key={messages.map(msg => msg._id).join()}
+    >
+      <div className="flex gap-[30px] w-full overflow-auto">
+        {messages.map((msg: Message) => (
+          <React.Fragment key={msg._id}>
+            <div className="flex items-center gap-[5px]">
+              <p className="text-[12px] lg:text-[14px] xl:text-[16px]" style={{ color: websiteTheme.textColor }}>
+                {msg.username}
+              </p>
+              <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden border-[0.5px]" style={{ borderColor: websiteTheme.textColor }}>
+                <img src={msg.profilePic} className="object-cover w-full h-full" alt={msg.username} />
               </div>
-              <div
-                className="w-[1px] lg:w-[1px] mx-auto h-[50px] my-auto lg:h-[70px]"
-                style={{
-                  backgroundImage: `linear-gradient(to bottom , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )`,
-                }}
-              />
-            </>
-          ))}
-          {messages.map((msg: Message) => (
-            <>
-              <div className=" flex items-center gap-[10px] ">
-                <p
-                  className=" text-[12px] lg:text-[14px] xl:text-[16px]  mr-[10px] ml-[10px] "
-                  style={{
-                    color: websiteTheme.textColor,
-                  }}
-                >
-                  {msg.username}
-                </p>
-                <div
-                  style={{ borderColor: websiteTheme.textColor }}
-                  className=" rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden border"
-                >
-                  <img
-                    src={msg.profilePic}
-                    className=" object-cover w-full h-full"
-                  />
-                </div>
-                <p className="  text-[13px] lg:text-[18px] xl:text-[20px] sm:max-w-[500px] max-w-[80%]  ">
-                  {msg.message}
-                </p>
-              </div>
-              <div
-                className="w-[1px] lg:w-[1px] mx-auto my-auto my- h-[50px] lg:h-[90px] "
-                style={{
-                  backgroundImage: `linear-gradient(to bottom , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )`,
-                }}
-              />
-            </>
-          ))}
-        </div>
-      </Marquee>
-    );
-  }
-);
+              <p className="text-[13px] lg:text-[18px] xl:text-[20px] max-w-[550px] my-auto">
+                {msg.message}
+              </p>
+            </div>
+            <div className="w-[1px] lg:w-[1px] mx-auto h-[50px] lg:h-[70px]" style={{ backgroundImage: `linear-gradient(to bottom, ${websiteTheme.bgColor}, ${websiteTheme.textColor}, ${websiteTheme.bgColor})` }} />
+          </React.Fragment>
+        ))}
+      </div>
+    </Marquee>
+  );
+});
 
-const EquatorTest = ({
-  initialMessages,
-  newMessage,
-}: {
-  initialMessages: Message[];
-  newMessage: Message[];
-}) => {
-  const websiteTheme = useRecoilValue(websiteThemeState);
+const EquatorTest = () => {
   const [firstRowMessages, setFirstRowMessages] = useState<Message[]>([]);
   const [secondRowMessages, setSecondRowMessages] = useState<Message[]>([]);
   const [thirdRowMessages, setThirdRowMessages] = useState<Message[]>([]);
   const [fourthRowMessages, setFourthRowMessages] = useState<Message[]>([]);
 
-  const updateFourthRow = useCallback(
-    (message: Message) => {
-      setFourthRowMessages((prev) => {
-        const updated = [...prev, message];
-        if (updated.length <= 20) return updated;
+  const initialMessages = useAppSelector(state => state.chat.initialMessages);
+  const newMessage = useAppSelector(state => state.chat.newMessage);
+  const websiteTheme = useAppSelector(state => state.theme.current.styles);
 
-        // Shift messages when fourth row exceeds 20
-        setFirstRowMessages(secondRowMessages);
-        setSecondRowMessages(thirdRowMessages);
-        setThirdRowMessages(prev.slice(0, 16));
-        return updated.slice(-4);
-      });
-    },
-    [secondRowMessages, thirdRowMessages]
-  );
+  const updateFourthRow = useCallback((message: Message) => {
+    setFourthRowMessages(prev => {
+      const updated = [...prev, message];
+      if (updated.length <= 20) return updated;
+      setFirstRowMessages(secondRowMessages);
+      setSecondRowMessages(thirdRowMessages);
+      setThirdRowMessages(prev.slice(0, 16));
+      return updated.slice(-4);
+    });
+  }, [secondRowMessages, thirdRowMessages]);
 
   useEffect(() => {
-    if (newMessage.length > 0) {
-      updateFourthRow(newMessage[newMessage.length - 1]);
-    }
+    if (newMessage) updateFourthRow(newMessage);
   }, [newMessage, updateFourthRow]);
 
   useEffect(() => {
-    setFirstRowMessages(initialMessages.slice(0, 16));
-    setSecondRowMessages(initialMessages.slice(16, 32));
-    setThirdRowMessages(initialMessages.slice(32, 48));
-    setFourthRowMessages(initialMessages.slice(48));
+    const [first, second, third, fourth] = [
+      initialMessages.slice(0, 16),
+      initialMessages.slice(16, 32),
+      initialMessages.slice(32, 48),
+      initialMessages.slice(48)
+    ];
+    setFirstRowMessages(first);
+    setSecondRowMessages(second);
+    setThirdRowMessages(third);
+    setFourthRowMessages(fourth);
   }, [initialMessages]);
 
-  const memoizedFirstSlider = useMemo(
-    () => <Slider messages={firstRowMessages} scrollDirection="left" />,
-    [firstRowMessages]
-  );
-  const memoizedSecondSlider = useMemo(
-    () => <Slider messages={secondRowMessages} scrollDirection="right" />,
-    [secondRowMessages]
-  );
-  const memoizedThirdSlider = useMemo(
-    () => <Slider messages={thirdRowMessages} scrollDirection="left" />,
-    [thirdRowMessages]
-  );
+  const sliderProps = useMemo<SlidePorps[]>(() => [
+    { messages: firstRowMessages, scrollDirection: "left" },
+    { messages: secondRowMessages, scrollDirection: "right" },
+    { messages: thirdRowMessages, scrollDirection: "left" },
+    { messages: fourthRowMessages, scrollDirection: "right" }
+  ], [firstRowMessages, secondRowMessages, thirdRowMessages, fourthRowMessages]);
 
   return (
-    <div className="w-full flex flex-col justify-end h-full lg:gap-[40px] gap-[60px] ">
-      {memoizedFirstSlider}
-      <div className="w-[50%] h-[1px]" style={{ backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )` }} />
-      {memoizedSecondSlider}
-      <div className="w-[50%] mx-auto h-[1px]" style={{ backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )` }} />
-      {memoizedThirdSlider}
-      <div className=" flex flex-col items-end">
-        <div className="w-[50%] h-[1px]" style={{ backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )` }} />
-      </div>
-      <Slider messages={fourthRowMessages} scrollDirection="right" />
+    <div className="w-full flex flex-col justify-end h-full lg:gap-[40px] gap-[60px]">
+      {sliderProps.slice(0, 3).map((props, index) => (
+        <React.Fragment key={index}>
+          <Slider {...props} />
+          <div className={`w-[50%] h-[1px] ${index === 1 ? 'mx-auto' : ''}`} style={{ backgroundImage: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.textColor}, ${websiteTheme.bgColor})` }} />
+        </React.Fragment>
+      ))}
+      {/* <Slider {...sliderProps[3]} /> */}
     </div>
   );
 };

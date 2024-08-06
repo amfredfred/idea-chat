@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const BASE_URI = import.meta.env.VITE_BASE_URI;
+const BASE_URI = import.meta.env.VITE_MESSENGER_API_URL;
 
 interface UserProfileState {
     userName: string;

@@ -5,7 +5,7 @@ import { IChatStates } from "../common/types";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import PumpChannel from "../components/chat/PumpDotRay";
 import DenChannel from "../components/chat/DenChannel";
-import { useEffect, useRef  } from "react";
+import { useEffect, useRef } from "react";
 import ContainedLayout from "../layouts/ContainedLayout";
 import { setMusicIsPlaying } from "../libs/redux/slices/chat-slice";
 
@@ -33,7 +33,6 @@ const Chat = () => {
       try {
         await audioRef.current.play();
         dispatch(setMusicIsPlaying(true));
-        console.log('Play', audioRef.current === null);
       } catch (error) {
         console.error("Error playing audio:", error);
       }
@@ -73,13 +72,12 @@ const Chat = () => {
         </audio>
 
         <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
-          {chatState == 'PUMP.RAY' && <PumpChannel />}
+          {chatState == 'PUMP.RAY' ? <PumpChannel /> : chatState == 'DEN' ? <DenChannel handleMusicPlayPause={handleMusicPlayPause} /> : null}
         </Box>
 
         <Box className='w-full  '>
           <Box alignItems='center' display='flex' margin='auto' flexDirection='column' gap='1rem' width={700} maxWidth={'100vw'} paddingBottom='1rem' >
             <Box display='flex' alignItems='center' justifyContent='center' width='100%'>
-              {chatState == 'DEN' ? <DenChannel handleMusicPlayPause={handleMusicPlayPause} /> : null}
               <audio ref={notificationRef} hidden>
                 <source src={notificationSounds?.[chatState]} type="audio/mpeg" />
                 <source src={notificationSounds?.[chatState]} type="audio/mp3" />

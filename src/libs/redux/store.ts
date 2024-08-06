@@ -3,7 +3,6 @@ import tokenSwapSlice from './slices/token-swap-slice'
 import appSlice from './slices/app-slice'
 import themeSlice from './slices/theme-slice'
 import userProfileSlice from './slices/user-profile-slice'
-import messagesSlice from './slices/message-slice'
 import audioSlice from './slices/audio-slice'
 import chatSlice from './slices/chat-slice'
 import socketIoSlice from './slices/pump-socket-slice'
@@ -17,7 +16,6 @@ export const makeStore = () => {
             app: appSlice,
             theme: themeSlice,
             profile: userProfileSlice,
-            messages: messagesSlice,
             audio: audioSlice,
 
             chat: chatSlice,

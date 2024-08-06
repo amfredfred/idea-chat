@@ -14,7 +14,7 @@ const Focused = () => {
   const [modalPfp, setModalPfp] = useState<string | undefined>();
 
   const initialMessages = useAppSelector(state => state.chat.initialMessages)
-  const newMessage = useAppSelector(state => state.chat.newMessages)
+  const newMessage = useAppSelector(state => state.chat.newMessage)
   const websiteTheme = useAppSelector(state => state.theme.current.styles);
 
 
@@ -136,7 +136,7 @@ const Focused = () => {
         <div ref={messagesEndRef} />
       </div>
       <AnimatePresence initial={false}>
-        {newMessage.map((msg) => (
+        {initialMessages.map((msg) => (
           <MessageComponent
             message={msg.message}
             username={msg.username}

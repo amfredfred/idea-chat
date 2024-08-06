@@ -6,17 +6,15 @@ import ChatSettings from './ChatSettings'
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks'
 import { Close, Send, Settings } from '@mui/icons-material'
-import { setChatSettingsOpen, setTypedMessage } from '../../libs/redux/slices/chat-slice'
+import { loadInitialMessages, setChatSettingsOpen, setTypedMessage } from '../../libs/redux/slices/chat-slice'
+import { useCallback, useEffect } from 'react'
+import { emitChatEvent } from '../../libs/redux/slices/chat-socket-slice'
 
 
 export default function DenChannel({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) {
 
-  const totalWidth = window.innerWidth;
-  const totalHeight = window.innerHeight;
   const dispatch = useAppDispatch()
   const theme = useAppSelector(state => state.theme.current.styles)
-  const currentUserMessage = useAppSelector(state => state.chat.newMessages)
-  const initialMessages = useAppSelector(state => state.chat.initialMessages)
   const settingsModal = useAppSelector(state => state.chat.settingsModal.motion)
   const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen)
   const typedMessage = useAppSelector(state => state.chat.typedMessage)
@@ -27,35 +25,23 @@ export default function DenChannel({ handleMusicPlayPause }: { handleMusicPlayPa
     transition: { type: "spring", stiffness: 400, damping: 10 },
   };
 
-  const handleSendMessage = () => {
-    console.log("SEND MESSAGE")
-  }
+  const loadMessages = useCallback(async () => dispatch(loadInitialMessages()), [dispatch])
+  const handleSendMessage = useCallback(() => dispatch(emitChatEvent('sendMessage', typedMessage)), [typedMessage, dispatch])
+
+  useEffect(() => {
+    loadMessages()
+  }, [loadMessages])
 
   return (
-    <Box className='max-sm:w-[361px]' >
-      <div className="relative   overflow-y-auto  w-full">
-        {settingsModal === "focused" ? (
-          initialMessages.length > 0 && (
-            <Focused />
-          )
-        ) : settingsModal === "chaos" ? (
-          <Chaos
-            newMessage={currentUserMessage?.[0]}
-            width={totalWidth}
-            height={totalHeight}
-          />
-        ) : (
-          initialMessages.length > 0 && (
-            <EquatorTest
-              initialMessages={initialMessages}
-              newMessage={currentUserMessage}
-            />
-          )
-        )}
-      </div>
+    <Box className='flex flex-col justify-center h-full overflow-hidden' >
+
+      <Box className="relative overflow-y-auto w-full  bg-green-900 no-scrollbar">
+        {settingsModal === "focused" ? <Focused /> : settingsModal === "chaos" ? <Chaos /> : <EquatorTest />}
+      </Box>
+
       {/* -------------------------------------- */}
 
-      <Box alignItems='flex-end' className="flex justify-between  relative gap-2 lg:gap-4 w-full " >
+      <Box alignItems='flex-end' className="flex justify-between relative gap-2 lg:gap-4 m-auto" >
         {!(isChatSettingsOpen && !isMobile) && <AnimatePresence>
           <Box className="w-[60%] max-sm:flex-grow  sm:w-[566px] " maxWidth='100%' display='flex'>
             <motion.textarea
@@ -85,7 +71,6 @@ export default function DenChannel({ handleMusicPlayPause }: { handleMusicPlayPa
             } bg-white rounded-[4px] lg:rounded-[8px]  sm:block`}>
             <motion.button
               whileTap={clickAnimation}
-
               onClick={handleSendMessage}    >
               <Send style={{ color: theme.buttonColor }} />
             </motion.button>

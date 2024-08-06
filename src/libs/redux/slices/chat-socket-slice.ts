@@ -69,7 +69,7 @@ export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch
 };
 
 // Emit events to the WebSocket
-export const emitEvent = <K extends ChatSocketSendEvents>(event: K, data?: any) => (dispatch: AppDispatch, getState: () => { chatSocket: ChatSocketState }) => {
+export const emitChatEvent = <K extends ChatSocketSendEvents>(event: K, data?: any) => (dispatch: AppDispatch, getState: () => { chatSocket: ChatSocketState }) => {
     dispatch
     const { socket } = getState().chatSocket;
     if (socket) {
@@ -78,7 +78,7 @@ export const emitEvent = <K extends ChatSocketSendEvents>(event: K, data?: any) 
 };
 
 // Handle incoming events from the WebSocket
-export const onEvent = <K extends ChatSocketEvents>(event: K, callback: (data: any) => void) => (dispatch: AppDispatch, getState: () => { chatSocket: ChatSocketState }) => {
+export const onChatEvent = <K extends ChatSocketEvents>(event: K, callback: (data: any) => void) => (dispatch: AppDispatch, getState: () => { chatSocket: ChatSocketState }) => {
     dispatch
     const { socket } = getState().chatSocket;
     if (socket) {

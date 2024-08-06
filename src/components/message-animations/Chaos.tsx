@@ -1,29 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageComponent } from "../MessageSpare";
+import { useAppSelector } from "../../libs/redux/hooks";
+import { Message } from "../../libs/redux/slices/chat-slice";
 
-interface Message {
-  _id: any;
-  message: string;
-  username: string;
-  profilePic: string;
-  position: {
-    x: number;
-    y: number;
-  };
-}
-
-const Chaos = ({
-  newMessage,
-  width,
-  height,
-}: {
-  newMessage: any;
-  width: number;
-  height: number;
-}) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const Chaos = () => {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
   const containerRef = useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const newMessage = useAppSelector(state => state.chat.newMessage)
+  // const initialMessages = useAppSelector(state => state.chat.initialMessages)
 
   useEffect(() => {
     if (newMessage && containerRef.current) {
@@ -32,8 +19,7 @@ const Chaos = ({
       const chatAreaHeight = height * 0.7;
       const chatAreaTop = height * 0.1;
 
-      let latestMessage: Message;
-
+      let latestMessage;
       if (Array.isArray(newMessage)) {
         latestMessage = newMessage[newMessage.length - 1];
       } else {
@@ -70,10 +56,15 @@ const Chaos = ({
         {messages.map((message) => (
           <motion.div
             key={message._id}
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            exit={{ opacity: 0, scale: 0.5, rotate: 20 }}
+            transition={{
+              duration: 0.5,
+              type: "spring",
+              stiffness: 300,
+              damping: 20
+            }}
             className="absolute text-white p-2 rounded-lg max-w-xs"
             style={{
               left: message.position.x,
