@@ -20,7 +20,9 @@ const TokenSwapAnalytic = () => {
         fetchTokenRateState,
         conversionRate,
         quoteResponse,
-        fetchQuoteState
+        fetchQuoteState,
+        platformFeeAmount,
+        platformFeeToken
     } = useAppSelector(state => state.tokenSwap);
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -99,7 +101,7 @@ const TokenSwapAnalytic = () => {
                             </Grid>
                         </Grid>
                         <Grid item display='flex' >
-                            <span>{(!quoteResponse?.platformFee?.amount || fetchQuoteState == 'pending') ? skeletonLoading : quoteResponse.platformFee.amount}</span>&nbsp;{quoteResponse.platformFee?.fee_currency}
+                            <span>{(!platformFeeAmount || fetchQuoteState == 'pending') ? skeletonLoading : platformFeeAmount}</span>&nbsp;{platformFeeToken}
                         </Grid>
                     </Grid>
                 </div>

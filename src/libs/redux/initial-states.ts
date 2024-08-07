@@ -81,7 +81,7 @@ export interface TokenSwapState {
     tokenToSend: PumpTokenItem | undefined;
     tokenToReceive: PumpTokenItem | undefined;
     amountToSend: number;
-    amountToReceive: number|string;
+    amountToReceive: number | string;
     loading: boolean;
     error: string | null;
     tokensList: PumpTokenItem[],
@@ -94,6 +94,8 @@ export interface TokenSwapState {
     fetchQuoteState: 'error' | 'success' | 'pending' | 'idle'
     fetchQuoteMessage: string | null
     quoteResponse: QuoteSwapResponse
+    platformFeeAmount: number,
+    platformFeeToken: string,
     settings: ISwapSettings
 
     tokenSwapState: 'error' | 'success' | 'pending' | 'idle',
@@ -128,6 +130,8 @@ export const tokenSwapInitialState: TokenSwapState = {
     fetchQuoteState: 'idle',
     fetchQuoteMessage: null,
     quoteResponse: {} as any,
+    platformFeeAmount: 0,
+    platformFeeToken: NativeToken.symbol,
     settings: {
         slippageBps: '300'
     },

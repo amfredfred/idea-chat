@@ -53,7 +53,6 @@ export const fetchQuoteSwap = createAsyncThunk(
     'token/fetchQuoteSwap',
     async ({ fromMint, toMint, amount, settings }: QuoteSwapPrams, thunkAPI) => {
         try {
-            console.log({ fromMint })
             if (!fromMint) return thunkAPI.rejectWithValue({ error: "Invalid from address" });
             if (!toMint) return thunkAPI.rejectWithValue({ error: "Invalid to address" });
             const url = new URL('https://quote-api.jup.ag/v6/quote');
@@ -84,21 +83,22 @@ export const handleTokenSwap = createAsyncThunk(
                 new PublicKey('REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3')
             );
 
-            const response = await fetch('https://quote-api.jup.ag/v6/swap', {
+            const response = await axios('https://quote-api.jup.ag/v6/swap', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+                data: JSON.stringify({
                     quoteResponse,
                     userPublicKey: wallet.publicKey?.toString(),
                     feeAccount: feeAccount.toString(),
                 }),
             });
 
-            if (!response.ok) {
-                throw new Error(`API Error: ${response.statusText}`);
+            if (response.status !== 200) {
+                console.log(response.data)
+                throw new Error(`API Error: ${response?.data?.response?.message}`);
             }
 
-            const { swapTransaction } = await response.json();
+            const { swapTransaction } = await response.data;
             if (!swapTransaction) {
                 throw new Error('Invalid swap transaction response');
             }
@@ -199,16 +199,15 @@ const tokenSwapSlice = createSlice({
                 state.fetchQuoteState = 'success';
                 state.fetchQuoteMessage = 'success';
                 state.quoteResponse = payload;
-                state.quoteResponse.platformFee.fee_currency = (state.tokenToReceive as any).symbol;
                 if (state.tokenToReceive?.address !== NativeToken.address) {
                     const feeAmount = parseEther(Number(payload.platformFee.amount), Number(state.tokenToReceive?.decimals));
                     const outAmount = parseEther(Number(payload.outAmount), Number(state.tokenToReceive?.decimals));
                     const feeOut = (feeAmount / outAmount) * parseEther(Number(payload.inAmount), Number(state.tokenToSend?.decimals));
                     const formattedFee = formatNumber(feeOut);
-                    state.quoteResponse.platformFee.amount = formattedFee as any;
+                    state.platformFeeAmount = formattedFee as any;
                     state.quoteResponse.platformFee.fee_currency = NativeToken.symbol;
                 } else {
-                    state.quoteResponse.platformFee.amount = parseEther(Number(payload.platformFee.amount), Number(state.tokenToSend?.decimals))
+                    state.platformFeeAmount = parseEther(Number(payload.platformFee.amount), Number(state.tokenToSend?.decimals))
                 }
                 state.amountToReceive = parseEther(Number(payload.outAmount), Number(state.tokenToReceive?.decimals));
             })
