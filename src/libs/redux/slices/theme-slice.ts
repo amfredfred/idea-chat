@@ -78,13 +78,13 @@ const virtuals: Theme[] = [
     {
         name: 'B/W',
         styles: {
-            bgColor: "#ffffff",
+            bgColor: "#FFF",
             text_color: "#000000",
             buttonColor: "#000000",
             pump_card_bg: '',
-            menu_bg: '',
-            active_color: '',
-            inactive_color: ''
+            menu_bg: '#ffffff',
+            active_color: '#0000FF',
+            inactive_color: '#3D3D3D'
         },
         class: 'bg-[#ffffff] text-[#000000] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] border border-black cursor-pointer'
     }
