@@ -198,7 +198,6 @@ const tokenSwapSlice = createSlice({
             .addCase(fetchTokenRate.fulfilled, (state, { payload }) => {
                 state.fetchTokenRateState = 'success';
                 state.fetchTokenRateMessage = 'success';
-                console.log('success', { payload })
                 state.conversionRate = payload?.data[state.tokenToSend?.address as string]?.price;
             })
             .addCase(fetchTokenRate.pending, (state) => {
