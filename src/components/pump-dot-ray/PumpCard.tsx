@@ -28,10 +28,11 @@ export default function PumpCard(pump: PumpTokenItem) {
 
   return (
     <div
-      className="border-[1px] rounded-[4px] border-white font-jbm w-full mx-auto isolate "
+      className="border-[1px] rounded-[4px] border-white font-jbm w-full mx-auto isolate overflow-hidden"
       style={{
         borderColor: theme.text_color,
         color: theme.text_color,
+        background:theme.pump_card_bg
       }}
     >
       <div className=" flex flex-col gap-[20px] p-[10px] ">
