@@ -131,15 +131,15 @@ const Profile = () => {
 
                         <Box className='grid grid-cols-3 gap-2 '>
                             <Box
-                                sx={{ borderColor: websiteTheme.textColor, color: websiteTheme.textColor }}
+                                sx={{ borderColor: websiteTheme.text_color, color: websiteTheme.text_color }}
                                 className={` center col-span-1 uppercase flex items-center justify-center  border  px-4 py-2 text-[15px] lg:text-[20px] outline-none `} >
                                 username
                             </Box>
                             <Box
-                                sx={{ borderColor: websiteTheme.textColor }}
+                                sx={{ borderColor: websiteTheme.text_color }}
                                 className={`max-sm:col-span-3 col-span-2 uppercase  border  px-4 py-2 text-[15px] lg:text-[20px] outline-none `} >
                                 <Input
-                                    inputProps={{ style: { textTransform: 'uppercase', color: websiteTheme.textColor } }}
+                                    inputProps={{ style: { textTransform: 'uppercase', color: websiteTheme.text_color } }}
                                     placeholder="type here"
                                     value={userName}
                                     disableUnderline
@@ -152,19 +152,19 @@ const Profile = () => {
                             <Button
                                 disableElevation
                                 disableTouchRipple
-                                sx={{ padding: '.7rem', color: websiteTheme.bgColor, background: websiteTheme.textColor }}
+                                sx={{ padding: '.7rem', color: websiteTheme.bgColor, background: websiteTheme.text_color }}
                                 className="flex h-full  align-middle gap-2 justify-center  w-full  whitespace-nowrap overflow-hidden text-ellipsis "   >
                                 save
                             </Button>
                         </Box>
 
-                        <Link to="/chat" style={{ color: websiteTheme.textColor }} className="mx-auto">
+                        <Link to="/chat" style={{ color: websiteTheme.text_color }} className="mx-auto">
                             <p className=" uppercase text-[15px] lg:text-[20px]">Back to chat</p>
                         </Link>
 
                         <Box className='m-auto flex justify-center max-w-[100%] h-[56px] mt-12' alignItems='center'>
                             <Button
-                                sx={{ borderColor: websiteTheme.textColor, color: websiteTheme.textColor }}
+                                sx={{ borderColor: websiteTheme.text_color, color: websiteTheme.text_color }}
                                 variant="outlined" className="flex h-full align-middle gap-2 justify-center  w-full  whitespace-nowrap overflow-hidden text-ellipsis"   >
                                 <span>connected with </span>
                                 <strong className=" whitespace-nowrap overflow-hidden text-ellipsis">

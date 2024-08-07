@@ -62,7 +62,7 @@ const Chat = () => {
     <ContainedLayout>
       <Box
         style={{
-          color: theme.styles.textColor,
+          color: theme.styles.text_color,
         }}
         className={`transition-colors duration-1000 flex flex-col relative font-jbm uppercase h-full overflow-hidden`}
       >

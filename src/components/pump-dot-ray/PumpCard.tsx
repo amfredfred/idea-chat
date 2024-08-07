@@ -26,8 +26,8 @@ export default function PumpCard(pump: PumpTokenItem) {
     <div
       className="border-[1px] rounded-[4px] border-white font-jbm w-full mx-auto isolate "
       style={{
-        borderColor: theme.textColor,
-        color: theme.textColor,
+        borderColor: theme.text_color,
+        color: theme.text_color,
       }}
     >
       <div className=" flex flex-col gap-[20px] p-[10px] ">
@@ -45,7 +45,7 @@ export default function PumpCard(pump: PumpTokenItem) {
           </div>
         </div>
 
-        <LinearProgress variant="determinate" style={{ background: theme.textColor, height: '1rem', borderRadius: '50px', border: 'solid thin' }} value={Number(pump?.price ?? 1) * 100} />
+        <LinearProgress variant="determinate" style={{ background: theme.text_color, height: '1rem', borderRadius: '50px', border: 'solid thin' }} value={Number(pump?.price ?? 1) * 100} />
 
         <div className=" flex justify-between w-[100%] mx-auto">
           <div className=" flex flex-col  text-center">
@@ -69,7 +69,7 @@ export default function PumpCard(pump: PumpTokenItem) {
         <div
           className=" h-[1px] w-[100%] mx-auto"
           style={{
-            background: `linear-gradient(to right, ${theme.bgColor}, ${theme.textColor}, ${theme.bgColor})`,
+            background: `linear-gradient(to right, ${theme.bgColor}, ${theme.text_color}, ${theme.bgColor})`,
           }}
         />
 
@@ -87,7 +87,7 @@ export default function PumpCard(pump: PumpTokenItem) {
         <div
           className=" h-[1px] w-[100%] mx-auto"
           style={{
-            background: `linear-gradient(to right, ${theme.bgColor}, ${theme.textColor}, ${theme.bgColor})`,
+            background: `linear-gradient(to right, ${theme.bgColor}, ${theme.text_color}, ${theme.bgColor})`,
           }}
         />
 
@@ -95,10 +95,10 @@ export default function PumpCard(pump: PumpTokenItem) {
           <Button onClick={handleLoadAndShowChart}
             disabled={pumpChartStatus === 'pending'}
             className='flex' variant="outlined"
-            style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden', color: theme.textColor, borderColor: theme.textColor, }} >
+            style={{ alignItems: 'center', borderRadius: 0, justifyContent: 'space-between', overflow: 'hidden', color: theme.text_color, borderColor: theme.text_color, }} >
             Chart  {pumpItem?.address == pump.address && pumpChartStatus == 'pending' ? <CircularProgress size={24} thickness={10} /> : <CandlestickChartRounded className='text-yellow-100' />}
           </Button>
-          <Button onClick={atClickBuy} title="Buy" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none', background: theme.textColor, color: theme.bgColor }} >
+          <Button onClick={atClickBuy} title="Buy" variant="contained" style={{ borderRadius: 0, flexGrow: 1, boxShadow: 'none', background: theme.text_color, color: theme.bgColor }} >
             Buy
           </Button>
         </Box>

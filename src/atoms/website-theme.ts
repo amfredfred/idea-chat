@@ -4,7 +4,7 @@ export const websiteThemeState = atom({
   key: "websiteThemeState",
   default: {
 
-    bgColor: "#0000FF", textColor: "#ffffff", buttonColor: "#0000FF",
+    bgColor: "#0000FF", text_color: "#ffffff", buttonColor: "#0000FF",
     container: {
       background: "#0000F"
     },

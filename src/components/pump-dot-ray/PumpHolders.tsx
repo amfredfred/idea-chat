@@ -35,7 +35,7 @@ export default function PumpHolders() {
                                 fontSize: '13px',
                                 fontWeight: 'bold',
                                 textAlign: 'center',
-                                fill: theme.textColor,
+                                fill: theme.text_color,
                                 width: 20
                             }}
                             allowReorder="yes">
@@ -56,7 +56,7 @@ export default function PumpHolders() {
                     ))}
                 </Box>
             </Box>
-            <Button variant="outlined" className="flex align-middle gap-2 justify-center w-full" sx={{ color: theme.textColor, borderColor: theme.textColor }}>
+            <Button variant="outlined" className="flex align-middle gap-2 justify-center w-full" sx={{ color: theme.text_color, borderColor: theme.text_color }}>
                 <MapIcon /> View on bubblemaps
             </Button>
         </Box>

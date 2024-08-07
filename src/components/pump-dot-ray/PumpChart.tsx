@@ -70,16 +70,16 @@ export default function PumpChart() {
                     </Box>
                 </Box>
                 <Box className="w-full lg:h-[390px] overflow-hidden aspect-video sm:border border-gray-500" >
-                    <PumpChartEmbed src={`https://gmgn.ai/sol/token/${pumpItem?.address}?embled=1`}    />
+                    <PumpChartEmbed src={`https://gmgn.ai/sol/token/${pumpItem?.address}?embled=1`} />
                 </Box>
                 <Box className="w-full">
                     <Box className="grid grid-cols-3 gap-4">
                         <Button variant="outlined" className="flex align-middle gap-2 justify-center"
-                            style={{ alignItems: 'center', borderRadius: 0, overflow: 'hidden', color: theme.textColor, borderColor: theme.textColor, }}
+                            style={{ alignItems: 'center', borderRadius: 0, overflow: 'hidden', color: theme.text_color, borderColor: theme.text_color, }}
                             onClick={() => dispatch(setPumpChartShown(false))}>
                             <ArrowBack /> Back
                         </Button>
-                        <Button style={{ color: theme.buttonColor, background: theme.textColor }} disableElevation variant="contained" className="flex col-span-2 align-middle gap-2 justify-center" onClick={atClickBuy}>
+                        <Button style={{ color: theme.buttonColor, background: theme.text_color }} disableElevation variant="contained" className="flex col-span-2 align-middle gap-2 justify-center" onClick={atClickBuy}>
                             Buy
                         </Button>
                     </Box>
@@ -90,8 +90,8 @@ export default function PumpChart() {
                     <TabContext value={value} >
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <TabList onChange={handleChange} centered >
-                                <Tab label="Token info" value="1" style={{ color: theme.textColor, flexGrow: 1 }} />
-                                <Tab label="Holders" value="2" style={{ color: theme.textColor, flexGrow: 1 }} />
+                                <Tab label="Token info" value="1" style={{ color: theme.text_color, flexGrow: 1 }} />
+                                <Tab label="Holders" value="2" style={{ color: theme.text_color, flexGrow: 1 }} />
                             </TabList>
                         </Box>
                         <TabPanel value="1">

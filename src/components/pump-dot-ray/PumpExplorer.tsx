@@ -32,8 +32,8 @@ export default function TokenExplorer() {
             <Typography variant="body2" className=" text-[20px]" >Latest pump.fun tokens to hit raydium</Typography>
           </Box>
           <Box>
-            <IconButton onClick={() => setIsFilterShown(state => !state)} sx={{ border: 'solid thin', borderColor: theme.textColor }}>
-              {isFilterShown ? <Close sx={{ color: theme.textColor }} /> : <FilterAlt sx={{ color: theme.textColor }} />}
+            <IconButton onClick={() => setIsFilterShown(state => !state)} sx={{ border: 'solid thin', borderColor: theme.text_color }}>
+              {isFilterShown ? <Close sx={{ color: theme.text_color }} /> : <FilterAlt sx={{ color: theme.text_color }} />}
             </IconButton>
           </Box>
         </Box>

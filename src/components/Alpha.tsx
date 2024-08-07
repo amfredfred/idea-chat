@@ -9,7 +9,7 @@ const Alpha = () => {
       className="h-[75%] w-full flex flex-col "
     >
       <div
-        style={{ color: websiteTheme.textColor }}
+        style={{ color: websiteTheme.text_color }}
         className="flex w-[90%] mx-auto mt-[50px] "
       >
         <div>
@@ -27,18 +27,18 @@ const Alpha = () => {
             “aped my life savings in Walter, this is FA”
           </p>
 
-         
+
         </div>
 
       </div>
       <div
-            className="h-[1px] w-[90%] mx-auto mt-[20px]"
-            style={{
-              background: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.textColor}, ${websiteTheme.bgColor})`,
-            }}
-          />
+        className="h-[1px] w-[90%] mx-auto mt-[20px]"
+        style={{
+          background: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.text_color}, ${websiteTheme.bgColor})`,
+        }}
+      />
       <div
-        style={{ color: websiteTheme.textColor }}
+        style={{ color: websiteTheme.text_color }}
         className="flex flex-col gap-[10px]"
       >
         <p className="text-center text-[20px] uppercase mt-[100px]">

@@ -55,13 +55,13 @@ const Footer = ({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) 
 
             <Box className='w-full  flex items-center '>
               <Box
-                style={{ borderColor: websiteTheme.textColor }}
+                style={{ borderColor: websiteTheme.text_color }}
                 className={` max-sm:mx-auto h-11 mr-auto  flex justify-between rounded-md sm:w-[566px] border overflow-hidden max-sm:w-full`}>  {
                   buttons.map(button => {
                     return <Box
                       style={{
-                        backgroundColor: chatState == button ? websiteTheme.textColor : 'transparent',
-                        color: chatState == button ? websiteTheme.bgColor : websiteTheme.textColor,
+                        backgroundColor: chatState == button ? websiteTheme.text_color : 'transparent',
+                        color: chatState == button ? websiteTheme.bgColor : websiteTheme.text_color,
                         borderRadius: chatState == button ? 5 : 0
                       }}
                       className=" flex-grow h-full flex place-content-center place-items-center cursor-pointer" onClick={() => updateChatState(button as any)}>
@@ -82,11 +82,11 @@ const Footer = ({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) 
               marginTop={isChatSettingsOpen ? 'auto' : undefined} >
               <motion.div
                 whileTap={clickAnimation}
-                style={{ borderColor: websiteTheme.textColor }}
+                style={{ borderColor: websiteTheme.text_color }}
                 className={`p-[5px] col-span-2 rounded-[4px] lg:rounded-[8px] border `}
                 onClick={handleSendMessage}    >
                 <IconButton>
-                  <Send style={{ color: websiteTheme.textColor }} />
+                  <Send style={{ color: websiteTheme.text_color }} />
                 </IconButton>
               </motion.div>
             </Box>
@@ -102,11 +102,11 @@ const Footer = ({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) 
             marginTop={isChatSettingsOpen ? 'auto' : undefined} >
             <motion.div
               whileTap={clickAnimation}
-              style={{ borderColor: websiteTheme.textColor }}
+              style={{ borderColor: websiteTheme.text_color }}
               className={`p-[5px] col-span-2 rounded-[4px] lg:rounded-[8px] border`}
               onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}  >
               <IconButton>
-                {isChatSettingsOpen ? <Close style={{ color: websiteTheme.textColor }} /> : <Settings style={{ color: websiteTheme.textColor }} />}
+                {isChatSettingsOpen ? <Close style={{ color: websiteTheme.text_color }} /> : <Settings style={{ color: websiteTheme.text_color }} />}
               </IconButton>
             </motion.div>
           </Box>
@@ -118,7 +118,7 @@ const Footer = ({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) 
             whileTap={clickAnimation}
             className={`p-[5px] col-span-2 rounded-[4px] lg:rounded-[8px] border max-md:hidden`}  >
             <IconButton>
-              <GraphicEq style={{ color: websiteTheme.textColor }} />
+              <GraphicEq style={{ color: websiteTheme.text_color }} />
             </IconButton>
           </motion.div>
         }

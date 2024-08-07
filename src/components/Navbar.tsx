@@ -37,14 +37,14 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-[10px]">
           <div className="h-[10px] w-[10px] bg-[#00FF00] rounded-full"></div>
-          <p style={{ color: websiteTheme.textColor }}>{liveUsersCount} Online</p>
+          <p style={{ color: websiteTheme.text_color }}>{liveUsersCount} Online</p>
         </div>
         <div className=" grid grid-cols-4 opacity-80 gap-2">
           <motion.div
             whileTap={clickAnimation}
             className={`p-[5px] col-span-2 rounded-[4px] lg:rounded-[8px] `}  >
             <IconButton>
-              <GraphicEq style={{ color: websiteTheme.textColor }} />
+              <GraphicEq style={{ color: websiteTheme.text_color }} />
             </IconButton>
           </motion.div>
           <motion.button
@@ -53,9 +53,9 @@ const Navbar = () => {
           >
             <IconButton onClick={() => dispatch(setChatSettingsOpen(!isChatSettingsOpen))}>
               {isChatSettingsOpen ? (
-                <SettingsClosed color={websiteTheme.textColor} />
+                <SettingsClosed color={websiteTheme.text_color} />
               ) : (
-                <SettingsIcon color={websiteTheme.textColor} />
+                <SettingsIcon color={websiteTheme.text_color} />
               )}
             </IconButton>
           </motion.button>
@@ -69,7 +69,7 @@ const Navbar = () => {
   ) : (
     <Box
       style={{
-        color: websiteTheme.textColor,
+        color: websiteTheme.text_color,
       }}
       className="uppercase flex  text-[14px] sm:text-[16px] gap-4 lg:gap-6 xl:gap-8 lg:text-[18px] xl:text-[20px] w-full"
     >

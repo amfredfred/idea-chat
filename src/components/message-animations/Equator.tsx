@@ -40,7 +40,7 @@ const Slider = ({
               <p
                 className=" text-[12px] lg:text-[14px] xl:text-[16px] "
                 style={{
-                  color: websiteTheme.textColor,
+                  color: websiteTheme.text_color,
                 }}
               >
                 {msg.username}
@@ -58,7 +58,7 @@ const Slider = ({
             <div
               className="w-[1px] lg:w-[1px] mx-auto h-[50px] lg:h-[70px]"
               style={{
-                backgroundImage: `linear-gradient(to bottom , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )`,
+                backgroundImage: `linear-gradient(to bottom , ${websiteTheme.bgColor} , ${websiteTheme.text_color} , ${websiteTheme.bgColor} )`,
               }}
             />
           </>
@@ -69,7 +69,7 @@ const Slider = ({
               <p
                 className=" text-[12px] lg:text-[14px] xl:text-[16px] "
                 style={{
-                  color: websiteTheme.textColor,
+                  color: websiteTheme.text_color,
                 }}
               >
                 {msg.username}
@@ -87,7 +87,7 @@ const Slider = ({
             <div
               className="w-[1px] lg:w-[1px] mx-auto h-[50px] lg:h-[90px] "
               style={{
-                backgroundImage: `linear-gradient(to bottom , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )`,
+                backgroundImage: `linear-gradient(to bottom , ${websiteTheme.bgColor} , ${websiteTheme.text_color} , ${websiteTheme.bgColor} )`,
               }}
             />
           </>
@@ -139,14 +139,14 @@ const GlobalChat = ({
       <div
         className="w-[50%] h-[1px]"
         style={{
-          backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )`,
+          backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.text_color} , ${websiteTheme.bgColor} )`,
         }}
       />
       <Slider messages={rows[1]} scrollDirection="right" />
       <div
         className="w-[50%] mx-auto h-[1px]"
         style={{
-          backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )`,
+          backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.text_color} , ${websiteTheme.bgColor} )`,
         }}
       />
       <Slider messages={rows[2]} scrollDirection="left" />
@@ -154,7 +154,7 @@ const GlobalChat = ({
         <div
           className="w-[50%] h-[1px]"
           style={{
-            backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor} )`,
+            backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.text_color} , ${websiteTheme.bgColor} )`,
           }}
         />
       </div>

@@ -20,8 +20,8 @@ export default function PumFilterChip({ type, name, max, min }: IFilterTypes) {
       variant="outlined"
       // onClick={handleClick}
       onDelete={() => handleDelete(name)}
-      deleteIcon={<Close style={{ color:theme.textColor }} />}
-      style={{ borderRadius: 3, color: theme.textColor, fontSize: 12 }}
+      deleteIcon={<Close style={{ color: theme.text_color }} />}
+      style={{ borderRadius: 3, color: theme.text_color, fontSize: 12 }}
     />
   )
 }

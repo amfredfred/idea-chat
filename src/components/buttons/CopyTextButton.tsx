@@ -33,7 +33,7 @@ const CopyTextButton: React.FC<CopyButtonProps> = ({ textToCopy, buttonText = "C
 
     return (
         <Box className='flex items-center'>
-            {buttonText} <IconButton onClick={handleCopy} style={{ color: theme.textColor }} >{isLoading ? <CircularProgress thickness={10} size={24} /> : isCopied ? <Check /> : <CopyAll />}</IconButton>
+            {buttonText} <IconButton onClick={handleCopy} style={{ color: theme.text_color }} >{isLoading ? <CircularProgress thickness={10} size={24} /> : isCopied ? <Check /> : <CopyAll />}</IconButton>
         </Box>
     );
 };

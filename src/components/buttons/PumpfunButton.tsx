@@ -1,6 +1,6 @@
 import { IconButton } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { useAppSelector } from '../../libs/redux/hooks' 
+import { useAppSelector } from '../../libs/redux/hooks'
 import PillSVG from '../../assets/pumpfun-logo.webp'
 
 export default function PumpfunButton({ mintAddress }: { mintAddress: string | undefined }) {
@@ -11,7 +11,7 @@ export default function PumpfunButton({ mintAddress }: { mintAddress: string | u
 
     return (
         <Link target='_blank' to={`${mintAddress}`}>
-            <IconButton style={{ border: 'solid thin red', borderColor: theme.textColor }}>
+            <IconButton style={{ border: 'solid thin red', borderColor: theme.text_color }}>
                 <img src={PillSVG} style={{ width: 14 }} />
             </IconButton>
         </Link>

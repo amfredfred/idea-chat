@@ -22,17 +22,17 @@ const Slider = React.memo(({ messages = [], scrollDirection }: SlidePorps) => {
         {messages.map((msg: Message) => (
           <React.Fragment key={msg._id}>
             <div className="flex items-center gap-[5px]">
-              <p className="text-[12px] lg:text-[14px] xl:text-[16px]" style={{ color: websiteTheme.textColor }}>
+              <p className="text-[12px] lg:text-[14px] xl:text-[16px]" style={{ color: websiteTheme.text_color }}>
                 {msg.username}
               </p>
-              <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden border-[0.5px]" style={{ borderColor: websiteTheme.textColor }}>
+              <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden border-[0.5px]" style={{ borderColor: websiteTheme.text_color }}>
                 <img src={msg.profilePic} className="object-cover w-full h-full" alt={msg.username} />
               </div>
               <p className="text-[11px] lg:text-[13px] xl:text-[16px] max-w-[550px] my-auto">
                 {msg.message}
               </p>
             </div>
-            <div className="w-[1px] lg:w-[1px] mx-auto h-[50px] lg:h-[70px]" style={{ backgroundImage: `linear-gradient(to bottom, ${websiteTheme.bgColor}, ${websiteTheme.textColor}, ${websiteTheme.bgColor})` }} />
+            <div className="w-[1px] lg:w-[1px] mx-auto h-[50px] lg:h-[70px]" style={{ backgroundImage: `linear-gradient(to bottom, ${websiteTheme.bgColor}, ${websiteTheme.text_color}, ${websiteTheme.bgColor})` }} />
           </React.Fragment>
         ))}
       </div>
@@ -90,7 +90,7 @@ const EquatorTest = () => {
       {sliderProps.slice(0, 3).map((props, index) => (
         <React.Fragment key={index}>
           <Slider {...props} />
-          <div className={`w-[50%] h-[1px] ${index === 1 ? 'mx-auto' : ''}`} style={{ backgroundImage: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.textColor}, ${websiteTheme.bgColor})` }} />
+          <div className={`w-[50%] h-[1px] ${index === 1 ? 'mx-auto' : ''}`} style={{ backgroundImage: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.text_color}, ${websiteTheme.bgColor})` }} />
         </React.Fragment>
       ))}
       {/* <Slider {...sliderProps[3]} /> */}

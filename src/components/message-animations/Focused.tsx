@@ -43,7 +43,7 @@ const MessageComponent: React.FC<Message> = ({
           <p
             className="text-[12px] lg:text-[14px] xl:text-[16px] text-right text-wrap w-[50px] sm:w-[70%]"
             style={{
-              color: websiteTheme.textColor,
+              color: websiteTheme.text_color,
               wordBreak: "break-word",
               whiteSpace: "normal",
             }}
@@ -68,7 +68,7 @@ const MessageComponent: React.FC<Message> = ({
           <p
             className="text-[12px] lg:text-[14px] xl:text-[16px]"
             style={{
-              color: websiteTheme.textColor,
+              color: websiteTheme.text_color,
               wordBreak: "break-word",
               whiteSpace: "normal",
             }}
@@ -79,7 +79,7 @@ const MessageComponent: React.FC<Message> = ({
             <p
               className="text-[11px] lg:text-[13px] xl:text-[16px]"
               style={{
-                color: websiteTheme.textColor,
+                color: websiteTheme.text_color,
                 wordBreak: "break-word",
                 whiteSpace: "normal",
               }}
@@ -92,7 +92,7 @@ const MessageComponent: React.FC<Message> = ({
       <div
         className="w-[100%] mx-auto h-[1px]"
         style={{
-          backgroundImage: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.textColor}, ${websiteTheme.bgColor})`,
+          backgroundImage: `linear-gradient(to right, ${websiteTheme.bgColor}, ${websiteTheme.text_color}, ${websiteTheme.bgColor})`,
         }}
       />
     </motion.div>
@@ -149,7 +149,7 @@ const Focused = () => {
                   <p
                     className="text-[12px] lg:text-[14px] xl:text-[16px] text-right text-wrap w-[50px] sm:w-[70%]"
                     style={{
-                      color: websiteTheme.textColor,
+                      color: websiteTheme.text_color,
                       wordBreak: "break-word",
                       whiteSpace: "normal",
                     }}
@@ -180,7 +180,7 @@ const Focused = () => {
                   <p
                     className="text-[12px] lg:text-[14px] xl:text-[16px]"
                     style={{
-                      color: websiteTheme.textColor,
+                      color: websiteTheme.text_color,
                       wordBreak: "break-word",
                       whiteSpace: "normal",
                     }}
@@ -198,7 +198,7 @@ const Focused = () => {
                       }}
                       className="text-[15px] lg:text-[18px] xl:text-[20px]"
                       style={{
-                        color: websiteTheme.textColor,
+                        color: websiteTheme.text_color,
                         wordBreak: "break-word",
                         whiteSpace: "normal",
                       }}
@@ -216,7 +216,7 @@ const Focused = () => {
             <div
               className="w-[100%] mx-auto h-[1px]"
               style={{
-                backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.textColor} , ${websiteTheme.bgColor})`,
+                backgroundImage: `linear-gradient(to right , ${websiteTheme.bgColor} , ${websiteTheme.text_color} , ${websiteTheme.bgColor})`,
               }}
             />
           </React.Fragment>

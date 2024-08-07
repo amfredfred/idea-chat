@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ThemeStyles {
     bgColor: string;
-    textColor: string;
+    text_color: string;
     buttonColor: string;
     pump_card_bg: string;
     menu_bg: string,
@@ -27,7 +27,7 @@ const virtuals: Theme[] = [
         name: 'rem',
         styles: {
             bgColor: "#0000FF",
-            textColor: "#FFFF",
+            text_color: "#FFFF",
             buttonColor: "#0000FF",
             pump_card_bg: '#100F0D',
             menu_bg: '#FFFF',
@@ -40,46 +40,46 @@ const virtuals: Theme[] = [
         name: 'neo',
         styles: {
             bgColor: "#000000",
-            textColor: "#00FF00",
+            text_color: "#00FF00",
             buttonColor: "#000000",
-            pump_card_bg: '',
-            menu_bg: '',
-            active_color: '',
-            inactive_color: ''
+            pump_card_bg: '#000000',
+            menu_bg: '#000000',
+            active_color: '#00FF00',
+            inactive_color: '#ffffff'
         },
-        class: 'bg-[#000000] text-[#00FF00] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
+        class: 'bg-[#000000] text-[#00FF00] border border-[#00FF00]  text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
     },
     {
-        name: 'oen',
+        name: 'pinky',
         styles: {
-            bgColor: "#00FF00",
-            textColor: "#000000",
-            buttonColor: "#00FF00",
-            pump_card_bg: '',
-            menu_bg: '',
-            active_color: '',
-            inactive_color: ''
+            bgColor: "#000000",
+            text_color: "#FF00BF",
+            buttonColor: "#FF00BF",
+            pump_card_bg: '#000000',
+            menu_bg: '#000000',
+            active_color: '#FF00BF',
+            inactive_color: '#FFFFFF'
         },
-        class: 'bg-[#00FF00] text-[#000000] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
+        class: 'bg-[#000000] text-[#FF00BF] border border-[#FF00BF] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
     },
     {
-        name: 'hmmm',
+        name: 'red',
         styles: {
-            bgColor: "#FF5959",
-            textColor: "#ffffff",
-            buttonColor: "#000000",
-            pump_card_bg: '',
-            menu_bg: '',
-            active_color: '',
-            inactive_color: ''
+            bgColor: "#000000",
+            text_color: "#FF5959",
+            buttonColor: "#FF5959",
+            pump_card_bg: '#000000',
+            menu_bg: '#000000',
+            active_color: '#FF5959',
+            inactive_color: '#ffffff'
         },
-        class: 'bg-[#FF5959] text-[#3D3D3D] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
+        class: 'bg-[#000000] text-[#FF5959] border border-[#FF5959] text-[8px] lg:text-[10px]  p-[5px] lg:p-2 rounded-[3px] cursor-pointer'
     },
     {
         name: 'B/W',
         styles: {
             bgColor: "#ffffff",
-            textColor: "#000000",
+            text_color: "#000000",
             buttonColor: "#000000",
             pump_card_bg: '',
             menu_bg: '',

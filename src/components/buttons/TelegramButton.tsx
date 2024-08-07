@@ -11,8 +11,8 @@ export default function TelegramButton({ url }: { url: string | undefined }) {
 
     return (
         <Link target='_blank' to={url ?? '#invalid-link'}>
-            <IconButton style={{ border: 'solid thin red', borderColor: theme.textColor }}>
-                <Telegram className=' text-[5px]' color='action' style={{ color: theme.textColor, fontSize: 14 }} />
+            <IconButton style={{ border: 'solid thin red', borderColor: theme.text_color }}>
+                <Telegram className=' text-[5px]' color='action' style={{ color: theme.text_color, fontSize: 14 }} />
             </IconButton>
         </Link>
     )

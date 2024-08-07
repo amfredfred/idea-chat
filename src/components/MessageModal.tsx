@@ -74,7 +74,7 @@ export const MessageModal: React.FC<ModalProps> = ({
             color:
               websiteTheme.bgColor === "#ffffff"
                 ? "#ffffff"
-                : websiteTheme.textColor,
+                : websiteTheme.text_color,
           }}
         >
           Back to chat

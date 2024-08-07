@@ -39,7 +39,7 @@ const PumpChartEmbed: React.FC<PumpChartEmbedProps> = ({ src, backgroundColor = 
                 <div
                     style={{ background: theme.bgColor }}
                     className="absolute inset-0 flex items-center justify-center  ">
-                    <CircularProgress style={{ color: theme.textColor }} thickness={25} />
+                    <CircularProgress style={{ color: theme.text_color }} thickness={25} />
                 </div>
             )}
             <iframe

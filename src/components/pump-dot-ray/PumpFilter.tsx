@@ -69,7 +69,7 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
             className='absolute right-0 top-0 w-[361px] max-w-[100%]  max-sm:bottom-0 max-sm:top-auto max-sm:w-full isolate'>
             <div className='fixed h-[100vh] w-[100vw] backdrop-brightness-75 left-0 top-0 -z-10' />
             <Box ref={containerRef} className='flex-col flex p-4 gap-3 h-auto rounded-lg  border '
-                sx={{ background: theme.textColor, borderColor: theme.textColor }} >
+                sx={{ background: theme.text_color, borderColor: theme.text_color }} >
                 {filters.filter_listing.map(filter => (
                     <Box className='flex flex-col gap-4'>
                         <Box key={filter.name} className='grid grid-cols-5 items-center '>
@@ -106,7 +106,7 @@ export default function PumpFilter({ onRequestClose }: { onRequestClose: () => v
                         disableElevation>
                         <strong >Reset</strong>
                     </Button>
-                    <Button onClick={applyFilters} sx={{ flexGrow: 1, background: theme.bgColor, padding: '.5rem', color: theme.textColor }} disableElevation>Apply</Button>
+                    <Button onClick={applyFilters} sx={{ flexGrow: 1, background: theme.bgColor, padding: '.5rem', color: theme.text_color }} disableElevation>Apply</Button>
                 </Box>
             </Box>
         </Box>

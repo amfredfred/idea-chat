@@ -11,8 +11,8 @@ export default function XButton({ username }: { username: string | undefined }) 
 
     return (
         <Link target='_blank' to={`https://x.com/${username}`}>
-            <IconButton style={{ border: 'solid thin red', borderColor: theme.textColor }}>
-                <X color='action' style={{ color: theme.textColor, fontSize: 16 }} />
+            <IconButton style={{ border: 'solid thin red', borderColor: theme.text_color }}>
+                <X color='action' style={{ color: theme.text_color, fontSize: 16 }} />
             </IconButton>
         </Link>
     )

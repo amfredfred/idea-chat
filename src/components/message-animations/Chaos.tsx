@@ -181,7 +181,7 @@ const Chaos: React.FC = () => {
             >
               <div className="flex w-max max-w-[calc(30vw_-_2rem)] max-sm:max-w-[calc(60vw_-_2rem)] gap-3 items-center">
                 <p className="text-[11px] lg:text-[13px] xl:text-[16px] text-right  sm:w-[70%] text-ellipsis overflow-hidden text-nowrap line-clamp-2"
-                  style={{ color: websiteTheme.textColor }}  >
+                  style={{ color: websiteTheme.text_color }}  >
                   {message?.username}
                 </p>
                 <img src={message?.profilePic} className="object-cover rounded-full w-[30px] h-[30px]  aspect-square" alt={message?.username} />
