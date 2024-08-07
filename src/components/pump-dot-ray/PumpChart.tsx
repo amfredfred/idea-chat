@@ -61,7 +61,7 @@ export default function PumpChart() {
                     <Box alignItems='flex-end' className="flex flex-col gap-1 max-sm:mt-4 max-sm:p-2 max-sm:flex-row   max-sm:flex max-sm:justify-between col-span-1 justify-center align-middle max-sm:border border-gray-500 ">
                         <Box display='flex' alignItems='center' gap='.3rem'>
                             <TelegramButton url={pumpItem?.social_links?.telegram} />
-                            <XButton url={`${pumpItem?.social_links.twitter_username ? 'https://x.com/' + pumpItem?.social_links.twitter_username : undefined}`} />
+                            <XButton username={`${pumpItem?.social_links.twitter_username ? 'https://x.com/' + pumpItem?.social_links.twitter_username : undefined}`} />
                             <WebsiteButton url={pumpItem?.social_links?.website} />
                         </Box>
                         <Box display='flex' alignItems='center' gap='.3rem'>
