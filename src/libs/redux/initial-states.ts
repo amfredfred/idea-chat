@@ -81,7 +81,7 @@ export interface TokenSwapState {
     tokenToSend: PumpTokenItem | undefined;
     tokenToReceive: PumpTokenItem | undefined;
     amountToSend: number;
-    amountToReceive: number;
+    amountToReceive: number|string;
     loading: boolean;
     error: string | null;
     tokensList: PumpTokenItem[],

@@ -12,6 +12,7 @@ import TokenRateRefreshAndStatus from './TokenRateRefreshAndStatus';
 const TokenSwapAnalytic = () => {
     const [open, setOpen] = React.useState(false);
     const tsacref = useRef<HTMLDivElement>(null);
+    const theme = useAppSelector(state => state.theme.current.styles)
 
     const {
         tokenToSend,
@@ -45,7 +46,10 @@ const TokenSwapAnalytic = () => {
     };
 
     return (
-        <div ref={tsacref} className="text-white w-full bg-slate-700 p-2 rounded-lg text-xs">
+        <div
+            style={{ color: theme.active_color, borderColor: theme.active_color }}
+            ref={tsacref}
+            className="text-white w-full   p-2 rounded-lg text-xs border ">
             <Button
                 onClick={() => setOpen(!open)}
                 className="border-b pb-2 mb-2 cursor-pointer w-full"

@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setTheme } from "../../libs/redux/slices/theme-slice";
 import { Link, useNavigate } from "react-router-dom";
-import { setChatSettingsOpen, setChatAudio, setWebsiteMotion } from "../../libs/redux/slices/chat-slice";
+import { setChatSettingsOpen, setChatAudio, setWebsiteMotion, setShouldPlayAudio } from "../../libs/redux/slices/chat-slice";
 import synthIcon from "../../assets/synth.svg";
 import slideIcon from "../../assets/slide.svg";
 import onIcon from "../../assets/on.svg";
@@ -56,7 +56,7 @@ const motions = [{
   motion: "equator"
 }]
 
-export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlayPause: () => void }) {
+export default function ChatSettings() {
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -68,6 +68,10 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
   const isChatSettingsOpen = useAppSelector(state => state.chat.isChatSettingsOpen)
   const isMusicPlaying = useAppSelector(state => state.chat.isMusicPlaying)
   const closeMenu = useCallback(() => dispatch(setChatSettingsOpen(false)), [dispatch]);
+  const handlePlayAudio = useCallback((state: boolean = true) => dispatch(setShouldPlayAudio(state)), [dispatch]);
+  const handlePauseAudio = useCallback((state: boolean = false) => dispatch(setShouldPlayAudio(state)), [dispatch]);
+
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -130,7 +134,7 @@ export default function ChatSettings({ handleMusicPlayPause }: { handleMusicPlay
         <div className=" col-span-1 flex flex-col max-md:flex-row max-sm:justify-between cursor-pointer  max-md:col-span-6 lg:mb-6">
           <Box className='flex gap-1 justify-between items-center'>
             <p style={{ color: theme.inactive_color }} className="text-[12px] lg:text-[16px] max-[max-content]">Audio</p>
-            <Android12Switch defaultChecked onChange={handleMusicPlayPause} checked={isMusicPlaying} />
+            <Android12Switch defaultChecked onChange={() => isMusicPlaying ? handlePauseAudio() : handlePlayAudio()} checked={isMusicPlaying} />
           </Box>
           <Box className='flex gap-1 justify-between items-center'>
             <p style={{ color: theme.inactive_color }} className="text-[12px] lg:text-[16px] max-[max-content] mr-5 max-md:mr-0">MSG</p>

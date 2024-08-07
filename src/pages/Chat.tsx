@@ -1,7 +1,7 @@
-import messageNotification from "../assets/message_notification.mp3";
+// import messageNotification from "../assets/message_notification.mp3";
 import Footer from "../components/chat/Footer";
 import { Box } from "@mui/material";
-import { IChatStates } from "../common/types";
+// import { IChatStates } from "../common/types";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import PumpChannel from "../components/chat/PumpDotRay";
 import DenChannel from "../components/chat/DenChannel";
@@ -9,19 +9,21 @@ import { useEffect, useRef } from "react";
 import ContainedLayout from "../layouts/ContainedLayout";
 import { setMusicIsPlaying } from "../libs/redux/slices/chat-slice";
 
-const notificationSounds: { [key in IChatStates]: string } = {
-  DEN: messageNotification,
-  "PUMP.RAY": '',
-  ALPHA: ''
-}
+// const notificationSounds: { [key in IChatStates]: string } = {
+//   DEN: messageNotification,
+//   "PUMP.RAY": '',
+//   ALPHA: ''
+// }
 
 const Chat = () => {
 
   const dispatch = useAppDispatch()
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const notificationRef = useRef<HTMLAudioElement | null>(null);
+  // const notificationRef = useRef<HTMLAudioElement | null>(null);
   const chatState = useAppSelector(state => state.chat.state)
-  const isMusicPlaying = useAppSelector(state => state.chat.isMusicPlaying)
+  // const isMusicPlaying = useAppSelector(state => state.chat.isMusicPlaying)
+  const shouldPlayAudio = useAppSelector(state => state.chat.shouldPlayAudio)
+
   const theme = useAppSelector((state) => state.theme.current);
   const chatAudio = useAppSelector(state => state.chat.chatAudio)
 
@@ -46,17 +48,12 @@ const Chat = () => {
     }
   };
 
-  const handleMusicPlayPause = async () => {
-    if (isMusicPlaying) {
-      handlePause();
-    } else {
-      handlePlay();
-    }
-  };
-
   useEffect(() => {
-    handlePlay();
-  }, [chatAudio, audioRef]);
+    if (shouldPlayAudio)
+      handlePlay();
+    else
+      handlePause()
+  }, [shouldPlayAudio, audioRef, chatAudio]);
 
   return (
     <ContainedLayout>
@@ -74,7 +71,7 @@ const Chat = () => {
         <Box flexGrow='1' display='flex' width='100%' overflow='hidden'>
           {chatState == 'PUMP.RAY' ? <PumpChannel /> : chatState == 'DEN' ? <DenChannel /> : null}
         </Box>
-        <Footer handleMusicPlayPause={handleMusicPlayPause} />
+        <Footer />
       </Box>
     </ContainedLayout>
   );

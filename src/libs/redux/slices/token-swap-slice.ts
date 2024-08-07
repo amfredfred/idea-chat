@@ -199,7 +199,7 @@ const tokenSwapSlice = createSlice({
                 state.fetchQuoteState = 'success';
                 state.fetchQuoteMessage = 'success';
                 state.quoteResponse = payload;
-                console.log({ payload })
+                state.quoteResponse.platformFee.fee_currency = (state.tokenToReceive as any).symbol;
                 if (state.tokenToReceive?.address !== NativeToken.address) {
                     const feeAmount = parseEther(Number(payload.platformFee.amount), Number(state.tokenToReceive?.decimals));
                     const outAmount = parseEther(Number(payload.outAmount), Number(state.tokenToReceive?.decimals));
@@ -207,18 +207,20 @@ const tokenSwapSlice = createSlice({
                     const formattedFee = formatNumber(feeOut);
                     state.quoteResponse.platformFee.amount = formattedFee as any;
                     state.quoteResponse.platformFee.fee_currency = NativeToken.symbol;
-                    console.log("After Mantui")
+                } else {
+                    state.quoteResponse.platformFee.amount = parseEther(Number(payload.platformFee.amount), Number(state.tokenToSend?.decimals))
                 }
                 state.amountToReceive = parseEther(Number(payload.outAmount), Number(state.tokenToReceive?.decimals));
-                console.log(state.quoteResponse)
             })
             .addCase(fetchQuoteSwap.pending, (state) => {
-                state.quoteResponse = { outAmount: 0 } as any
+                state.amountToReceive = ''
+                state.quoteResponse = {} as any
                 state.fetchQuoteState = 'pending';
                 state.fetchQuoteMessage = 'pending';
             })
             .addCase(fetchQuoteSwap.rejected, (state, { payload }) => {
-                state.quoteResponse = { outAmount: 0 } as any
+                state.amountToReceive = ''
+                state.quoteResponse = {} as any
                 state.fetchQuoteState = 'error';
                 state.fetchQuoteMessage = (payload as any)?.error || 'Failed to fetch token rate';
             })

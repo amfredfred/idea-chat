@@ -7,7 +7,10 @@ export const promise = (seconds: number = 3) => new Promise((resolved) => setTim
 
 export const parseEther = (amount: number | string, decimals: number): number => {
     const bnAmount = new BigNumber(amount);
-    return bnAmount.dividedBy(new BigNumber(10).pow(decimals)).toNumber();
+    const divisor = Math.pow(10, decimals);
+    const result = bnAmount.dividedBy(divisor);
+    const truncatedResult = result.toFixed(8); // Truncate beyond 8 decimal places
+    return parseFloat(truncatedResult);
 };
 
 export const parseAmount = (amount: number, decimals: number): string => {

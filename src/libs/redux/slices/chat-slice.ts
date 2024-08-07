@@ -32,9 +32,11 @@ export interface ChatState {
     isChatSettingsOpen: boolean;
     chatAudio: string;
     isMusicPlaying: boolean;
+    shouldPlayAudio: boolean,
     state: IChatStates;
     typedMessage: string;
-    isLoadingInitialMessages: boolean
+    isLoadingInitialMessages: boolean,
+    audioRef: HTMLAudioElement | null
 }
 
 const initialState: ChatState = {
@@ -50,9 +52,11 @@ const initialState: ChatState = {
     isChatSettingsOpen: false,
     chatAudio: onMusic,
     isMusicPlaying: false,
+    shouldPlayAudio: true,
     state: 'PUMP.RAY',
     typedMessage: '',
-    isLoadingInitialMessages: false
+    isLoadingInitialMessages: false,
+    audioRef: null
 };
 
 // Async thunk to load initial messages
@@ -88,6 +92,7 @@ const chatSlice = createSlice({
             state.isChatSettingsOpen = action.payload;
         },
         setChatAudio(state, action: PayloadAction<string>) {
+            state.shouldPlayAudio = true
             state.chatAudio = action.payload;
         },
         setWebsiteMotion(state, action: PayloadAction<Settings['motion']>) {
@@ -101,6 +106,9 @@ const chatSlice = createSlice({
         },
         setTypedMessage: (state, action: PayloadAction<string>) => {
             state.typedMessage = action.payload;
+        },
+        setShouldPlayAudio: (state, action: PayloadAction<boolean>) => {
+            state.shouldPlayAudio = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -130,7 +138,8 @@ export const {
     setMusicIsPlaying,
     setWebsiteMotion,
     setChatState,
-    setTypedMessage
+    setTypedMessage,
+    setShouldPlayAudio
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
