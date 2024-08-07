@@ -81,7 +81,6 @@ export const handleTokenSwap = createAsyncThunk(
             let quoteResponse
             try {
                 quoteResponse = await fetchFreshQuotes({ fromMint, toMint, amount, settings })
-                console.log({ quoteResponse })
             } catch (error) {
                 quoteResponse = Qresponse
             }
