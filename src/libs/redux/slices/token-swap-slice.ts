@@ -14,6 +14,9 @@ import {
     TokenSwapResponse,
 } from "../initial-states";
 import { parseEther } from "../../../utils";
+import { formatNumber } from "../../../utils/format";
+
+const FEE_BP = import.meta.env.VITE_FEE_BP
 
 const handleTokenSelection = (
     state: typeof initialStates['tokenSwapInitialState'],
@@ -50,6 +53,7 @@ export const fetchQuoteSwap = createAsyncThunk(
     'token/fetchQuoteSwap',
     async ({ fromMint, toMint, amount, settings }: QuoteSwapPrams, thunkAPI) => {
         try {
+            console.log({ fromMint })
             if (!fromMint) return thunkAPI.rejectWithValue({ error: "Invalid from address" });
             if (!toMint) return thunkAPI.rejectWithValue({ error: "Invalid to address" });
             const url = new URL('https://quote-api.jup.ag/v6/quote');
@@ -57,7 +61,7 @@ export const fetchQuoteSwap = createAsyncThunk(
             url.searchParams.append('outputMint', toMint);
             url.searchParams.append('amount', String(amount));
             url.searchParams.append('slippageBps', settings.slippageBps);
-            url.searchParams.append('platformFeeBps', import.meta.env.VITE_FEE_BP);
+            url.searchParams.append('platformFeeBps', FEE_BP);
             const response = await axios.get<QuoteSwapResponse>(url.toString());
             return response.data;
         } catch (error) {
@@ -195,13 +199,26 @@ const tokenSwapSlice = createSlice({
                 state.fetchQuoteState = 'success';
                 state.fetchQuoteMessage = 'success';
                 state.quoteResponse = payload;
+                console.log({ payload })
+                if (state.tokenToReceive?.address !== NativeToken.address) {
+                    const feeAmount = parseEther(Number(payload.platformFee.amount), Number(state.tokenToReceive?.decimals));
+                    const outAmount = parseEther(Number(payload.outAmount), Number(state.tokenToReceive?.decimals));
+                    const feeOut = (feeAmount / outAmount) * parseEther(Number(payload.inAmount), Number(state.tokenToSend?.decimals));
+                    const formattedFee = formatNumber(feeOut);
+                    state.quoteResponse.platformFee.amount = formattedFee as any;
+                    state.quoteResponse.platformFee.fee_currency = NativeToken.symbol;
+                    console.log("After Mantui")
+                }
                 state.amountToReceive = parseEther(Number(payload.outAmount), Number(state.tokenToReceive?.decimals));
+                console.log(state.quoteResponse)
             })
             .addCase(fetchQuoteSwap.pending, (state) => {
+                state.quoteResponse = { outAmount: 0 } as any
                 state.fetchQuoteState = 'pending';
                 state.fetchQuoteMessage = 'pending';
             })
             .addCase(fetchQuoteSwap.rejected, (state, { payload }) => {
+                state.quoteResponse = { outAmount: 0 } as any
                 state.fetchQuoteState = 'error';
                 state.fetchQuoteMessage = (payload as any)?.error || 'Failed to fetch token rate';
             })

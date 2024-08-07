@@ -1,11 +1,19 @@
 import { MutableRefObject } from "react";
 import { PumpTokenItem } from "../common/types";
 import { formatNumber } from "./format";
+import BigNumber from 'bignumber.js';
 
 export const promise = (seconds: number = 3) => new Promise((resolved) => setTimeout(resolved, seconds * 1000))
-export const parseEther = (amount: number, decimals: number) => amount / 10 ** decimals;
-export const parseAmount = (amount: number, decimals: number) => amount * 10 ** decimals;
 
+export const parseEther = (amount: number | string, decimals: number): number => {
+    const bnAmount = new BigNumber(amount);
+    return bnAmount.dividedBy(new BigNumber(10).pow(decimals)).toNumber();
+};
+
+export const parseAmount = (amount: number, decimals: number): string => {
+    const bnAmount = new BigNumber(amount);
+    return bnAmount.multipliedBy(new BigNumber(10).pow(decimals)).toFixed(0);
+};
 
 export function shortenString(str: string, maxLength: number = 10, mode: 'left' | 'center' | 'right' = 'center'): string {
     if (str.length <= maxLength) {

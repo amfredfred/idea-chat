@@ -36,7 +36,6 @@ const TokenSwapAnalytic = () => {
     }, []);
 
     const skeletonLoading = <Skeleton style={{ borderRadius: '50px' }} variant="rectangular" width={50} height={18} />;
-    const platformFee = formatNumber(parseEther(Number(quoteResponse?.platformFee?.amount || 0), Number(tokenToReceive?.decimals || 0)));
     const maxToPay = parseEther(Number(quoteResponse?.inAmount || 0), Number(tokenToSend?.decimals || 0));
 
     const priceImpactColor = () => {
@@ -96,7 +95,7 @@ const TokenSwapAnalytic = () => {
                             </Grid>
                         </Grid>
                         <Grid item display='flex' >
-                            <span>{(!quoteResponse?.platformFee?.amount || fetchQuoteState == 'pending') ? skeletonLoading : platformFee}</span>&nbsp;{tokenToReceive?.symbol}
+                            <span>{(!quoteResponse?.platformFee?.amount || fetchQuoteState == 'pending') ? skeletonLoading : quoteResponse.platformFee.amount}</span>&nbsp;{quoteResponse.platformFee?.fee_currency}
                         </Grid>
                     </Grid>
                 </div>

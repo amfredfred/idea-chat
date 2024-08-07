@@ -35,7 +35,7 @@ const TokenswapStack: React.FC = () => {
   const isMobile = useMediaQuery('(max-width:600px)');
   const wallet = useWallet();
   const containerRef = useRef<HTMLDivElement>(null)
-
+  const theme = useAppSelector(state => state.theme.current.styles)
   const RPC_URL = import.meta.env.VITE_RPC_URL;
   const connection = new Connection(RPC_URL, 'confirmed');
 
@@ -116,13 +116,16 @@ const TokenswapStack: React.FC = () => {
 
   const buttonStyle = () => {
     if (loading) return {
-      backgroundColor: "black"
+      backgroundColor: theme.inactive_color,
+      color: theme.active_color
     };
     if (tokenToReceive?.symbol?.toUpperCase?.() === 'SOL') return {
-      backgroundColor: "#FF0000"
+      backgroundColor: theme.active_color,
+      color: theme.inactive_color
     };
     if (tokenToSend?.symbol?.toUpperCase?.() === 'SOL') return {
-      backgroundColor: "green"
+      backgroundColor: theme.bgColor,
+      color:theme.active_color
     };
   };
 
@@ -150,15 +153,19 @@ const TokenswapStack: React.FC = () => {
           maxWidth: '100vw',
           maxHeight: '100vh',
           zIndex: 1000,
-          borderRadius: isMinimized ? '10px' : '20px',
-          borderBottomLeftRadius: isMobile ? 0 : isMinimized ? '10px' : '20px',
-          borderBottomRightRadius: isMobile ? 0 : isMinimized ? '10px' : '20px',
+          borderRadius: isMinimized ? '10px' : '15px',
+          borderBottomLeftRadius: isMobile ? 0 : isMinimized ? '10px' : '15px',
+          borderBottomRightRadius: isMobile ? 0 : isMinimized ? '10px' : '15px',
           overflow: 'hidden',
           display: isReady ? 'flex' : 'none',
           flexDirection: 'column',
-          background: 'linear-gradient(rgb(4, 36, 65) 0%, rgb(42, 36, 60) 100%) no-repeat;',
+          // background: 'linear-gradient(rgb(4, 36, 65) 0%, rgb(42, 36, 60) 100%) no-repeat;',
+          backgroun: theme.menu_bg,
           boxShadow: isMinimized ? '' : '0 10px 4px rgba(0,0,0,0.8)',
+          border: 'solid thin',
+          borderColor: theme.active_color,
           bottom: (isMobile) ? 0 : undefined,
+          backdropFilter:`blur(40px)`
         }}
       >
         <div className="text-yellow-100 flex w-full" style={{

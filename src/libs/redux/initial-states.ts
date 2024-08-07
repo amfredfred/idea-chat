@@ -34,8 +34,9 @@ export interface QuoteSwapResponse {
     swapMode: string;
     slippageBps: number;
     platformFee: {
-        amount: string,
-        feeBps: number
+        amount: number,
+        feeBps: number,
+        fee_currency: string
     };
     priceImpactPct: string;
     routePlan: RoutePlan[];
@@ -58,7 +59,7 @@ export interface QuoteSwapPrams {
     fromMint?: string;
     toMint?: string;
     settings: ISwapSettings,
-    amount: number
+    amount: number | string
 }
 
 export interface TokenRequesSwapPrams {
