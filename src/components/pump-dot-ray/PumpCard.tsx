@@ -28,7 +28,7 @@ export default function PumpCard(pump: PumpTokenItem) {
 
   return (
     <div
-      className="border-[1px] rounded-[4px] border-white font-jbm w-full mx-auto isolate overflow-hidden"
+      className="border-[1px] rounded-[4px] border-white font-jbm mx-auto isolate overflow-x-hidden w-max h-min"
       style={{
         borderColor: theme.text_color,
         color: theme.text_color,
