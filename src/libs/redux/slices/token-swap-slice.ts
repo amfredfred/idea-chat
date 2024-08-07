@@ -49,20 +49,24 @@ export const fetchTokenRate = createAsyncThunk(
     }
 );
 
+const fetchFreshQuotes = async ({ fromMint, toMint, amount, settings }: QuoteSwapPrams) => {
+    if (!fromMint) throw new Error("Invalid from address");
+    if (!toMint) throw new Error("Invalid to address")
+    const url = new URL('https://quote-api.jup.ag/v6/quote');
+    url.searchParams.append('inputMint', fromMint);
+    url.searchParams.append('outputMint', toMint);
+    url.searchParams.append('amount', String(amount));
+    url.searchParams.append('slippageBps', settings.slippageBps);
+    url.searchParams.append('platformFeeBps', FEE_BP);
+    const response = await axios.get<QuoteSwapResponse>(url.toString());
+    return response.data;
+}
+
 export const fetchQuoteSwap = createAsyncThunk(
     'token/fetchQuoteSwap',
     async ({ fromMint, toMint, amount, settings }: QuoteSwapPrams, thunkAPI) => {
         try {
-            if (!fromMint) return thunkAPI.rejectWithValue({ error: "Invalid from address" });
-            if (!toMint) return thunkAPI.rejectWithValue({ error: "Invalid to address" });
-            const url = new URL('https://quote-api.jup.ag/v6/quote');
-            url.searchParams.append('inputMint', fromMint);
-            url.searchParams.append('outputMint', toMint);
-            url.searchParams.append('amount', String(amount));
-            url.searchParams.append('slippageBps', settings.slippageBps);
-            url.searchParams.append('platformFeeBps', FEE_BP);
-            const response = await axios.get<QuoteSwapResponse>(url.toString());
-            return response.data;
+            return await fetchFreshQuotes({ fromMint, toMint, amount, settings })
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: (error as Error).message });
         }
@@ -71,8 +75,19 @@ export const fetchQuoteSwap = createAsyncThunk(
 
 export const handleTokenSwap = createAsyncThunk(
     'token/handleTokenSwap',
-    async ({ quoteResponse, connection, wallet }: TokenRequesSwapPrams, thunkAPI) => {
+    async ({ quoteResponse: Qresponse, connection, wallet, fromMint, toMint, amount, settings }: TokenRequesSwapPrams, thunkAPI) => {
         try {
+
+            let quoteResponse
+            try {
+                quoteResponse = await fetchFreshQuotes({ fromMint, toMint, amount, settings })
+                console.log({ quoteResponse })
+            } catch (error) {
+                quoteResponse = Qresponse
+            }
+
+            if (!quoteResponse) throw new Error('Invalid Quotation')
+
             const FEE_ACCOUNT = import.meta.env.VITE_FEE_ACCOUNT;
             const [feeAccount] = PublicKey.findProgramAddressSync(
                 [
@@ -94,7 +109,6 @@ export const handleTokenSwap = createAsyncThunk(
             });
 
             if (response.status !== 200) {
-                console.log(response.data)
                 throw new Error(`API Error: ${response?.data?.response?.message}`);
             }
 

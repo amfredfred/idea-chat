@@ -62,7 +62,7 @@ export interface QuoteSwapPrams {
     amount: number | string
 }
 
-export interface TokenRequesSwapPrams {
+export interface TokenRequesSwapPrams extends QuoteSwapPrams  {
     quoteResponse: QuoteSwapResponse
     connection: Connection,
     wallet: WalletContextState
@@ -120,7 +120,8 @@ export const tokenSwapInitialState: TokenSwapState = {
     tokenToSend: undefined,
     tokenToReceive: undefined,
     amountToSend: 0.0001,
-    amountToReceive: 0, loading: false,
+    amountToReceive: 0,
+    loading: false,
     error: null,
     tokensList: [],
     isVisible: false,

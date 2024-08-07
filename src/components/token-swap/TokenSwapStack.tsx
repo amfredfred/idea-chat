@@ -11,7 +11,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
 import { toast } from 'react-toastify';
 import { useMediaQuery } from '@mui/material';
-import { getDimensions } from '../../utils';
+import { getDimensions, parseAmount } from '../../utils';
 import { fetchPumpTokenDetails } from '../../libs/redux/slices/pump-chart-slice';
 
 const TokenswapStack: React.FC = () => {
@@ -27,7 +27,8 @@ const TokenswapStack: React.FC = () => {
     fetchQuoteState,
     quoteResponse,
     fetchTokenRateState,
-    tokenSwapState
+    tokenSwapState,
+    settings
   } = useAppSelector(state => state.tokenSwap);
   const [isMinimized, setIsMinimized] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -44,7 +45,11 @@ const TokenswapStack: React.FC = () => {
       dispatch(handleTokenSwap({
         connection,
         wallet,
-        quoteResponse
+        quoteResponse,
+        fromMint: String(tokenToSend?.address),
+        toMint: String(tokenToReceive?.address),
+        amount: parseAmount(amountToSend, Number(tokenToSend?.decimals)),
+        settings
       }));
     }
   };
@@ -125,7 +130,7 @@ const TokenswapStack: React.FC = () => {
     };
     if (tokenToSend?.symbol?.toUpperCase?.() === 'SOL') return {
       backgroundColor: theme.bgColor,
-      color:theme.active_color
+      color: theme.active_color
     };
   };
 
@@ -165,7 +170,7 @@ const TokenswapStack: React.FC = () => {
           border: 'solid thin',
           borderColor: theme.active_color,
           bottom: (isMobile) ? 0 : undefined,
-          backdropFilter:`blur(40px)`
+          backdropFilter: `blur(40px)`
         }}
       >
         <div className="text-yellow-100 flex w-full" style={{
