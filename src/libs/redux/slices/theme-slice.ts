@@ -29,7 +29,7 @@ const virtuals: Theme[] = [
             bgColor: "#0000FF",
             text_color: "#FFFF",
             buttonColor: "#0000FF",
-            pump_card_bg: '#100F0D',
+            pump_card_bg: 'transparent',
             menu_bg: '#FFFF',
             active_color: '#0000FF',
             inactive_color: '#100F0D'
