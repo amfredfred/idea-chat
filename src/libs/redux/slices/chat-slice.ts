@@ -12,7 +12,8 @@ export interface Message {
     profilePic: string;
     position: {
         x: number,
-        y: number
+        y: number,
+        width: number
     }
 }
 

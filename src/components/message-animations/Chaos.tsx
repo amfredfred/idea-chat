@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { Message } from "../../libs/redux/slices/chat-slice";
 import { addNewMessage } from "../../libs/redux/slices/chat-slice";
 import debounce from "lodash.debounce";
-import { Box } from "@mui/material";
 
 const Chaos: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,7 +24,7 @@ const Chaos: React.FC = () => {
     }
   }, 100);
 
-  const isSmallScreen = dimensions.width < 600;
+  const isSmallScreen = dimensions.width < 1024;
 
   /**
    * 
@@ -33,7 +32,7 @@ const Chaos: React.FC = () => {
    */
   const getNextPosition = () => {
     const columnWidth = dimensions.width / 3;
-    const variation = 15; // Variations in pixel
+    const variation = 10; // Variations in pixel
 
     let newPosition;
 
@@ -47,7 +46,7 @@ const Chaos: React.FC = () => {
         setLastPosition('right');
       } else {
         newPosition = {
-          x: (dimensions.width - messageWidth) + (variation - Math.random() * (variation * 5)), // Slight horizontal variation for right
+          x: dimensions.width - messageWidth + variation - Math.random() * (variation * 2), // Slight horizontal variation for right
           y: Math.random() * (dimensions.height - messageHeight)
         };
         setLastPosition('left');
@@ -167,32 +166,29 @@ const Chaos: React.FC = () => {
               stiffness: 300,
               damping: 20
             }}
-            className="absolute   p-2 rounded-lg max-w-xs"
+            className="absolute text-white p-2 rounded-lg max-w-xs"
             style={{
               left: message.position.x,
               top: message.position.y,
             }}
           >
             <motion.div
-              className="flex w-max max-w-[calc(30vw)] max-sm:max-w-[calc(30vw)] gap-3 items-center max-sm:items-start"
+              className=" mx-auto flex flex-col gap-[15px] lg:gap-[20px]"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
-              transition={{ type: "spring", stiffness: 100, damping: 20 }}  >
-              <p className="text-[11px]  max-sm:hidden  text-nowrap "
-                style={{ color: websiteTheme.textColor }}  >
-                {message?.username}
-              </p>
-              <img src={message?.profilePic} className="object-cover rounded-full w-[30px] h-[30px]  aspect-square" alt={message?.username} />
-              <Box className='flex max-sm:flex-col items-start'>
-                <p className="text-[11px] hidden  max-sm:block line-clamp-1 text-ellipsis "
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
+            >
+              <div className="flex w-max max-w-[calc(30vw_-_2rem)] max-sm:max-w-[calc(60vw_-_2rem)] gap-3 items-center">
+                <p className="text-[11px] lg:text-[13px] xl:text-[16px] text-right  sm:w-[70%] text-ellipsis overflow-hidden text-nowrap line-clamp-2"
                   style={{ color: websiteTheme.textColor }}  >
                   {message?.username}
                 </p>
-                <p className="text-[10px] lg:text-[12px] line-clamp-3 max-sm:line-clamp-4">
+                <img src={message?.profilePic} className="object-cover rounded-full w-[30px] h-[30px]  aspect-square" alt={message?.username} />
+                <p className="text-[10px] lg:text-[12px] line-clamp-2">
                   {message?.message}
                 </p>
-              </Box>
+              </div>
             </motion.div>
           </motion.div>
         ))}
