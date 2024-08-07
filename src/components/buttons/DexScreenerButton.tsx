@@ -9,7 +9,7 @@ export default function DexScreenerButton({ mintAddress }: { mintAddress: string
     if (!mintAddress) return
 
     return (
-        <Link target='_blank' to={`${mintAddress}`} className='relative h-[35px] w-[35px]'>
+        <Link target='_blank' to={`https://dexscreener.com/solana/${mintAddress}`} className='relative h-[35px] w-[35px]'>
             <svg width="35" height="35" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="13" cy="13" r="12" stroke={theme.active_color} />
             </svg>
