@@ -173,19 +173,20 @@ const Chaos: React.FC = () => {
             }}
           >
             <motion.div
-              className=" mx-auto flex flex-col gap-[15px] lg:gap-[20px]"
+              className=" mx-auto flex flex-col gap-[15px] lg:gap-[20px] max-w-[25vw] max-md:w-[45vw]"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
-              <div className="flex w-max max-w-[calc(30vw_-_2rem)] max-sm:max-w-[calc(60vw_-_2rem)] gap-3 items-center">
+              <div className="flex w-full gap-3 items-center">
                 <p className="text-[11px] lg:text-[13px] xl:text-[16px] text-right  sm:w-[70%] text-ellipsis overflow-hidden text-nowrap line-clamp-2"
                   style={{ color: websiteTheme.text_color }}  >
                   {message?.username}
                 </p>
                 <img src={message?.profilePic} className="object-cover rounded-full w-[30px] h-[30px]  aspect-square" alt={message?.username} />
-                <p className="text-[10px] lg:text-[12px] line-clamp-2">
+                <p className="text-[10px] lg:text-[12px] line-clamp-2"
+                  style={{ color: websiteTheme.text_color }}  >
                   {message?.message}
                 </p>
               </div>

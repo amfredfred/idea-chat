@@ -9,6 +9,10 @@ import TelegramButton from "../buttons/TelegramButton";
 import WebsiteButton from "../buttons/WebsiteButton";
 import PumpfunButton from "../buttons/PumpfunButton";
 import XButton from "../buttons/XButton";
+import JupiterButton from "../buttons/JupiterButton";
+import DexScreenerButton from "../buttons/DexScreenerButton";
+import DexToolButton from "../buttons/DexToolButton";
+import SolanaButton from "../buttons/SolanaButton";
 
 export default function PumpCard(pump: PumpTokenItem) {
   const theme = useAppSelector(state => state.theme.current.styles);
@@ -80,7 +84,11 @@ export default function PumpCard(pump: PumpTokenItem) {
             <WebsiteButton url={pump?.social_links?.website} />
           </Box>
           <Box display='flex' alignItems='center' gap='.3rem'>
+            <DexScreenerButton mintAddress={pump?.address} />
+            <DexToolButton mintAddress={pump?.address} />
+            <JupiterButton mintAddress={pump?.address} />
             <PumpfunButton mintAddress={pump?.address} />
+            <SolanaButton mintAddress={pump?.address} />
           </Box>
         </Box>
 
