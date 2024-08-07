@@ -11,7 +11,7 @@ export default function DexScreenerButton({ mintAddress }: { mintAddress: string
     return (
         <Link target='_blank' to={`https://dexscreener.com/solana/${mintAddress}`} className='relative h-[35px] w-[35px]'>
             <svg width="35" height="35" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="13" cy="13" r="12" stroke={theme.active_color} />
+                <circle cx="13" cy="13" r="12" stroke={theme.text_color} />
             </svg>
             <img className='rounded-full w-[26px] aspect-square absolute translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%]' src={DexScreenerIcon} />
         </Link>
