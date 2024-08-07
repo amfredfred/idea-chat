@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { setTheme } from "../../libs/redux/slices/theme-slice";
 import { Link, useNavigate } from "react-router-dom";
-import { setChatSettingsOpen, setChatAudio, setWebsiteMotion, setShouldPlayAudio } from "../../libs/redux/slices/chat-slice";
+import { setChatSettingsOpen, setChatAudio, setWebsiteMotion, setShouldPlayAudio, MotionType } from "../../libs/redux/slices/chat-slice";
 import synthIcon from "../../assets/synth.svg";
 import slideIcon from "../../assets/slide.svg";
 import onIcon from "../../assets/on.svg";
@@ -45,7 +45,10 @@ const musics = [
   }
 ];
 
-const motions = [{
+const motions: Array<{
+  name: keyof MotionType
+  motion: keyof MotionType
+}> = [{
   name: 'chaos',
   motion: "chaos"
 }, {
@@ -70,8 +73,6 @@ export default function ChatSettings() {
   const closeMenu = useCallback(() => dispatch(setChatSettingsOpen(false)), [dispatch]);
   const handlePlayAudio = useCallback((state: boolean = true) => dispatch(setShouldPlayAudio(state)), [dispatch]);
   const handlePauseAudio = useCallback((state: boolean = false) => dispatch(setShouldPlayAudio(state)), [dispatch]);
-
-
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -101,9 +102,7 @@ export default function ChatSettings() {
       ref={containerRef}
       style={{ background: theme.menu_bg, borderColor: theme.active_color }}
       className={`border  z-10 p-5 max-sm:w-full rounded-[8px] max-md:gap-2 flex flex-col md:right-[0] md:gap-[1.5rem]  bg-white absolute md:bottom-[0] md:relative max-md:absolute  max-md:bottom-[110%] max-md:w-[361px]
-
 `}  >
-
       <Box className='grid grid-cols-6 items-center w-full'>
         <div className="col-span-1 max-md:col-span-6 lg:mb-6">
           <p style={{ color: theme.inactive_color }} className=" text-[12px] lg:text-[16px]">Visual</p>

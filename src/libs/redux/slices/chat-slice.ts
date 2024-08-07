@@ -13,14 +13,20 @@ export interface Message {
     position: {
         x: number,
         y: number,
-        width: number
+        // width: number
     }
+}
+
+export interface MotionType {
+    chaos: 'chaos'
+    focused: 'focused'
+    equator: 'equator'
 }
 
 export interface Settings {
     visual: string;
     audio: string;
-    motion: 'focused' | 'chaos' | null;
+    motion: keyof MotionType;
 }
 
 export interface ChatState {
@@ -123,6 +129,7 @@ const chatSlice = createSlice({
             })
             .addCase(loadInitialMessages.rejected, (state, action) => {
                 state.isLoadingInitialMessages = false
+                state.initialMessages = []
                 console.error('Failed to load initial messages:', action.payload);
             });
     }
