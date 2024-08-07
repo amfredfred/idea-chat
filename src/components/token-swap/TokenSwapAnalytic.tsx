@@ -58,7 +58,7 @@ const TokenSwapAnalytic = () => {
             >
                 <Grid container alignItems="center" justifyContent="space-between">
                     <span className=' text-white text-xs '>
-                        1 {tokenToSend?.symbol} = {fetchTokenRateState == 'pending' ? <CircularProgress size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}
+                        1 {tokenToSend?.symbol} = {fetchTokenRateState == 'pending' ? <CircularProgress style={{ color: theme.text_color }} size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}
                     </span>
                     <Box display='flex' alignItems='center' gap='.4rem'>
                         <SwipeDown fontSize='small' className={`transform transition-transform ${open ? 'rotate-180' : ''}`} />

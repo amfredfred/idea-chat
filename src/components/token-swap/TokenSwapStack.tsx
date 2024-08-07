@@ -109,6 +109,10 @@ const TokenswapStack: React.FC = () => {
   );
 
   const buttonText = () => {
+    if (tokenSwapState == 'pending' && fetchQuoteState == 'pending')
+      return <div className='flex items-center gap-2'>Fetching Quotes <CircularProgress style={{ color: theme.text_color }} size={20} thickness={10} /></div>
+    if (tokenSwapState == 'pending')
+      return <div className='flex items-center gap-2'>Pending<CircularProgress style={{ color: theme.text_color }} size={20} thickness={10} /></div>
     if (loading)
       return <CircularProgress size={25} />;
     if (tokenToReceive?.symbol?.toUpperCase?.() === 'SOL') {

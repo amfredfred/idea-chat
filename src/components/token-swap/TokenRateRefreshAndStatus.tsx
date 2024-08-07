@@ -7,6 +7,7 @@ import { CircularProgress } from "@mui/material";
 export default function TokenRateRefreshAndStatus() {
   const [initCountdown,] = useState(20) //setInitCountdown
   const [timeTillRefetch, setTimeTillRefetch] = useState<number>(initCountdown);
+  const theme = useAppSelector(state => state.theme.current.styles)
   const dispatch = useAppDispatch();
 
   const {
@@ -59,5 +60,5 @@ export default function TokenRateRefreshAndStatus() {
     };
   }, [fetchQuote, initCountdown, amountToSend, tokenToReceive, tokenToSend]);
 
-  return <CircularProgress variant="determinate" size={17} value={((initCountdown - timeTillRefetch) / initCountdown) * 100} />
+  return <CircularProgress variant="determinate" size={17} style={{ color: theme.text_color }} value={((initCountdown - timeTillRefetch) / initCountdown) * 100} />
 }

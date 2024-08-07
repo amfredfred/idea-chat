@@ -6,6 +6,7 @@ import TokenSelection from './TokenSelection';
 import TokenBalance from './TokenBalance';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
+import { useAppSelector } from '../../libs/redux/hooks';
 
 const StyledPaper = styled(Paper)(() => ({
     boxShadow: 'none',
@@ -34,6 +35,7 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
 
     const RPC_URL = import.meta.env.VITE_RPC_URL;
     const connection = new Connection(RPC_URL, 'confirmed')
+    const theme = useAppSelector(state => state.theme.current.styles)
 
     const handleOnTokenSelect = (token: any) => {
         setIsTokensListOpen(false);
@@ -69,7 +71,7 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
                     />
                     {loading && (
                         <Box>
-                            <CircularProgress size={20} thickness={10} />
+                            <CircularProgress style={{ color: theme.text_color }} size={20} thickness={10} />
                         </Box>
                     )}
                     <Box
