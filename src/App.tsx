@@ -69,6 +69,7 @@ export default function App() {
     return <Loading />
   }
 
+  console.log('EXCESS 👍👌')
   const useColor = theme.bgColor === '#0000FF' ? '#FFFF' : theme.bgColor === '#FFF' ? theme.text_color : theme.active_color
 
   return (
