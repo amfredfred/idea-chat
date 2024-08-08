@@ -51,7 +51,6 @@ export const fetchTokenRate = createAsyncThunk(
 );
 
 const fetchFreshQuotes = async ({ fromMint, toMint, amount, settings }: QuoteSwapPrams) => {
-    console.log({ slippage: calculateBpsAmount( settings.selectedSlippagePercent) })
     if (!fromMint) throw new Error("Invalid from address");
     if (!toMint) throw new Error("Invalid to address")
     const url = new URL('https://quote-api.jup.ag/v6/quote');
@@ -100,7 +99,6 @@ export const handleTokenSwap = createAsyncThunk(
             );
 
             const priority = calculateMaxFee(settings.selectedPriority)
-            console.log({ priority })
             const response = await axios('https://quote-api.jup.ag/v6/swap', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
