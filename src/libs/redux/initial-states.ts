@@ -79,7 +79,6 @@ export type PriorityOptions = {
 }
 
 export interface ISwapSettings {
-    isOpen: boolean
     slippageBps: string,
     priorityOptions: Array<{ value: keyof PriorityOptions, label: keyof PriorityOptions }>,
     feeOptions: Array<{ value: number, label: number }>,
@@ -135,7 +134,7 @@ export const tokenSwapInitialState: TokenSwapState = {
     loading: false,
     error: null,
     tokensList: [],
-    isVisible: false,
+    isVisible: true,
     fetchTokenRateState: 'idle',
     fetchTokenRateMessage: null,
     conversionRate: null,
@@ -146,7 +145,6 @@ export const tokenSwapInitialState: TokenSwapState = {
     platformFeeToken: NativeToken.symbol,
     settings: {
         slippageBps: '300',
-        isOpen: false,
         priorityOptions: [
             { value: 'low', label: 'low' },
             { value: 'medium', label: 'medium' },

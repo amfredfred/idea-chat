@@ -198,9 +198,6 @@ const tokenSwapSlice = createSlice({
         setPriorityOption: (state, action: PayloadAction<keyof PriorityOptions>) => {
             state.settings.selectedPriority = action.payload
         },
-        setSwapSettiongOpen: (state, action: PayloadAction<boolean>) => {
-            state.settings.isOpen = action.payload
-        }
     },
     extraReducers: (builder) => {
         builder
@@ -276,7 +273,6 @@ export const {
     setTokensList,
     setFeeOption,
     setPriorityOption,
-    setSwapSettiongOpen
 } = tokenSwapSlice.actions;
 
 export default tokenSwapSlice.reducer;

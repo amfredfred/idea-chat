@@ -6,6 +6,7 @@ import { useAppSelector } from '../../libs/redux/hooks';
 const TokenSwapConfigs: React.FC = () => {
     const [priority, setPriority] = useState<string>('medium');
     const [fee, setFee] = useState<string>('0.5');
+    const theme = useAppSelector(state => state.theme.current.styles)
 
     const priorities = useAppSelector(state => state.tokenSwap.settings.priorityOptions)
     const feeOptions = useAppSelector(state => state.tokenSwap.settings.feeOptions)
@@ -25,10 +26,7 @@ const TokenSwapConfigs: React.FC = () => {
     };
 
     return (
-        <div className="p-6">
-            <Typography variant="h5" className="mb-4">
-                Token Swap Configurations
-            </Typography>
+        <div className="p-6" style={{ color: theme.text_color }}>
             <FormControl fullWidth className="mb-4">
                 <InputLabel id="priority-label">Priority</InputLabel>
                 <Select
