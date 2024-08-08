@@ -32,7 +32,6 @@ export interface QuoteSwapResponse {
     outAmount: string;
     otherAmountThreshold: string;
     swapMode: string;
-    slippageBps: number;
     platformFee: {
         amount: number,
         feeBps: number,
@@ -75,15 +74,15 @@ export interface TokenSwapResponse {
 export type PriorityOptions = {
     low: 'low'
     medium: 'medium'
-    high: 'high'
+    fast: 'fast',
+    auto: 'auto'
 }
 
 export interface ISwapSettings {
-    slippageBps: string,
     priorityOptions: Array<{ value: keyof PriorityOptions, label: keyof PriorityOptions, description: string }>,
-    feeOptions: Array<{ value: number, label: number }>,
-    selectedPriority: string,
-    selectedFee: number
+    slippageOptions: Array<{ value: number, label: number }>,
+    selectedPriority: keyof PriorityOptions,
+    selectedSlippagePercent: number
 }
 
 
@@ -144,7 +143,6 @@ export const tokenSwapInitialState: TokenSwapState = {
     platformFeeAmount: 0,
     platformFeeToken: NativeToken.symbol,
     settings: {
-        slippageBps: '300',
         priorityOptions: [
             {
                 value: 'low',
@@ -157,18 +155,23 @@ export const tokenSwapInitialState: TokenSwapState = {
                 description: 'Balanced option offering moderate speed and cost efficiency for transactions.'
             },
             {
-                value: 'high',
-                label: 'high',
-                description: 'Priority choice for fastest processing with higher fees and quicker inclusion.'
+                value: 'fast',
+                label: 'fast',
+                description: 'Priority choice for fastest processing with faster fees and quicker inclusion.'
+            },
+            {
+                value: 'auto',
+                label: 'auto',
+                description: 'Lets our system decide.'
             },
         ],
-        feeOptions: [
+        slippageOptions: [
             { value: 0.1, label: 0.1 },
             { value: 0.5, label: 0.5 },
             { value: 1.0, label: 1.0 },
         ],
-        selectedPriority: '',
-        selectedFee: 0.1,
+        selectedPriority: 'auto',
+        selectedSlippagePercent: 0.1,
     },
 
     tokenSwapState: 'idle',

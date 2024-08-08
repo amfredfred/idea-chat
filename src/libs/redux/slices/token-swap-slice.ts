@@ -14,7 +14,7 @@ import {
     TokenSwapResponse,
     PriorityOptions,
 } from "../initial-states";
-import { parseEther } from "../../../utils";
+import { calculateBpsAmount, parseEther } from "../../../utils";
 import { formatNumber } from "../../../utils/format";
 
 const FEE_BP = import.meta.env.VITE_FEE_BP
@@ -51,13 +51,14 @@ export const fetchTokenRate = createAsyncThunk(
 );
 
 const fetchFreshQuotes = async ({ fromMint, toMint, amount, settings }: QuoteSwapPrams) => {
+    console.log({ slippage: calculateBpsAmount(amount, settings.selectedSlippagePercent) })
     if (!fromMint) throw new Error("Invalid from address");
     if (!toMint) throw new Error("Invalid to address")
     const url = new URL('https://quote-api.jup.ag/v6/quote');
     url.searchParams.append('inputMint', fromMint);
     url.searchParams.append('outputMint', toMint);
     url.searchParams.append('amount', String(amount));
-    url.searchParams.append('slippageBps', settings.slippageBps);
+    url.searchParams.append('slippageBps', calculateBpsAmount(amount, settings.selectedSlippagePercent));
     url.searchParams.append('platformFeeBps', FEE_BP);
     const response = await axios.get<QuoteSwapResponse>(url.toString());
     return response.data;
@@ -192,8 +193,8 @@ const tokenSwapSlice = createSlice({
             if (!state.tokenToReceive) state.tokenToReceive = action.payload?.[0];
             state.tokensList = action.payload;
         },
-        setFeeOption: (state, action: PayloadAction<number>) => {
-            state.settings.selectedFee = action.payload
+        setSlippagePercentage: (state, action: PayloadAction<number>) => {
+            state.settings.selectedSlippagePercent = action.payload
         },
         setPriorityOption: (state, action: PayloadAction<keyof PriorityOptions>) => {
             state.settings.selectedPriority = action.payload
@@ -271,7 +272,7 @@ export const {
     setIsVisible,
     setError,
     setTokensList,
-    setFeeOption,
+    setSlippagePercentage,
     setPriorityOption,
 } = tokenSwapSlice.actions;
 

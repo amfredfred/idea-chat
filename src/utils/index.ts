@@ -71,3 +71,9 @@ export function calculatePumpTokenChanges(token: PumpTokenItem): { change5m: str
 
     return { change5m, change1h, change6h, change24h };
 }
+
+
+export function calculateBpsAmount(amount: number | string, percentage: number | string): string {
+    const basisPoints = Number(percentage) * 100;
+    return String((Number(amount) * basisPoints) / 10_000);
+}

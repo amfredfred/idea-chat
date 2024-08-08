@@ -1,15 +1,15 @@
 import React from 'react';
 import { Button, Box, Stack, Divider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setFeeOption, setPriorityOption } from '../../libs/redux/slices/token-swap-slice';
+import { setSlippagePercentage, setPriorityOption } from '../../libs/redux/slices/token-swap-slice';
 
 const TokenSwapConfigs: React.FC = () => {
     const theme = useAppSelector(state => state.theme.current.styles)
     const dispatch = useAppDispatch()
 
     const priorities = useAppSelector(state => state.tokenSwap.settings.priorityOptions)
-    const feeOptions = useAppSelector(state => state.tokenSwap.settings.feeOptions)
-    const selectedFee = useAppSelector(state => state.tokenSwap.settings.selectedFee)
+    const slippageOptions = useAppSelector(state => state.tokenSwap.settings.slippageOptions)
+    const selectedSlippagePercent = useAppSelector(state => state.tokenSwap.settings.selectedSlippagePercent)
     const selectedPriority = useAppSelector(state => state.tokenSwap.settings.selectedPriority)
     const priorityDescription = (priorities.filter(item => selectedPriority == item.value))?.[0]?.description
 
@@ -35,12 +35,12 @@ const TokenSwapConfigs: React.FC = () => {
                         }}
                         className="flex items-center border rounded-md ring-1 ring-black/10 dark:ring-white/5 overflow-hidden text-sm h-10">
                         {
-                            feeOptions.map(feeitem => (
+                            slippageOptions.map(feeitem => (
                                 <button
-                                    onClick={() => dispatch(setFeeOption(feeitem.value))}
+                                    onClick={() => dispatch(setSlippagePercentage(feeitem.value))}
                                     style={{
-                                        background: selectedFee == feeitem.value ? theme.active_color : '',
-                                        color: selectedFee == feeitem.value ? theme.menu_bg : theme.text_color
+                                        background: selectedSlippagePercent == feeitem.value ? theme.active_color : '',
+                                        color: selectedSlippagePercent == feeitem.value ? theme.menu_bg : theme.text_color
                                     }}
                                     className="flex-1 py-4 px-1 text-white-50 bg-[#1B1B1E] h-full relative"  >
                                     <div className="h-full w-full leading-none flex justify-center items-center">
@@ -49,14 +49,19 @@ const TokenSwapConfigs: React.FC = () => {
                                 </button>
                             ))
                         }
-                        <div className="flex items-center justify-between cursor-text w-[130px] h-full text-white-50 bg-[#1B1B1E] px-2 text-sm relative border-l border-white/5">
-                            <span className="text-xs">OR</span>
+                        <div
+                            style={{
+                                background: slippageOptions.every(item => item.value != selectedSlippagePercent) ? theme.active_color : '',
+                                color: slippageOptions.every(item => item.value != selectedSlippagePercent) ? theme.menu_bg : theme.text_color
+                            }}
+                            className="flex items-center justify-between cursor-text w-[130px] h-full text-white-50 bg-[#1B1B1E] px-2 text-sm relative border-l border-white/5">
+                            <span className="text-xs flex-grow text-right">Custom</span>
                             <input
-
+                                onChange={({ target: { value } }) => dispatch(setSlippagePercentage(Number(value)))}
                                 inputMode="decimal"
                                 className="outline-none text-center h-full w-full bg-transparent py-4 px-2 text-sm rounded-lg placeholder:text-white/25 text-v2-primary  pointer-events-all"
                                 placeholder="0.00%"
-                                type="text"
+                                type="number"
                             // value=""
                             />
                         </div>
