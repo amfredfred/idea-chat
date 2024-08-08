@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Loading from "./components/Loading.tsx";
 import Chat from "./pages/Chat.tsx";
 import { useAppDispatch, useAppSelector } from "./libs/redux/hooks.ts";
-import { connectSocket  } from "./libs/redux/slices/pump-socket-slice.ts";
+import { connectSocket } from "./libs/redux/slices/pump-socket-slice.ts";
 import TokenswapStack from "./components/token-swap/TokenSwapStack.tsx";
 import { ToastContainer } from "react-toastify";
 import { Box, Stack } from "@mui/material";
@@ -13,7 +13,7 @@ import Profile from "./pages/Profile.tsx";
 import { loadInitialMessages } from "./libs/redux/slices/chat-slice.ts";
 // import filtersSvg from "./assets/wallet-bg-big.png";
 
-const API_URL = import.meta.env.VITE_PUMP_SEVER_URL 
+const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 const connectWallet = async (wallet: any): Promise<boolean> => {
   try {
     if (!wallet.connected) {
@@ -44,22 +44,17 @@ const ProtectedRoute: React.FC = () => {
 };
 
 export default function App() {
-  const socketState = useAppSelector(state => state.pumpSocket.socketState)
-  const theme = useAppSelector(state => state.theme.current.styles)
-  // const chatState = useAppSelector(state => state.chat.state)
 
   const dispatch = useAppDispatch()
+  const theme = useAppSelector(state => state.theme.current.styles)
+  const socketState = useAppSelector(state => state.pumpSocket.socketState)
   const loadMessages = useCallback(async () => dispatch(loadInitialMessages()), [dispatch])
+  const startSocket = useCallback(async () => dispatch(connectSocket(API_URL)), [dispatch])
 
   useEffect(() => {
-    return () => {
-      dispatch(connectSocket(API_URL))
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
+    startSocket()
     loadMessages()
-  }, [loadMessages])
+  }, [loadMessages, startSocket])
 
   console.log({ socketState })
 
