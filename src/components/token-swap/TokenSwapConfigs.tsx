@@ -1,12 +1,9 @@
-// components/TokenSwapConfigs.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Box, Stack, Divider } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { setFeeOption, setPriorityOption } from '../../libs/redux/slices/token-swap-slice';
 
 const TokenSwapConfigs: React.FC = () => {
-    const [priority, setPriority] = useState<string>('medium');
-    const [fee, setFee] = useState<string>('0.5');
     const theme = useAppSelector(state => state.theme.current.styles)
     const dispatch = useAppDispatch()
 
@@ -14,19 +11,10 @@ const TokenSwapConfigs: React.FC = () => {
     const feeOptions = useAppSelector(state => state.tokenSwap.settings.feeOptions)
     const selectedFee = useAppSelector(state => state.tokenSwap.settings.selectedFee)
     const selectedPriority = useAppSelector(state => state.tokenSwap.settings.selectedPriority)
-
-    const handlePriorityChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setPriority(event.target.value as string);
-    };
-
-    const handleFeeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setFee(event.target.value as string);
-    };
+    const priorityDescription = (priorities.filter(item => selectedPriority == item.value))?.[0]?.description
 
     const handleSave = () => {
         // Save the configuration settings
-        console.log('Priority:', priority);
-        console.log('Fee:', fee);
     };
 
     return (
@@ -105,7 +93,7 @@ const TokenSwapConfigs: React.FC = () => {
                                 </button>
                             ))
                         }
-                        <div className="flex items-center justify-between cursor-text w-[130px] h-full text-white-50 bg-[#1B1B1E] px-2 text-sm relative border-l border-white/5">
+                        {/* <div className="flex items-center justify-between cursor-text w-[130px] h-full text-white-50 bg-[#1B1B1E] px-2 text-sm relative border-l border-white/5">
                             <span className="text-xs whitespace-nowrap">MAX</span>
                             <input
                                 inputMode="decimal"
@@ -114,11 +102,18 @@ const TokenSwapConfigs: React.FC = () => {
                                 type="text"
                             // value=""
                             />
-                        </div>
+                        </div> */}
                     </Box>
 
                     <div className="mt-2 text-xs text-v2-lily/50 flex flex-col gap-y-2">
-                        <p>Higher slippage can increase the likelihood of a successful transaction, but it also raises the risk of being exposed to frontrunning or sandwich attacks.</p>
+                        <p>
+                            Prioritizing blockchain transactions involves setting higher fees for faster processing and quicker inclusion in the blockchain.
+                        </p>
+                        <p
+                            className=' rounded-md border'
+                            style={{ background: theme.menu_bg, padding: '.5rem', borderColor: theme.text_color }}>
+                            {priorityDescription}
+                        </p>
                     </div>
 
                     <div className="block"></div>
@@ -134,7 +129,7 @@ const TokenSwapConfigs: React.FC = () => {
                     style={{ borderRadius: '50px', padding: '.6rem', color: theme.text_color, borderColor: theme.text_color }}
                     disableElevation
                 >
-                    Save Chnages
+                    Save Changes
                 </Button>
             </Box>
         </Stack>

@@ -3,7 +3,7 @@ import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress, Tab } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError, handleTokenSwap } from '../../libs/redux/slices/token-swap-slice';
-import { Remove, Close, Settings, CandlestickChartRounded, SwapHoriz, Expand } from '@mui/icons-material';
+import { Remove, Close, Settings, CandlestickChartRounded,   Expand } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { motion } from 'framer-motion';
@@ -133,21 +133,6 @@ const TokenswapStack: React.FC = () => {
     }
   };
 
-  const buttonStyle = () => {
-    if (loading) return {
-      backgroundColor: theme.inactive_color,
-      color: theme.active_color
-    };
-    if (tokenToReceive?.symbol?.toUpperCase?.() === 'SOL') return {
-      backgroundColor: theme.active_color,
-      color: theme.inactive_color
-    };
-    if (tokenToSend?.symbol?.toUpperCase?.() === 'SOL') return {
-      backgroundColor: theme.bgColor,
-      color: theme.active_color
-    };
-  };
-
   const isButtonDisabled = loading || fetchQuoteState === 'pending' || fetchTokenRateState === 'pending' || tokenSwapState === 'pending';
 
   useEffect(() => {
@@ -193,7 +178,7 @@ const TokenswapStack: React.FC = () => {
               <TabList TabIndicatorProps={{ style: { display: 'none' } }} onChange={handleChange}>
                 <Tab
                   style={{ color: value == '1' ? theme.active_color : theme.inactive_color }}
-                  label={<Box><SwapHoriz style={{ color: value == '1' ? theme.active_color : theme.inactive_color }} /> Swap</Box>}
+                  label={"Swap"}
                   value="1" />
                 <Tab
                   style={{ color: value == '2' ? theme.active_color : theme.inactive_color }}
@@ -253,11 +238,11 @@ const TokenswapStack: React.FC = () => {
                     <Button
                       disabled={isButtonDisabled}
                       fullWidth
-                      variant="contained"
+                      variant="outlined"
                       color="primary"
                       onClick={handleSwap}
                       className="text-white font-bold py-2 px-4 rounded-full"
-                      style={{ borderRadius: '50px', padding: '.6rem', ...buttonStyle() }}
+                      style={{ borderRadius: '50px', padding: '.6rem', color: theme.text_color, borderColor: theme.text_color, background: theme.menu_bg }}
                       disableElevation
                     >
                       {buttonText()}

@@ -80,7 +80,7 @@ export type PriorityOptions = {
 
 export interface ISwapSettings {
     slippageBps: string,
-    priorityOptions: Array<{ value: keyof PriorityOptions, label: keyof PriorityOptions }>,
+    priorityOptions: Array<{ value: keyof PriorityOptions, label: keyof PriorityOptions, description: string }>,
     feeOptions: Array<{ value: number, label: number }>,
     selectedPriority: string,
     selectedFee: number
@@ -146,9 +146,21 @@ export const tokenSwapInitialState: TokenSwapState = {
     settings: {
         slippageBps: '300',
         priorityOptions: [
-            { value: 'low', label: 'low' },
-            { value: 'medium', label: 'medium' },
-            { value: 'high', label: 'high' },
+            {
+                value: 'low',
+                label: 'low',
+                description: 'Economical choice with slower transaction processing time and lower fees.'
+            },
+            {
+                value: 'medium',
+                label: 'medium',
+                description: 'Balanced option offering moderate speed and cost efficiency for transactions.'
+            },
+            {
+                value: 'high',
+                label: 'high',
+                description: 'Priority choice for fastest processing with higher fees and quicker inclusion.'
+            },
         ],
         feeOptions: [
             { value: 0.1, label: 0.1 },
