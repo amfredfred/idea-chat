@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Loading from "./components/Loading.tsx";
 import Chat from "./pages/Chat.tsx";
 import { useAppDispatch, useAppSelector } from "./libs/redux/hooks.ts";
-import { connectSocket, emitEvent } from "./libs/redux/slices/pump-socket-slice.ts";
+import { connectSocket  } from "./libs/redux/slices/pump-socket-slice.ts";
 import TokenswapStack from "./components/token-swap/TokenSwapStack.tsx";
 import { ToastContainer } from "react-toastify";
 import { Box, Stack } from "@mui/material";
@@ -47,7 +47,6 @@ const ProtectedRoute: React.FC = () => {
 };
 
 export default function App() {
-  const connected = useAppSelector(state => state.pumpSocket.connected)
   const socketState = useAppSelector(state => state.pumpSocket.socketState)
   const theme = useAppSelector(state => state.theme.current.styles)
   // const chatState = useAppSelector(state => state.chat.state)
@@ -62,9 +61,8 @@ export default function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(emitEvent('requestPumpList'))
     loadMessages()
-  }, [connected, dispatch, loadMessages])
+  }, [loadMessages])
 
   if (socketState !== 'receiving') {
     return <Loading />
