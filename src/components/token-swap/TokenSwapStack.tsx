@@ -3,7 +3,7 @@ import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress, Tab } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError, handleTokenSwap } from '../../libs/redux/slices/token-swap-slice';
-import { Remove, Close, Settings, CandlestickChartRounded, SwapHoriz } from '@mui/icons-material';
+import { Remove, Close, Settings, CandlestickChartRounded, SwapHoriz, Expand } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { motion } from 'framer-motion';
@@ -190,7 +190,7 @@ const TokenswapStack: React.FC = () => {
         <TabContext value={value}  >
           <Box sx={{ background: theme.pump_card_bg }} className=' flex items-center justify-between gap-4  px-4'>
             <Box className=' flex-grow' >
-              <TabList  TabIndicatorProps={{ style: { display: 'none' } }} onChange={handleChange}>
+              <TabList TabIndicatorProps={{ style: { display: 'none' } }} onChange={handleChange}>
                 <Tab
                   style={{ color: value == '1' ? theme.active_color : theme.inactive_color }}
                   label={<Box><SwapHoriz style={{ color: value == '1' ? theme.active_color : theme.inactive_color }} /> Swap</Box>}
@@ -207,16 +207,12 @@ const TokenswapStack: React.FC = () => {
               cursor: isMobile ? 'default' : 'move', // Disable move cursor on mobile
             }}>
               <div className=' flex items-center justify-between  ml-auto'>
-                {/* <IconButton className='bg-red-400' size="small" onClick={() => dispatch(setSwapSettiongOpen(!settings.isOpen))}>
-                    <Settings className='text-yellow-100' />
-                  </IconButton> */}
-
                 <IconButton size="small" onClick={handleLoadAndShowChart} >
                   <CandlestickChartRounded className='text-yellow-100' />
                 </IconButton>
 
                 <IconButton className='bg-red-400' size="small" onClick={toggleMinimize}>
-                  <Remove className='text-yellow-100' />
+                  {isMinimized ? <Expand style={{ color: theme.active_color }} /> : <Remove style={{ color: theme.inactive_color }} />}
                 </IconButton>
 
                 <IconButton size="small" onClick={closeWindow}>
@@ -276,14 +272,7 @@ const TokenswapStack: React.FC = () => {
           <TabPanel value="2">
             <motion.div
               initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              style={{
-                // background: theme.menu_bg,
-                // borderBottomLeftRadius: 20,
-                // WebkitBorderBottomLeftRadius: 20,
-                // borderTopLeftRadius: 20,
-                // WebkitBorderTopLeftRadius: 20,
-              }}>
+              animate={{ x: 0, opacity: 1 }}>
               <TokenSwapConfigs />
             </motion.div>
           </TabPanel>
