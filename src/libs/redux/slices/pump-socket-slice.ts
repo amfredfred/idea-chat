@@ -117,28 +117,30 @@ const getFilterValue = (item: PumpTokenItem, filterName: IFilterTypes['name']): 
 };
 
 export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch) => {
+
+    console.log({serverUrl})
+
     const socketInstance = io(serverUrl, {
         autoConnect: true,
         upgrade: true,
     });
 
     socketInstance.on('connect', () => {
+        console.log('Connected to Socket.IO server');
         dispatch(emitEvent('requestPumpList'))
         dispatch(setConnected(true));
     });
 
     socketInstance.on('disconnect', () => {
+        console.log('Disconnected from Socket.IO server');
         dispatch(setConnected(false));
     });
 
     socketInstance.on('pumpList', (data: PumpSocketReceived['pumpList']) => {
+        console.log('Received message:', ' ');
         dispatch(setPumpSocketState('receiving'))
         dispatch(setPumpList(data));
-    });
-
-    socketInstance.on('erorr', (erorr) => {
-        console.log({ erorr })
-    })
+    }); 
 
     dispatch(setSocket(socketInstance));
 
