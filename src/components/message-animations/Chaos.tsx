@@ -42,7 +42,7 @@ const Chaos: React.FC = () => {
           profilePic: `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 50)}.jpg`,
           timestamp: new Date().toISOString(),
           marginClass,
-          textClampClass
+          textClampClass,
         });
       }
     }
@@ -126,7 +126,7 @@ const Chaos: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="text-gray-500">No message</div>
+          <div className=""></div>
         )}
       </motion.div>
     );
