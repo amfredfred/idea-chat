@@ -15,6 +15,8 @@ import { loadInitialMessages } from "./libs/redux/slices/chat-slice.ts";
 
 const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
 
+console.log({ API_URL })
+
 const connectWallet = async (wallet: any): Promise<boolean> => {
   try {
     if (!wallet.connected) {
@@ -52,7 +54,6 @@ export default function App() {
 
   const dispatch = useAppDispatch()
   const loadMessages = useCallback(async () => dispatch(loadInitialMessages()), [dispatch])
-
 
   useEffect(() => {
     return () => {
