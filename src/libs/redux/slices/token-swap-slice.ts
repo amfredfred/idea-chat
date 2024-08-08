@@ -14,7 +14,7 @@ import {
     TokenSwapResponse,
     PriorityOptions,
 } from "../initial-states";
-import { calculateBpsAmount, parseEther } from "../../../utils";
+import { calculateBpsAmount, parseAmount, parseEther } from "../../../utils";
 import { formatNumber } from "../../../utils/format";
 
 const FEE_BP = import.meta.env.VITE_FEE_BP
@@ -99,6 +99,8 @@ export const handleTokenSwap = createAsyncThunk(
                 new PublicKey('REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3')
             );
 
+            const priority = typeof settings.selectedPriority == 'string' ? settings.selectedPriority : parseAmount(settings.selectedPriority, 6)
+            console.log({ priority })
             const response = await axios('https://quote-api.jup.ag/v6/swap', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -106,6 +108,8 @@ export const handleTokenSwap = createAsyncThunk(
                     quoteResponse,
                     userPublicKey: wallet.publicKey?.toString(),
                     feeAccount: feeAccount.toString(),
+                    dynamicComputeUnitLimit: true,
+                    prioritizationFeeLamports: priority
                 }),
             });
 
