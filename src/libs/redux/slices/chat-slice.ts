@@ -10,11 +10,12 @@ export interface Message {
     message: string;
     username: string;
     profilePic: string;
-    position: {
+    position?: {
         x: number,
         y: number,
         // width: number
-    }
+    },
+    timestamp: string
 }
 
 export interface MotionType {

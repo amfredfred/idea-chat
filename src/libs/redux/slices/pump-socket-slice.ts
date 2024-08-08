@@ -126,13 +126,11 @@ export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch
     });
 
     socketInstance.on('connect', () => {
-        console.log('Connected to Socket.IO server');
         dispatch(emitEvent('requestPumpList'))
         dispatch(setConnected(true));
     });
 
     socketInstance.on('disconnect', () => {
-        console.log('Disconnected from Socket.IO server');
         dispatch(setConnected(false));
     });
 

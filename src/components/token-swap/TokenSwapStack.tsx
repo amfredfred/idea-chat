@@ -38,7 +38,7 @@ const TokenswapStack: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isReady, setIsReady] = useState(false);
   const [value, setValue] = React.useState('1');
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const isMobile = useMediaQuery('(max-width:300px)');
   const wallet = useWallet();
   const containerRef = useRef<HTMLDivElement>(null)
   const theme = useAppSelector(state => state.theme.current.styles)

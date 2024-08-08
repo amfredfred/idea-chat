@@ -1,146 +1,98 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
-import { Message } from "../../libs/redux/slices/chat-slice";
-import { addNewMessage } from "../../libs/redux/slices/chat-slice";
-import debounce from "lodash.debounce";
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { useMediaQuery } from '@mui/material';
+import { addNewMessage, Message } from '../../libs/redux/slices/chat-slice';
+import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
+
+interface MessageItem extends Message {
+  _id: string;
+  message: string;
+  username: string;
+  profilePic: string;
+  timestamp: string;
+  marginClass?: string;
+  textClampClass?: string;
+}
 
 const Chaos: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const websiteTheme = useAppSelector(state => state.theme.current.styles);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
-  const [lastPosition, setLastPosition] = useState<'left' | 'right' | 'center'>('right');
+  const isLargeScreen = useMediaQuery('(min-width: 1200px)');
+  const isMediumScreen = useMediaQuery('(min-width: 600px) and (max-width: 1199px)');
+  const numColumns = isLargeScreen ? 5 : (isMediumScreen ? 3 : 2);
+  const numRowsPerColumn = isLargeScreen ? 4 : (isMediumScreen ? 3 : 2);
+
   const newMessage = useAppSelector(state => state.chat.newMessage);
   const dispatch = useAppDispatch();
-  const maxItems = 7;
-  const messageWidth = 200;
-  const messageHeight = 100;
 
-  const updateDimensions = debounce(() => {
-    if (containerRef.current) {
-      const { width, height } = containerRef.current.getBoundingClientRect();
-      setDimensions({ width, height });
+  const generateRandomStyles = () => {
+    return {
+      marginClass: `m-${Math.floor(Math.random() * 5) + 1}`,
+      textClampClass: ['line-clamp-3', 'line-clamp-5', 'line-clamp-2', 'line-clamp-4'][Math.floor(Math.random() * 3)],
+    };
+  };
+
+  const [gridData, setGridData] = useState<MessageItem[]>(() => {
+    const data = [];
+    for (let colIndex = 0; colIndex < numColumns; colIndex++) {
+      for (let rowIndex = 0; rowIndex < numRowsPerColumn; rowIndex++) {
+        const { marginClass, textClampClass } = generateRandomStyles();
+        data.push({
+          _id: `${colIndex}-${rowIndex}`,
+          message: "",
+          username: `User_${Math.floor(Math.random() * 10)}`,
+          profilePic: `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 50)}.jpg`,
+          timestamp: new Date().toISOString(),
+          marginClass,
+          textClampClass
+        });
+      }
     }
-  }, 100);
+    return data;
+  });
 
-  const isSmallScreen = dimensions.width < 1024;
+  const getEmptyRows = () => gridData.filter(item => item.message === "");
+  const getOldestMessage = (messages: MessageItem[]) => {
+    return messages.reduce((oldest, message) =>
+      new Date(message.timestamp) < new Date(oldest.timestamp) ? message : oldest
+    );
+  };
 
-  /**
-   * 
-   * @description what is up dev? it is hard to do this -> don`t touch anything 😥
-   */
-  const getNextPosition = () => {
-    const columnWidth = dimensions.width / 3;
-    const variation = 10; // Variations in pixel
+  const updateGridWithNewMessage = useCallback((message: MessageItem) => {
+    setGridData(prevData => {
+      const emptyRows = getEmptyRows();
 
-    let newPosition;
-
-    if (isSmallScreen) {
-      // Two-line positioning for small screens with slight overlap in the center
-      if (lastPosition === 'left') {
-        newPosition = {
-          x: -variation + Math.random() * (variation * 2), // Slight horizontal variation for left
-          y: Math.random() * (dimensions.height - messageHeight)
-        };
-        setLastPosition('right');
+      if (emptyRows.length > 0) {
+        const randomEmptyRow = emptyRows[Math.floor(Math.random() * emptyRows.length)];
+        return prevData.map(item => item._id === randomEmptyRow._id
+          ? { ...item, ...message }
+          : item
+        );
       } else {
-        newPosition = {
-          x: dimensions.width - messageWidth + variation - Math.random() * (variation * 2), // Slight horizontal variation for right
-          y: Math.random() * (dimensions.height - messageHeight)
-        };
-        setLastPosition('left');
+        const oldestMessage = getOldestMessage(prevData);
+        return prevData.map(item => item._id === oldestMessage._id
+          ? { ...item, ...message }
+          : item
+        );
       }
-    } else {
-      // Three-column positioning for larger screens
-      switch (lastPosition) {
-        case 'left':
-          newPosition = {
-            x: columnWidth + (columnWidth - messageWidth) / 3 + Math.random() * (variation * 2) - variation, // Centered with variation for left
-            y: Math.random() * (dimensions.height - messageHeight)
-          };
-          setLastPosition('center');
-          break;
-        case 'center':
-          newPosition = {
-            x: 2 * columnWidth + (columnWidth - messageWidth) / 6, // Center position for larger screens
-            y: Math.random() * (dimensions.height - messageHeight)
-          };
-          setLastPosition('right');
-          break;
-        case 'right':
-        default:
-          newPosition = {
-            x: ((columnWidth - messageWidth) / 2) - (columnWidth - messageWidth) / 2 + Math.random() * (variation * 2) - variation, // Centered with variation for right
-            y: Math.random() * (dimensions.height - messageHeight)
-          };
-          setLastPosition('left');
-          break;
-      }
-    }
-
-    // Ensure new position is within view
-    newPosition.x = Math.max(0, Math.min(newPosition.x, dimensions.width - messageWidth));
-    newPosition.y = Math.max(0, Math.min(newPosition.y, dimensions.height - messageHeight));
-
-    return newPosition;
-  };
-
-
-
-  const checkOverlap = (newPosition: { x: number; y: number }) => {
-    if (newPosition.x < 0 || newPosition.x + messageWidth > dimensions.width || newPosition.y < 0 || newPosition.y + messageHeight > dimensions.height) {
-      return true;
-    }
-
-    return messages.some(message => {
-      const dx = newPosition.x - message.position.x;
-      const dy = newPosition.y - message.position.y;
-      return Math.abs(dx) < messageWidth && Math.abs(dy) < messageHeight;
     });
-  };
-
-  const updateMessageList = (newMessage: Message | Message[]) => {
-    const messageLimit = isSmallScreen ? 5 : maxItems; // Modified
-    const latestMessage = Array.isArray(newMessage) ? newMessage[newMessage.length - 1] : newMessage;
-
-    if (latestMessage) {
-      let newPosition = getNextPosition();
-      let retries = 0;
-      const maxRetries = 10;
-
-      while (checkOverlap(newPosition) && retries < maxRetries) {
-        newPosition = getNextPosition();
-        retries++;
-      }
-
-      setMessages(prevMessages => {
-        const updatedMessages = [...prevMessages, { ...latestMessage, position: newPosition }];
-        return updatedMessages.length > messageLimit ? updatedMessages.slice(-messageLimit) : updatedMessages;
-      });
-    }
-  };
-
-  useEffect(() => {
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
   useEffect(() => {
-    if (newMessage) {
-      updateMessageList(newMessage);
-    }
-  }, [newMessage]);
+    if (newMessage)
+      updateGridWithNewMessage(newMessage);
+  }, [updateGridWithNewMessage, newMessage]);
+
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const newMsg: Message = {
-        _id: `${Date.now()}`,
-        username: "User-" + Math.floor(Math.random() * 1000),
-        message: `Submit your own private work, something you haven't shown to anyone. Omit your name from the submission if you like. Let us set it free. It wants to be free.`,
-        profilePic: "https://via.placeholder.com/50",
-        position: { x: 0, y: 0 }
+      const { marginClass, textClampClass } = generateRandomStyles();
+      const newMsg = {
+        _id: `${Math.random().toString()}`,
+        message: `In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available`,
+        username: `User_${Math.floor(Math.random() * 10)}`,
+        profilePic: `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 50)}.jpg`,
+        timestamp: new Date().toISOString(),
+        marginClass,
+        textClampClass
       };
       dispatch(addNewMessage(newMsg));
     }, 1000);
@@ -148,52 +100,43 @@ const Chaos: React.FC = () => {
     return () => clearInterval(intervalId);
   }, [dispatch]);
 
-  return (
-    <div
-      ref={containerRef}
-      className="relative rounded-2xl w-full h-full overflow-hidden"
-    >
-      <AnimatePresence>
-        {messages.map(message => (
-          <motion.div
-            key={message._id}
-            initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.5, rotate: 20 }}
-            transition={{
-              duration: 0.5,
-              type: "spring",
-              stiffness: 300,
-              damping: 20
-            }}
-            className="absolute text-white p-2 rounded-lg max-w-xs"
-            style={{
-              left: message.position.x,
-              top: message.position.y,
-            }}
-          >
-            <motion.div
-              className=" mx-auto flex flex-col gap-[15px] lg:gap-[20px] max-w-[25vw] max-md:w-[45vw]"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ type: "spring", stiffness: 100, damping: 20 }}
-            >
-              <div className="flex w-full gap-3 items-center">
-                <p className="text-[11px] lg:text-[13px] xl:text-[16px] text-right  sm:w-[70%] text-ellipsis overflow-hidden text-nowrap line-clamp-2"
-                  style={{ color: websiteTheme.text_color }}  >
-                  {message?.username}
-                </p>
-                <img src={message?.profilePic} className="object-cover rounded-full w-[30px] h-[30px]  aspect-square" alt={message?.username} />
-                <p className="text-[10px] lg:text-[12px] line-clamp-2"
-                  style={{ color: websiteTheme.text_color }}  >
-                  {message?.message}
-                </p>
+  const renderMessageItem = useCallback((message: MessageItem) => {
+    const { _id, message: msg, username, profilePic, timestamp, marginClass, textClampClass } = message;
+    const compositeKey = `${_id}-${timestamp}`;
+
+    return (
+      <motion.div
+        key={compositeKey}
+        initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
+        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+        exit={{ opacity: 0, scale: 0.5, rotate: 20 }}
+        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+        className={`flex items-center ${marginClass} ${textClampClass}`}
+      >
+        {msg ? (
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2 overflow-hidden">
+              <div className="flex items-center gap-2">
+                <img src={profilePic} alt={username} className="w-6 h-6 rounded-full" />
+                <p className="font-bold text-xs">{username}</p>
               </div>
-            </motion.div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
+              <div className="flex-1">
+                <p className={`${textClampClass} text-xs`}>{msg}</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="text-gray-500">No message</div>
+        )}
+      </motion.div>
+    );
+  }, []);
+
+  return (
+    <div className="flex flex-col h-full w-full">
+      <div className={`grid grid-cols-${numColumns} gap-4 flex-1`}>
+        {gridData.map(message => renderMessageItem(message))}
+      </div>
     </div>
   );
 };

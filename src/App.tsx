@@ -56,8 +56,6 @@ export default function App() {
     loadMessages()
   }, [loadMessages, startSocket])
 
-  console.log({ socketState })
-
   if (socketState !== 'receiving') {
     return <Loading />
   }

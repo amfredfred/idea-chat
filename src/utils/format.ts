@@ -18,3 +18,9 @@ export function formatPercent(val: string | number) {
 
 export const getBrowserLocale = (): string => navigator.language || 'en-US';
 export const formatNumber = (value: number | string, locale: string = getBrowserLocale(), options: Intl.NumberFormatOptions = { notation: 'compact' }): string => new Intl.NumberFormat(locale, options).format(Number(value));
+
+
+export const formatTimestamp = (timestamp: string) => {
+  const date = new Date(timestamp);
+  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
