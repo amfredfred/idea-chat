@@ -39,7 +39,8 @@ const ProtectedRoute: React.FC = () => {
   }, [wallet]);
 
   if (!wallet.wallet) return <Navigate to="/" />
-  if (isLoading || wallet.connecting || !isConnected) return <Loading />;
+  if (isLoading || wallet.connecting) return <Loading />;
+  if (!isConnected) return <Navigate to="/" />
   return <Outlet />
 };
 
