@@ -55,14 +55,14 @@ const TokenSwapConfigs: React.FC = () => {
                                 color: slippageOptions.every(item => item.value != selectedSlippagePercent) ? theme.menu_bg : theme.text_color
                             }}
                             className="flex items-center justify-between cursor-text w-[130px] h-full text-white-50 bg-[#1B1B1E] px-2 text-sm relative border-l border-white/5">
-                            <span className="text-xs flex-grow text-right">Custom</span>
+                            <span className="text-xs flex-grow text-right">CUSTOM</span>
                             <input
                                 onChange={({ target: { value } }) => dispatch(setSlippagePercentage(Number(value)))}
                                 inputMode="decimal"
                                 className="outline-none text-center h-full w-full bg-transparent py-4 px-2 text-sm rounded-lg placeholder:text-white/25 text-v2-primary  pointer-events-all"
                                 placeholder="0.00%"
                                 type="number"
-                            // value=""
+                                value={selectedSlippagePercent}
                             />
                         </div>
                     </Box>

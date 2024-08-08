@@ -50,7 +50,7 @@ const TokenSwapAnalytic = () => {
     return (
         <div
             style={{ color: theme.active_color, borderColor: theme.active_color }}
-            ref={tsacref}  
+            ref={tsacref}
             className="text-white w-full   p-2 rounded-lg text-xs border ">
             <Button
                 onClick={() => setOpen(!open)}
@@ -89,7 +89,7 @@ const TokenSwapAnalytic = () => {
                             </Grid>
                         </Grid>
                         <Grid item display='flex'>
-                            <strong>{(!maxToPay || fetchQuoteState == 'pending') ? skeletonLoading : maxToPay} </strong>&nbsp;<strong>{tokenToSend?.symbol}</strong>
+                            <strong>{(!maxToPay || fetchQuoteState == 'pending') ? skeletonLoading : (Number(platformFeeAmount || 0) + Number(maxToPay)).toFixed(8)} </strong>&nbsp;<strong>{tokenToSend?.symbol}</strong>
                         </Grid>
                     </Grid>
 
@@ -101,7 +101,7 @@ const TokenSwapAnalytic = () => {
                             </Grid>
                         </Grid>
                         <Grid item display='flex' >
-                            <span>{(!platformFeeAmount || fetchQuoteState == 'pending') ? skeletonLoading : platformFeeAmount}</span>&nbsp;{platformFeeToken}
+                            <span>{(!platformFeeAmount || fetchQuoteState == 'pending') ? skeletonLoading : formatNumber(platformFeeAmount)}</span>&nbsp;{platformFeeToken}
                         </Grid>
                     </Grid>
                 </div>

@@ -14,7 +14,7 @@ import {
     TokenSwapResponse,
     PriorityOptions,
 } from "../initial-states";
-import { calculateBpsAmount, parseAmount, parseEther } from "../../../utils";
+import { calculateBpsAmount, calculateMaxFee, parseEther } from "../../../utils";
 import { formatNumber } from "../../../utils/format";
 
 const FEE_BP = import.meta.env.VITE_FEE_BP
@@ -51,14 +51,14 @@ export const fetchTokenRate = createAsyncThunk(
 );
 
 const fetchFreshQuotes = async ({ fromMint, toMint, amount, settings }: QuoteSwapPrams) => {
-    console.log({ slippage: calculateBpsAmount(amount, settings.selectedSlippagePercent) })
+    console.log({ slippage: calculateBpsAmount( settings.selectedSlippagePercent) })
     if (!fromMint) throw new Error("Invalid from address");
     if (!toMint) throw new Error("Invalid to address")
     const url = new URL('https://quote-api.jup.ag/v6/quote');
     url.searchParams.append('inputMint', fromMint);
     url.searchParams.append('outputMint', toMint);
     url.searchParams.append('amount', String(amount));
-    url.searchParams.append('slippageBps', calculateBpsAmount(amount, settings.selectedSlippagePercent));
+    url.searchParams.append('slippageBps', calculateBpsAmount(settings.selectedSlippagePercent));
     url.searchParams.append('platformFeeBps', FEE_BP);
     const response = await axios.get<QuoteSwapResponse>(url.toString());
     return response.data;
@@ -99,7 +99,7 @@ export const handleTokenSwap = createAsyncThunk(
                 new PublicKey('REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3')
             );
 
-            const priority = typeof settings.selectedPriority == 'string' ? settings.selectedPriority : parseAmount(settings.selectedPriority, 6)
+            const priority = calculateMaxFee(settings.selectedPriority)
             console.log({ priority })
             const response = await axios('https://quote-api.jup.ag/v6/swap', {
                 method: 'POST',

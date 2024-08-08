@@ -2,6 +2,7 @@ import { MutableRefObject } from "react";
 import { PumpTokenItem } from "../common/types";
 import { formatNumber } from "./format";
 import BigNumber from 'bignumber.js';
+import { PriorityOptions } from "../libs/redux/initial-states";
 
 export const promise = (seconds: number = 3) => new Promise((resolved) => setTimeout(resolved, seconds * 1000))
 
@@ -72,8 +73,26 @@ export function calculatePumpTokenChanges(token: PumpTokenItem): { change5m: str
     return { change5m, change1h, change6h, change24h };
 }
 
-
-export function calculateBpsAmount(amount: number | string, percentage: number | string): string {
+export function calculateBpsAmount(percentage: number | string): string {
     const basisPoints = Number(percentage) * 100;
-    return String((Number(amount) * basisPoints) / 10_000);
+    return String(basisPoints);
+}
+
+export function lamportsToSol(lamports: number): number {
+    const LAMPORTS_PER_SOL = 1_000_000_000;
+    return lamports / LAMPORTS_PER_SOL;
+}
+
+export function calculateMaxFee(priority: keyof PriorityOptions): number | 'auto' {
+    const MAX_LAMPORTS = 1_400_000;
+    const priorityFees: Record<keyof PriorityOptions, number | string> = {
+        low: 0.1,
+        medium: 0.5,
+        fast: 1.0,
+        auto: 'auto'
+    };
+    if (priority === 'auto') return 'auto'
+    const feePercentage = priorityFees[priority];
+    const feeInLamports = (MAX_LAMPORTS * Number(feePercentage)) / 100;
+    return Math.min(feeInLamports, MAX_LAMPORTS);
 }
