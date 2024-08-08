@@ -15,7 +15,6 @@ export interface Message {
         y: number,
         // width: number
     },
-    timestamp: string
 }
 
 export interface MotionType {

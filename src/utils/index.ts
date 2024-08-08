@@ -96,3 +96,12 @@ export function calculateMaxFee(priority: keyof PriorityOptions): number | 'auto
     const feeInLamports = (MAX_LAMPORTS * Number(feePercentage)) / 100;
     return Math.min(feeInLamports, MAX_LAMPORTS);
 }
+
+export function generateRandomHex(length=5) {
+    const hex = '0123456789abcdef';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += hex.charAt(Math.floor(Math.random() * hex.length));
+    }
+    return result;
+}
