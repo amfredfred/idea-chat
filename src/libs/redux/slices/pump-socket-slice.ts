@@ -136,8 +136,7 @@ export const connectSocket = (serverUrl: string) => async (dispatch: AppDispatch
         dispatch(setConnected(false));
     });
 
-    socketInstance.on('pumpList', (data: PumpSocketReceived['pumpList']) => {
-        console.log('Received message:', ' ');
+    socketInstance.on('pumpList', (data: PumpSocketReceived['pumpList']) => { 
         dispatch(setPumpSocketState('receiving'))
         dispatch(setPumpList(data));
     }); 

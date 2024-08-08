@@ -13,10 +13,7 @@ import Profile from "./pages/Profile.tsx";
 import { loadInitialMessages } from "./libs/redux/slices/chat-slice.ts";
 // import filtersSvg from "./assets/wallet-bg-big.png";
 
-const API_URL = import.meta.env.VITE_PUMP_SEVER_URL
-
-console.log({ API_URL })
-
+const API_URL = import.meta.env.VITE_PUMP_SEVER_URL 
 const connectWallet = async (wallet: any): Promise<boolean> => {
   try {
     if (!wallet.connected) {
@@ -63,6 +60,8 @@ export default function App() {
   useEffect(() => {
     loadMessages()
   }, [loadMessages])
+
+  console.log({ socketState })
 
   if (socketState !== 'receiving') {
     return <Loading />
