@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Box, IconButton, Divider, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError, handleTokenSwap } from '../../libs/redux/slices/token-swap-slice';
+import { setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError, handleTokenSwap, setSwapSettiongOpen } from '../../libs/redux/slices/token-swap-slice';
 import { Remove, Close, Settings, CandlestickChartRounded } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { useMediaQuery } from '@mui/material';
 import { getDimensions, parseAmount } from '../../utils';
 import { fetchPumpTokenDetails } from '../../libs/redux/slices/pump-chart-slice';
+import TokenSwapConfigs from './TokenSwapConfigs';
 
 const TokenswapStack: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -37,6 +38,7 @@ const TokenswapStack: React.FC = () => {
   const wallet = useWallet();
   const containerRef = useRef<HTMLDivElement>(null)
   const theme = useAppSelector(state => state.theme.current.styles)
+
   const RPC_URL = import.meta.env.VITE_RPC_URL;
   const connection = new Connection(RPC_URL, 'confirmed');
 
@@ -158,7 +160,7 @@ const TokenswapStack: React.FC = () => {
         ref={containerRef}
         sx={{
           position: 'fixed', // (isMobile && isMinimized) ? 'revert' :
-          width: 400,
+          width: settings.isOpen ? 'max-content' : 400,
           maxWidth: '100vw',
           maxHeight: '100vh',
           zIndex: 1000,
@@ -167,88 +169,103 @@ const TokenswapStack: React.FC = () => {
           borderBottomRightRadius: isMobile ? 0 : isMinimized ? '10px' : '15px',
           overflow: 'hidden',
           display: isReady ? 'flex' : 'none',
-          flexDirection: 'column',
+          flexDirection: 'row',
           // background: 'linear-gradient(rgb(4, 36, 65) 0%, rgb(42, 36, 60) 100%) no-repeat;',
           backgroun: theme.menu_bg,
-          boxShadow: isMinimized ? '' : '0 10px 4px rgba(0,0,0,0.8)',
+          boxShadow: isMinimized ? '' : `0 0 4px ${theme.active_color}`,
           border: 'solid thin',
-          borderColor: theme.active_color,
+          // borderColor: theme.active_color,
           bottom: (isMobile) ? 0 : undefined,
-          backdropFilter: `blur(40px)`
+          backdropFilter: `blur(144px)`,
         }}
       >
-        <div className="text-yellow-100 flex w-full" style={{
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          cursor: isMobile ? 'default' : 'move', // Disable move cursor on mobile
-          padding: '8px',
-        }}>
-          <h1 style={{ margin: '0', padding: '0 8px' }}>Swap</h1>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton className='bg-red-400' size="small" onClick={() => null}>
-              <Settings className='text-yellow-100' />
-            </IconButton>
+        <Box
+          sx={{ width: 400 }}
+          className=' max-w-full'>
+          <div className="text-yellow-100 flex w-full" style={{
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            cursor: isMobile ? 'default' : 'move', // Disable move cursor on mobile
+            padding: '8px',
+          }}>
+            <h1 style={{ margin: '0', padding: '0 8px' }}>Swap</h1>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton className='bg-red-400' size="small" onClick={() => dispatch(setSwapSettiongOpen(!settings.isOpen))}>
+                <Settings className='text-yellow-100' />
+              </IconButton>
 
-            <IconButton size="small" onClick={handleLoadAndShowChart} >
-              <CandlestickChartRounded className='text-yellow-100' />
-            </IconButton>
+              <IconButton size="small" onClick={handleLoadAndShowChart} >
+                <CandlestickChartRounded className='text-yellow-100' />
+              </IconButton>
 
-            <IconButton className='bg-red-400' size="small" onClick={toggleMinimize}>
-              <Remove className='text-yellow-100' />
-            </IconButton>
+              <IconButton className='bg-red-400' size="small" onClick={toggleMinimize}>
+                <Remove className='text-yellow-100' />
+              </IconButton>
 
-            <IconButton size="small" onClick={closeWindow}>
-              <Close className='text-yellow-100' />
-            </IconButton>
+              <IconButton size="small" onClick={closeWindow}>
+                <Close className='text-yellow-100' />
+              </IconButton>
+            </div>
           </div>
-        </div>
 
-        {!isMinimized && <Divider orientation='horizontal' className='bg-gray- w-11/12 rounded-full' style={{ marginInline: 'auto' }} />}
+          {!isMinimized && <Divider orientation='horizontal' className='bg-gray- w-11/12 rounded-full' style={{ marginInline: 'auto' }} />}
 
-        {!isMinimized && ((!tokenToReceive?.symbol || !tokenToSend?.symbol) ? Loading : (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            style={{ padding: '1rem' }}>
-            <Box gap='1rem' display='flex' flexDirection='column'>
-              <TokenSwapInput
-                side="pay"
-                onChange={value => dispatch(setAmountToSend(value))}
-                selectedToken={tokenToSend}
-                value={amountToSend}
-                onTokenSelect={(pump) => dispatch(setSelectedtokenToSend(pump))}
-              />
+          {!isMinimized && ((!tokenToReceive?.symbol || !tokenToSend?.symbol) ? Loading : (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              style={{ padding: '1rem' }}>
+              <Box gap='1rem' display='flex' flexDirection='column'>
+                <TokenSwapInput
+                  side="pay"
+                  onChange={value => dispatch(setAmountToSend(value))}
+                  selectedToken={tokenToSend}
+                  value={amountToSend}
+                  onTokenSelect={(pump) => dispatch(setSelectedtokenToSend(pump))}
+                />
 
-              <TokenSwapInput
-                side="receive"
-                readonly
-                onChange={() => null}
-                selectedToken={tokenToReceive}
-                value={amountToReceive}
-                loading={fetchQuoteState === 'pending'}
-                onTokenSelect={(pump) => dispatch(setSelectedtokenToReceive(pump))}
-              />
+                <TokenSwapInput
+                  side="receive"
+                  readonly
+                  onChange={() => null}
+                  selectedToken={tokenToReceive}
+                  value={amountToReceive}
+                  loading={fetchQuoteState === 'pending'}
+                  onTokenSelect={(pump) => dispatch(setSelectedtokenToReceive(pump))}
+                />
 
-              <TokenSwapAnalytic />
+                <TokenSwapAnalytic />
 
-              <Button
-                disabled={isButtonDisabled}
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={handleSwap}
-                className="text-white font-bold py-2 px-4 rounded-full"
-                style={{ borderRadius: '50px', padding: '.6rem', ...buttonStyle() }}
-                disableElevation
-              >
-                {buttonText()}
-              </Button>
+                <Button
+                  disabled={isButtonDisabled}
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSwap}
+                  className="text-white font-bold py-2 px-4 rounded-full"
+                  style={{ borderRadius: '50px', padding: '.6rem', ...buttonStyle() }}
+                  disableElevation
+                >
+                  {buttonText()}
+                </Button>
 
-            </Box>
-            {error && <p>Error: {error}</p>}
-          </motion.div>
-        ))}
+              </Box>
+              {error && <p>Error: {error}</p>}
+            </motion.div>
+          ))}
+        </Box>
+        <Box
+          sx={{
+            background: theme.menu_bg,
+            display: settings.isOpen ? 'flex' : 'none'
+            // borderBottomLeftRadius: 20,
+            // WebkitBorderBottomLeftRadius: 20,
+            // borderTopLeftRadius: 20,
+            // WebkitBorderTopLeftRadius: 20,
+          }}>
+          <TokenSwapConfigs />
+        </Box>
       </Box>
     </Draggable>
   );

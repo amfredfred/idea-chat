@@ -62,7 +62,7 @@ export interface QuoteSwapPrams {
     amount: number | string
 }
 
-export interface TokenRequesSwapPrams extends QuoteSwapPrams  {
+export interface TokenRequesSwapPrams extends QuoteSwapPrams {
     quoteResponse: QuoteSwapResponse
     connection: Connection,
     wallet: WalletContextState
@@ -72,8 +72,19 @@ export interface TokenSwapResponse {
     sol_scan: string | null
 }
 
+export type PriorityOptions = {
+    low: 'low'
+    medium: 'medium'
+    high: 'high'
+}
+
 export interface ISwapSettings {
-    slippageBps: string
+    isOpen: boolean
+    slippageBps: string,
+    priorityOptions: Array<{ value: keyof PriorityOptions, label: keyof PriorityOptions }>,
+    feeOptions: Array<{ value: number, label: number }>,
+    selectedPriority: string,
+    selectedFee: number
 }
 
 
@@ -134,7 +145,20 @@ export const tokenSwapInitialState: TokenSwapState = {
     platformFeeAmount: 0,
     platformFeeToken: NativeToken.symbol,
     settings: {
-        slippageBps: '300'
+        slippageBps: '300',
+        isOpen: false,
+        priorityOptions: [
+            { value: 'low', label: 'low' },
+            { value: 'medium', label: 'medium' },
+            { value: 'high', label: 'high' },
+        ],
+        feeOptions: [
+            { value: 0.1, label: 0.1 },
+            { value: 0.5, label: 0.5 },
+            { value: 1.0, label: 1.0 },
+        ],
+        selectedPriority: '',
+        selectedFee: 0.1,
     },
 
     tokenSwapState: 'idle',

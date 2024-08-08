@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { PublicKey, VersionedTransaction } from "@solana/web3.js";
 import { Buffer } from 'buffer';
@@ -12,6 +12,7 @@ import {
     QuoteSwapResponse,
     TokenRequesSwapPrams,
     TokenSwapResponse,
+    PriorityOptions,
 } from "../initial-states";
 import { parseEther } from "../../../utils";
 import { formatNumber } from "../../../utils/format";
@@ -191,6 +192,15 @@ const tokenSwapSlice = createSlice({
             if (!state.tokenToReceive) state.tokenToReceive = action.payload?.[0];
             state.tokensList = action.payload;
         },
+        setFeeOption: (state, action: PayloadAction<number>) => {
+            state.settings.selectedFee = action.payload
+        },
+        setPriorityOption: (state, action: PayloadAction<keyof PriorityOptions>) => {
+            state.settings.selectedPriority = action.payload
+        },
+        setSwapSettiongOpen: (state, action: PayloadAction<boolean>) => {
+            state.settings.isOpen = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -263,7 +273,10 @@ export const {
     setLoading,
     setIsVisible,
     setError,
-    setTokensList
+    setTokensList,
+    setFeeOption,
+    setPriorityOption,
+    setSwapSettiongOpen
 } = tokenSwapSlice.actions;
 
 export default tokenSwapSlice.reducer;
