@@ -14,12 +14,9 @@ interface MessageItem extends Message {
   marginClass?: string;
   textClampClass?: string;
   isEmpty: boolean;
+  rowSpanClass?: string
+  colSpanClass?: string
 }
-
-const getRandomRotation = (min: number = 0, max: number = 20) => {
-  const rotation = Math.floor(Math.random() * (max - min + 1)) + min;
-  return Math.random() > 0.5 ? rotation : -rotation;
-};
 
 const Chaos: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -29,20 +26,20 @@ const Chaos: React.FC = () => {
     if (window.innerWidth >= 1200) {
       return { numColumns: 5, numRowsPerColumn: 4, totalSlots: 20 };
     } else if (window.innerWidth >= 600) {
-      return { numColumns: 3, numRowsPerColumn: 3, totalSlots: 9 };
+      return { numColumns: 3, numRowsPerColumn: 5, totalSlots: 10 };
     } else {
-      return { numColumns: 2, numRowsPerColumn: 4, totalSlots: 8 };
+      return { numColumns: 2, numRowsPerColumn: 6, totalSlots: 9 };
     }
   };
-
-
 
   const [gridConfig, setGridConfig] = useState(getGridDimensions);
 
   const generateRandomStyles = () => {
     return {
-      marginClass: `m-${Math.floor(Math.random() * 10) + 1}`,
-      textClampClass: ['line-clamp-3', 'line-clamp-5', 'line-clamp-2', 'line-clamp-4'][Math.floor(Math.random() * 3)],
+      marginClass: `px-${Math.floor(Math.random() * 10) + 1}`,
+      colSpanClass: ['col-span-1', 'col-span-1', 'col-span-2', 'col-span-1'][Math.floor(Math.random() * 3)],
+      rowSpanClass: ['row-span-1', 'row-span-1', 'row-span-1', 'row-span-2'][Math.floor(Math.random() * 3)],
+      textClampClass: ['line-clamp-3', 'line-clamp-3', 'line-clamp-2', 'line-clamp-2'][Math.floor(Math.random() * 3)],
     };
   };
 
@@ -64,8 +61,8 @@ const Chaos: React.FC = () => {
     const data = [] as MessageItem[];
     const { totalSlots } = getGridDimensions();
     for (let i = 0; i < totalSlots; i++) {
-      const { marginClass, textClampClass } = generateRandomStyles();
-      data.push({ ...makeMessage(true), message: '', marginClass, textClampClass });
+      const { marginClass, textClampClass , colSpanClass, rowSpanClass} = generateRandomStyles();
+      data.push({ ...makeMessage(true), message: '', marginClass, textClampClass, colSpanClass, rowSpanClass });
     }
     return data;
   });
@@ -138,26 +135,30 @@ const Chaos: React.FC = () => {
   return (
     <div className="flex flex-col h-full w-full overflow-hidden">
       <div className={`grid grid-cols-${gridConfig.numColumns} gap-4 flex-1 overflow-hidden`}>
-        {gridData.map(({ _id, message: msg, username, profilePic, marginClass, textClampClass }) => (
+        {gridData.map(({ _id, message: msg, username, profilePic, marginClass, textClampClass, rowSpanClass, colSpanClass }) => (
           <motion.div
             key={_id}
-            initial={{ opacity: 0, scale: 0.5, rotate: getRandomRotation(), y: getRandomRotation(), x: getRandomRotation() }}
-            animate={{ opacity: 1, scale: 1, rotate: getRandomRotation(), y: getRandomRotation(), x: getRandomRotation() }}
-            exit={{ opacity: 0, scale: 0.5, rotate: getRandomRotation(), y: getRandomRotation(), x: getRandomRotation() }}
+            initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0}}
+            exit={{ opacity: 0, scale: 0.5, rotate: 20 }}
             transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-            className={`flex items-center`}
+            className={`flex items-center ${rowSpanClass} ${colSpanClass}`}
           >
             {msg ? (
-              <div className={`flex flex-col ${marginClass}`}>
-                <div className="flex items-center gap-2 overflow-hidden max-sm:items-start">
+              <motion.div className={`flex flex-col ${marginClass} `}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="flex gap-2 overflow-hidden items-start">
                   <img src={profilePic} alt={username} className="w-6 h-6 rounded-full" />
-                  <p className="font-bold text-xs max-sm:hidden text-ellipsis overflow-hidden max-w-10 ">{username}</p>
                   <div className="flex-1 flex flex-col justify-start ">
-                    <p className="font-bold text-xs max-sm:block">{username}</p>
-                    <p className={`${textClampClass} text-xs`}>{msg}</p>
+                    <p className="font-bold text-[10px] ">{username}</p>
+                    <p className={`${textClampClass} text-[10px]`}>{msg}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ) : (
               <p className={`${textClampClass}`}>&nbsp;</p>
             )}
