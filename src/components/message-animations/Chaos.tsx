@@ -164,7 +164,7 @@ const Chaos: React.FC = () => {
             className={`flex items-center ${rowSpanClass} ${colSpanClass} `}
           >
             {msg ? (
-              <motion.div className={`flex flex-col ${marginClass} `}
+              <motion.div className={`flex flex-col ${marginClass}  m-auto`}
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5 }}
