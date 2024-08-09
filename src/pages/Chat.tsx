@@ -55,9 +55,6 @@ const Chat = () => {
       handlePause();
     }
     console.log({ shouldPlayAudio, isMusicPlaying });
-    return () => {
-      handlePause();
-    };
   }, [shouldPlayAudio, handlePause, handlePlay]);
 
   return (

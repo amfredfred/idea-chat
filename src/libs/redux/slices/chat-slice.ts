@@ -59,7 +59,7 @@ const initialState: ChatState = {
     chatAudio: onMusic,
     isMusicPlaying: false,
     shouldPlayAudio: true,
-    state: 'PUMP.RAY',
+    state: 'DEN',
     typedMessage: '',
     isLoadingInitialMessages: false,
     audioRef: null

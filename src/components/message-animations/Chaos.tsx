@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { addNewMessage, Message } from '../../libs/redux/slices/chat-slice';
 import { generateRandomHex } from '../../utils';
 import debounce from 'lodash/debounce';
+import MessageShowModal from './MessageModal';
+import { IconButton } from '@mui/material';
 
 interface MessageItem extends Message {
   _id: string;
@@ -40,6 +42,10 @@ const GetRandomParagraph = () => {
 const Chaos: React.FC = () => {
   const dispatch = useAppDispatch();
   const newMessage = useAppSelector((state) => state.chat.newMessage);
+  const [messageModal, setMessageModal] = useState({
+    isOpen: false,
+    message: {} as any
+  })
 
   const initGridData = () => {
     const data = [] as MessageItem[];
@@ -163,33 +169,41 @@ const Chaos: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden">
+      <MessageShowModal {...messageModal} onRequestClose={() => setMessageModal({ isOpen: false, message: {} as any })} />
       <div className={`grid grid-cols-${gridConfig.numColumns} gap-4 flex-1 overflow-hidden`}>
-        {gridData.map(({ _id, message: msg, username, profilePic, marginClass, textClampClass, rowSpanClass, colSpanClass }) => (
+        {gridData.map((message) => (
           <motion.div
-            key={_id}
+            key={message._id}
             initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, scale: 0.5, rotate: 20 }}
             transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-            className={`flex items-center ${rowSpanClass} ${colSpanClass} `}
+            className={`flex items-center ${message.rowSpanClass} ${message.colSpanClass} `}
           >
-            {msg ? (
-              <motion.div className={`flex flex-col ${marginClass}  m-auto`}
+            {message.message ? (
+              <motion.div className={`flex flex-col ${message.marginClass}  m-auto`}
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ duration: 0.5 }}
               >
                 <div className="flex gap-2 overflow-hidden items-start">
-                  <img src={profilePic} alt={username} className="w-6 h-6 rounded-full" />
+                  <IconButton sx={{ padding: 0 }} onClick={() => {
+                    setMessageModal({
+                      isOpen: true,
+                      message
+                    })
+                  }}>
+                    <img src={message.profilePic} alt={message.username} className="w-6 h-6 rounded-full" />
+                  </IconButton>
                   <div className="flex-1 flex flex-col justify-start ">
-                    <p className="font-bold text-[10px] ">{username}</p>
-                    <p className={`${textClampClass} text-[10px]`}>{msg}</p>
+                    <p className="font-bold text-[10px] ">{message.username}</p>
+                    <p className={`${message.textClampClass} text-[10px]`}>{message.message}</p>
                   </div>
                 </div>
               </motion.div>
             ) : (
-              <p className={`${textClampClass}`}>&nbsp;</p>
+              <p className={`${message.textClampClass}`}>&nbsp;</p>
             )}
           </motion.div>
         ))}
