@@ -4,6 +4,7 @@ import { NativeToken } from '../../libs/redux/initial-states';
 import { Box } from '@mui/material';
 import { formatNumber } from '../../utils/format';
 import { AccountBalanceWallet } from '@mui/icons-material';
+import { useAppSelector } from '../../libs/redux/hooks';
 
 interface TokenBalanceProps {
     walletAddress: string;
@@ -13,6 +14,7 @@ interface TokenBalanceProps {
 
 const TokenBalance: React.FC<TokenBalanceProps> = ({ walletAddress, tokenMintAddress, connection }) => {
     const [balance, setBalance] = useState<number | null>(null);
+    const theme = useAppSelector(state => state.theme.current.styles)
     const [, setError] = useState<string | null>(null);//error
     useEffect(() => {
         const fetchBalance = async () => {
@@ -52,7 +54,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ walletAddress, tokenMintAdd
     // }
 
     return (
-        <Box fontStyle={{ color: 'whitesmoke' }} display={'flex'} alignItems={'center'} gap={'.2rem'}>
+        <Box fontStyle={{ color: theme.bgColor == '#0000FF' ? theme.bgColor: 'whitesmoke' }} display={'flex'} alignItems={'center'} gap={'.2rem'}>
             <AccountBalanceWallet style={{ fontSize: 13 }} /> <small>{formatNumber(Number(balance))}</small>
         </Box>
     );

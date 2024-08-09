@@ -52,7 +52,7 @@ const TokenSwapInput: React.FC<ITokenSwapInputProps> = ({
     return (
         <Box className="w-full" width={'100%'} >
             <Grid container alignItems="center" display='flex' justifyContent="space-between" style={{ marginBottom: '8px' }}>
-                <Typography variant="body2" className='text-white' style={{ textTransform: 'capitalize' }}>{side}</Typography>
+                <Typography variant="body2" className='text-white' style={{ textTransform: 'capitalize', color: theme.bgColor == '#0000FF' ? theme.bgColor:theme.text_color }}>{side}</Typography>
                 <TokenBalance
                     walletAddress={String(wallet?.publicKey?.toString?.())}
                     tokenMintAddress={String(selectedToken?.address)}

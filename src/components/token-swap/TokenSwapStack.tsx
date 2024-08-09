@@ -3,7 +3,7 @@ import Draggable from 'react-draggable';
 import { Button, Box, IconButton, CircularProgress, Tab } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError, handleTokenSwap } from '../../libs/redux/slices/token-swap-slice';
-import { Remove, Close, Settings, CandlestickChartRounded, Fullscreen } from '@mui/icons-material';
+import { Remove, Close, Settings, Fullscreen } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { motion } from 'framer-motion';
@@ -11,8 +11,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
 import { toast } from 'react-toastify';
 import { useMediaQuery } from '@mui/material';
-import { getDimensions, parseAmount } from '../../utils';
-import { fetchPumpTokenDetails } from '../../libs/redux/slices/pump-chart-slice';
+import { getDimensions, parseAmount } from '../../utils'; 
 import TokenSwapConfigs from './TokenSwapConfigs';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
@@ -59,10 +58,6 @@ const TokenswapStack: React.FC = () => {
       }));
     }
   };
-
-  const handleLoadAndShowChart = () => {
-    dispatch(fetchPumpTokenDetails(String(tokenToSend?.address)))
-  }
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     event
@@ -121,9 +116,9 @@ const TokenswapStack: React.FC = () => {
 
   const buttonText = () => {
     if (tokenSwapState == 'pending' && fetchQuoteState == 'pending')
-      return <div className='flex items-center gap-2'>Fetching Quotes <CircularProgress style={{ color: theme.text_color }} size={20} thickness={10} /></div>
+      return <div className='flex items-center gap-2'>Fetching Quotes <CircularProgress style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor : theme.text_color }} size={20} thickness={10} /></div>
     if (tokenSwapState == 'pending')
-      return <div className='flex items-center gap-2'>Pending<CircularProgress style={{ color: theme.text_color }} size={20} thickness={10} /></div>
+      return <div className='flex items-center gap-2'>Pending<CircularProgress style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor : theme.text_color }} size={20} thickness={10} /></div>
     if (loading)
       return <CircularProgress size={25} />;
     if (tokenToReceive?.symbol?.toUpperCase?.() === 'SOL') {
@@ -164,7 +159,7 @@ const TokenswapStack: React.FC = () => {
           overflow: 'hidden',
           display: isReady ? 'black' : 'none',
           flexDirection: 'row',
-          // background: 'linear-gradient(rgb(4, 36, 65) 0%, rgb(42, 36, 60) 100%) no-repeat;',
+          background: theme.bgColor == '#0000FF' ? theme.menu_bg : 'transparent',
           backgroun: theme.menu_bg,
           boxShadow: isMinimized ? '' : `0 0 4px ${theme.active_color}`,
           border: 'solid thin',
@@ -174,17 +169,13 @@ const TokenswapStack: React.FC = () => {
         }}
       >
         <TabContext value={value}  >
-          <Box sx={{ background: theme.pump_card_bg }} className=' flex items-center justify-between gap-4  px-4'>
+          <Box sx={{ background: theme.bgColor == '#0000FF' ? 'grey': theme.pump_card_bg }} className=' flex items-center justify-between gap-4  px-4'>
             <Box className=' flex-grow' >
               <TabList TabIndicatorProps={{ style: { display: 'none' } }} onChange={handleChange}>
                 <Tab
                   style={{ color: value == '1' ? theme.active_color : theme.inactive_color }}
                   label={"Swap"}
                   value="1" />
-                {!isMinimized && <Tab
-                  style={{ color: value == '2' ? theme.active_color : theme.inactive_color }}
-                  label={<Settings style={{ color: value == '2' ? theme.active_color : theme.inactive_color }} />}
-                  value="2" />}
               </TabList>
             </Box>
             <div className="text-yellow-100 flex w-full" style={{
@@ -193,16 +184,14 @@ const TokenswapStack: React.FC = () => {
               cursor: isMobile ? 'default' : 'move', // Disable move cursor on mobile
             }}>
               <div className=' flex items-center justify-between  ml-auto'>
-                <IconButton size="small" onClick={handleLoadAndShowChart} >
-                  <CandlestickChartRounded className='text-yellow-100' />
+                <IconButton onClick={() => setValue('2')} >
+                  <Settings style={{ color: value == '2' ? theme.active_color : theme.inactive_color }} />
                 </IconButton>
-
                 <IconButton className='bg-red-400' size="small" onClick={toggleMinimize}>
-                  {isMinimized ? <Fullscreen style={{ color: theme.active_color }} /> : <Remove style={{ color: theme.inactive_color }} />}
+                  {isMinimized ? <Fullscreen style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor : theme.active_color }} /> : <Remove style={{ color: theme.inactive_color }} />}
                 </IconButton>
-
                 <IconButton size="small" onClick={closeWindow}>
-                  <Close className='text-yellow-100' />
+                  <Close style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor : theme.text_color }} />
                 </IconButton>
               </div>
             </div>
@@ -246,10 +235,14 @@ const TokenswapStack: React.FC = () => {
                         disabled={isButtonDisabled}
                         fullWidth
                         variant="outlined"
-                        color="primary"
                         onClick={handleSwap}
-                        className="text-white font-bold py-2 px-4 rounded-full"
-                        style={{ borderRadius: '50px', padding: '.6rem', color: theme.text_color, borderColor: theme.text_color, background: theme.menu_bg }}
+                        className="font-bold py-2 px-4 rounded-full"
+                        style={{
+                          borderRadius: '50px',
+                          padding: '.6rem',
+                          color: theme.bgColor == '#0000FF' ? theme.bgColor : theme.text_color,
+                          borderColor: theme.bgColor == '#0000FF' ? theme.bgColor : theme.text_color, background: theme.menu_bg
+                        }}
                         disableElevation
                       >
                         {buttonText()}
@@ -276,9 +269,9 @@ const TokenswapStack: React.FC = () => {
           }
         </TabContext>
 
-      </Box>
+      </Box >
 
-    </Draggable>
+    </Draggable >
   );
 };
 

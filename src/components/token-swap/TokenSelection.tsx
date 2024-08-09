@@ -13,6 +13,7 @@ const TokenSelection: React.FC<{
 
     const tokensList = useAppSelector(state => state.pumpSocket.pumpList?.migrated)
     const containerRef = useRef<HTMLDivElement>(null)
+    const theme = useAppSelector(state => state.theme.current.styles)
 
     useEffect(() => {
         document.addEventListener('mousedown', (event) => {
@@ -25,21 +26,20 @@ const TokenSelection: React.FC<{
 
     return (
         <Collapse in={isOpen}>
-            <Box ref={containerRef} className="active rounded-lg   mt-4 flex text-yellow-100" style={{ maxHeight: '20vh' }} >
+            <Box ref={containerRef} className="active rounded-lg   mt-4 flex " style={{ maxHeight: '20vh', color: theme.bgColor == '#0000FF' ? theme.bgColor : theme.bgColor == '#FFF' ? theme.active_color : 'whitesmoke' }} >
                 <Box flexDirection="column" display='flex' overflow='hidden' width='100%' >
                     <Grid item>
                         <InputBase
                             placeholder="Find tokens by name or address"
                             startAdornment={<SearchIcon className='text-yellow-100 mr-2' />}
                             fullWidth
-                            className='text-yellow-100'
-                            style={{ color: 'white' }}
+                            style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor : theme.bgColor == '#FFF' ? theme.active_color: 'white' }}
                         />
                     </Grid>
                     <Box display='flex' flexDirection='column' gap='.5rem' width='100%' className=' no-scrollbar' overflow='auto'>
                         {tokensList?.map?.((token,) => (
                             <MenuItem key={token.address} onClick={() => onTokenSelect(token)} value={token.symbol} style={{ paddingInline: 0, borderRadius: '10px' }}   >
-                                <Box display='flex' flexDirection='column' width='100%'  gap='1rem'>
+                                <Box display='flex' flexDirection='column' width='100%' gap='1rem'>
                                     <Box display='flex' alignItems='center' flexDirection='row' width='100%' >
                                         <img
                                             className="w-7 h-7 mr-2 rounded-full aspect-square"

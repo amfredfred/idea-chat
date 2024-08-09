@@ -60,5 +60,5 @@ export default function TokenRateRefreshAndStatus() {
     };
   }, [fetchQuote, initCountdown, amountToSend, tokenToReceive, tokenToSend]);
 
-  return <CircularProgress variant="determinate" size={17} style={{ color: theme.text_color }} value={((initCountdown - timeTillRefetch) / initCountdown) * 100} />
+  return <CircularProgress variant="determinate" size={17} style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor:theme.text_color }} value={((initCountdown - timeTillRefetch) / initCountdown) * 100} />
 }

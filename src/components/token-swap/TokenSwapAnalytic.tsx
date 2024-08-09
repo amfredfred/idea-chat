@@ -49,15 +49,16 @@ const TokenSwapAnalytic = () => {
 
     return (
         <div
-            style={{ color: theme.active_color, borderColor: theme.active_color }}
+            style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor: theme.active_color, borderColor: theme.active_color }}
             ref={tsacref}
-            className="text-white w-full   p-2 rounded-lg text-xs border ">
+            className="    p-2 rounded-lg text-xs border ">
             <Button
+                style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor:theme.text_color }}
                 onClick={() => setOpen(!open)}
                 className="border-b pb-2 mb-2 cursor-pointer w-full"
             >
                 <Grid container alignItems="center" justifyContent="space-between">
-                    <span className=' text-white text-xs '>
+                    <span className=' text-xs '>
                         1 {tokenToSend?.symbol} = {fetchTokenRateState == 'pending' || !conversionRate ? <CircularProgress style={{ color: theme.text_color }} size={12} /> : formatNumber(Number(conversionRate))} {tokenToReceive?.symbol}
                     </span>
                     <Box display='flex' alignItems='center' gap='.4rem'>

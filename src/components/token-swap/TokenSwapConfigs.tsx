@@ -22,7 +22,7 @@ const TokenSwapConfigs: React.FC = () => {
             direction='column'
             spacing={2}
             divider={<Divider orientation="vertical" flexItem />}
-            style={{ color: theme.text_color }}>
+            style={{ color: theme.bgColor == '#0000FF' ? theme.bgColor: theme.text_color }}>
             <Stack direction='column' spacing={2}>
                 <Stack className="text-sm mb-2">
                     <div className="text-xs font-semibold mb-2">
@@ -30,8 +30,8 @@ const TokenSwapConfigs: React.FC = () => {
                     </div>
                     <Box
                         sx={{
-                            background: theme.menu_bg,
-                            borderColor: theme.text_color
+                            background: theme.bgColor == '#0000FF' ? theme.bgColor: theme.menu_bg,
+                            borderColor: theme.bgColor == '#0000FF' ? theme.bgColor: theme.text_color
                         }}
                         className="flex items-center border rounded-md ring-1 ring-black/10 dark:ring-white/5 overflow-hidden text-sm h-10">
                         {
@@ -116,7 +116,7 @@ const TokenSwapConfigs: React.FC = () => {
                         </p>
                         <p
                             className=' rounded-md border'
-                            style={{ background: theme.menu_bg, padding: '.5rem', borderColor: theme.text_color }}>
+                            style={{ background: theme.menu_bg, padding: '.5rem', borderColor: theme.bgColor == '#0000FF' ? theme.bgColor: theme.text_color }}>
                             {priorityDescription}
                         </p>
                     </div>
