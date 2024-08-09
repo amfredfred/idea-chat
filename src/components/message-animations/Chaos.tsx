@@ -18,6 +18,25 @@ interface MessageItem extends Message {
   colSpanClass?: string
 }
 
+//Dummy Area
+const messageLengths = [1, 10, 20, 30, 50, 80, 445];
+
+const messages = {
+  1: "Lorem ipsu",
+  10: "Lorem ipsu",
+  20: "Lorem ipsum dolor sit am",
+  30: "Lorem ipsum dolor sit amet, cons",
+  50: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  80: "In publishing and graphic design, Lorem ipsum serves as a placeholder text often utilized to showcase the visual form of a document or typeface, without depending on meaningful content. It’s a standard tool for designers, allowing them to focus on layout and aesthetics before the final text is available.",
+  445: "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available."
+};
+
+const GetRandomParagraph = () => {
+  const randomLength = messageLengths[Math.floor(Math.random() * messageLengths.length)];
+  return messages[randomLength].slice(0, randomLength);
+};
+
+
 const Chaos: React.FC = () => {
   const dispatch = useAppDispatch();
   const newMessage = useAppSelector((state) => state.chat.newMessage);
@@ -47,7 +66,7 @@ const Chaos: React.FC = () => {
     const { textClampClass } = generateRandomStyles();
     const newMsg: MessageItem = {
       _id: generateRandomHex(),
-      message: `In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available`,
+      message: GetRandomParagraph(),
       username: `User_${generateRandomHex(10)}`,
       profilePic: `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 50)}.jpg`,
       timestamp: Date.now(),
