@@ -38,10 +38,11 @@ const TokenswapStack: React.FC = () => {
   const [isReady, setIsReady] = useState(false);
   const [value, setValue] = React.useState('1');
   const isMobile = useMediaQuery('(max-width:300px)');
+  const isMedium = useMediaQuery('(max-width:600px)');
+
   const wallet = useWallet();
   const containerRef = useRef<HTMLDivElement>(null)
   const theme = useAppSelector(state => state.theme.current.styles)
-  console.log('rerenderd')
 
   const RPC_URL = import.meta.env.VITE_RPC_URL;
   const connection = new Connection(RPC_URL, 'confirmed');
@@ -81,29 +82,26 @@ const TokenswapStack: React.FC = () => {
     dispatch(setIsVisible(false));
   };
 
-  useEffect(() => {
-    setIsMinimized(false);
-  }, [tokenToSend, tokenToReceive]);
+  const handleResize = () => {
+    const centerX = window.innerWidth / 2 - (window.innerWidth / (isMedium ? 2.5 : 4));
+    const centerY = isMobile ? 0 : window.innerHeight / 2 - window.innerHeight / 4;
+    setPosition({ x: centerX, y: centerY });
+  };
 
   useEffect(() => {
     if (isVisible) {
-      const centerX = window.innerWidth / 2 - window.innerWidth / 4;
-      const centerY = isMobile ? 0 : window.innerHeight / 2 - window.innerHeight / 4;
-      setPosition({ x: centerX, y: centerY });
+      handleResize()
       setIsReady(true);
     }
   }, [isVisible, isMobile]);
 
   useEffect(() => {
-    const handleResize = () => {
-      const { width, height } = getDimensions(containerRef)
-      const centerX = window.innerWidth / 2 - (width / 2);
-      const centerY = isMobile ? 0 : isMinimized ? 40 : window.innerHeight / 2 - height;
-      setPosition({ x: centerX, y: centerY });
-    };
+    handleResize()
+    setIsMinimized(false);
+  }, [tokenToSend, tokenToReceive]);
 
+  useEffect(() => {
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
