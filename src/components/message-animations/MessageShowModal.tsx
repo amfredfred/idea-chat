@@ -23,14 +23,14 @@ const MessageShowModal: React.FC<MessageShowModalProps> = ({ message, isOpen, on
                     <p className="font-bold text-[16px] ">{message.username}</p>
                     <Divider style={{ background: theme.bgColor, width: 130, height: 2, borderRadius: 50 }} />
                 </Box>
-                <Box className='flex-1 w-full flex overflow-auto '>
-                    <p className='m-auto max-h-full min-w-full text-wrap whitespace-pre-wrap break-words font-semibold' >
+                <Box className='flex-1 w-full flex overflow-auto custom-scrollbar'>
+                    <p className='m-auto max-h-full min-w-full text-wrap whitespace-pre-wrap break-words font-semibold ' >
                         {message.message}
                         {message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}{message.message}
                     </p>
                 </Box>
-                <Box style={{ background: theme.bgColor }} className=' w-full -700 flex items-center justify-center rounded no-scrollbar'>
-                    <Button style={{ color: theme.text_color, width:'100%'}}>
+                <Box style={{ background: theme.bgColor }} className=' w-full -700 flex items-center justify-center rounded '>
+                    <Button style={{ color: theme.text_color, width: '100%' }} >
                         back to chat
                     </Button>
                 </Box>

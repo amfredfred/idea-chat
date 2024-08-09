@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { addNewMessage, Message } from '../../libs/redux/slices/chat-slice';
 import { generateRandomHex } from '../../utils';
 import debounce from 'lodash/debounce';
-import MessageShowModal from './MessageModal';
+import MessageShowModal from './MessageShowModal';
 import { IconButton } from '@mui/material';
 
 interface MessageItem extends Message {

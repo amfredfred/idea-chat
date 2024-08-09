@@ -3,11 +3,17 @@ import Marquee from "react-fast-marquee";
 import React from "react";
 import { Message } from "../../libs/redux/slices/chat-slice";
 import { useAppSelector } from "../../libs/redux/hooks";
+import { IconButton } from "@mui/material";
+import MessageShowModal from "./MessageShowModal";
 
 type SlidePorps = { messages: Message[]; scrollDirection: "left" | "right" }
 
 const Slider = React.memo(({ messages = [], scrollDirection }: SlidePorps) => {
   const websiteTheme = useAppSelector(state => state.theme.current.styles);
+  const [messageModal, setMessageModal] = useState({
+    isOpen: false,
+    message: {} as any
+  })
 
   return (
     <Marquee
@@ -19,6 +25,7 @@ const Slider = React.memo(({ messages = [], scrollDirection }: SlidePorps) => {
       className=" overflow-hidden h-max"
     >
       <div className="flex gap-[30px] h-full">
+        <MessageShowModal {...messageModal} onRequestClose={() => setMessageModal({ isOpen: false, message: {} as any })} />
         {messages.map((msg: Message) => (
           <React.Fragment key={msg._id}>
             <div className="flex items-center gap-[5px]">
@@ -26,7 +33,14 @@ const Slider = React.memo(({ messages = [], scrollDirection }: SlidePorps) => {
                 {msg.username}
               </p>
               <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden border-[0.5px]" style={{ borderColor: websiteTheme.text_color }}>
-                <img src={msg.profilePic} className="object-cover w-full h-full" alt={msg.username} />
+                <IconButton sx={{ padding: 0 }} onClick={() => {
+                  setMessageModal({
+                    isOpen: true,
+                    message: msg
+                  })
+                }}>
+                  <img src={msg.profilePic} alt={msg.username} className="w-6 h-6 rounded-full" />
+                </IconButton>
               </div>
               <p className="text-[11px] lg:text-[13px] xl:text-[16px] max-w-[550px] my-auto">
                 {msg.message}

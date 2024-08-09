@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import { useAppSelector } from "../../libs/redux/hooks";
 import { MessageModal } from "../MessageModal";
+import MessageShowModal from "./MessageShowModal";
+import { IconButton } from "@mui/material";
 
 interface Message {
   message: string;
@@ -10,12 +12,12 @@ interface Message {
   profilePic: string;
 }
 
-const MessageComponent: React.FC<Message> = ({
-  username,
-  message,
-  profilePic,
-}) => {
+const MessageComponent: React.FC<Message> = (msg) => {
   const websiteTheme = useAppSelector(state => state.theme.current.styles);
+  const [messageModal, setMessageModal] = useState({
+    isOpen: false,
+    message: {} as any
+  })
 
   const formatMessage = (text: string) => {
     let formattedText = text.replace(/\\n/g, "\n");
@@ -38,6 +40,7 @@ const MessageComponent: React.FC<Message> = ({
       exit={{ opacity: 0, y: -50 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
     >
+      <MessageShowModal {...messageModal} onRequestClose={() => setMessageModal({ isOpen: false, message: {} as any })} />
       <div className="hidden lg:flex gap-2 lg:gap-5 xl:gap-10 items-center mt-2 lg:mt-5 xl:mt-5">
         <div className="flex items-center gap-[10px] w-[30%] lg:w-[20%] justify-end">
           <p
@@ -48,21 +51,35 @@ const MessageComponent: React.FC<Message> = ({
               whiteSpace: "normal",
             }}
           >
-            {username}
+            {msg.username}
           </p>
           <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[35px] h-[35px] overflow-hidden">
-            <img src={profilePic} className="object-cover w-full h-full" />
+            <IconButton sx={{ padding: 0 }} onClick={() => {
+              setMessageModal({
+                isOpen: true,
+                message: msg
+              })
+            }}>
+              <img src={msg.profilePic} alt={msg.username} className="w-6 h-6 rounded-full" />
+            </IconButton>
           </div>
         </div>
         <div className="w-[70%] lg:w-[60%]">
           <p className="text-[13px] lg:text-[18px] xl:text-[20px]">
-            {message.length > 300 ? message.slice(0, 300) : message}
+            {msg.message.length > 300 ? msg.message.slice(0, 300) : msg.message}
           </p>
         </div>
       </div>
       <div className="lg:hidden flex gap-[10px] items-center">
         <div className="rounded-full lg:h-[50px] lg:w-[50px] w-[30px] h-[30px] overflow-hidden">
-          <img src={profilePic} className="object-cover w-full h-full" />
+          <IconButton sx={{ padding: 0 }} onClick={() => {
+            setMessageModal({
+              isOpen: true,
+              message: msg
+            })
+          }}>
+            <img src={msg.profilePic} alt={msg.username} className="w-6 h-6 rounded-full" />
+          </IconButton>
         </div>
         <div>
           <p
@@ -73,7 +90,7 @@ const MessageComponent: React.FC<Message> = ({
               whiteSpace: "normal",
             }}
           >
-            {username}
+            {msg.username}
           </p>
           <div className="lg:w-[60%]">
             <p
@@ -84,7 +101,7 @@ const MessageComponent: React.FC<Message> = ({
                 whiteSpace: "normal",
               }}
             >
-              {formatMessage(message)}
+              {formatMessage(msg.message)}
             </p>
           </div>
         </div>
