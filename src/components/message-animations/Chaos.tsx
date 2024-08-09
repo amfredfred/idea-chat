@@ -37,7 +37,7 @@ const Chaos: React.FC = () => {
   const generateRandomStyles = () => {
     return {
       marginClass: `px-${Math.floor(Math.random() * 10) + 1}`,
-      colSpanClass: ['col-span-1', 'col-span-1', 'col-span-2', 'col-span-1'][Math.floor(Math.random() * 3)],
+      colSpanClass: ['col-span-1', 'col-span-1', 'col-span-2 w-[62.5%] max-sm:w-[100%]', 'col-span-1'][Math.floor(Math.random() * 3)],
       rowSpanClass: ['row-span-1', 'row-span-1', 'row-span-1', 'row-span-2'][Math.floor(Math.random() * 3)],
       textClampClass: ['line-clamp-3', 'line-clamp-3', 'line-clamp-2', 'line-clamp-2'][Math.floor(Math.random() * 3)],
     };
@@ -142,7 +142,7 @@ const Chaos: React.FC = () => {
             animate={{ opacity: 1, scale: 1, rotate: 0}}
             exit={{ opacity: 0, scale: 0.5, rotate: 20 }}
             transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-            className={`flex items-center ${rowSpanClass} ${colSpanClass}`}
+            className={`flex items-center ${rowSpanClass} ${colSpanClass} `}
           >
             {msg ? (
               <motion.div className={`flex flex-col ${marginClass} `}
