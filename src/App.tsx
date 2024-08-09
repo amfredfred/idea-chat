@@ -30,16 +30,16 @@ const ProtectedRoute: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
 
-  // useEffect(() => {
-  //   connectWallet(wallet).then((connected) => {
-  //     setIsConnected(connected);
-  //     setIsLoading(false);
-  //   });
-  // }, [wallet]);
+  useEffect(() => {
+    connectWallet(wallet).then((connected) => {
+      setIsConnected(connected);
+      setIsLoading(false);
+    });
+  }, [wallet]);
 
-  // if (!wallet.wallet) return <Navigate to="/" />
-  // if (isLoading || wallet.connecting) return <Loading />;
-  // if (!isConnected) return <Navigate to="/" />
+  if (!wallet.wallet) return <Navigate to="/" />
+  if (isLoading || wallet.connecting) return <Loading />;
+  if (!isConnected) return <Navigate to="/" />
   return <Outlet />
 };
 
