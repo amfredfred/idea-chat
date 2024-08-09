@@ -23,7 +23,7 @@ interface MessageItem extends Message {
 //Dummy Area
 const messageLengths = [1, 10, 20, 30, 50, 80, 445];
 
-const messages = {
+const messages: Record<number, string> = {
   1: "Lorem ipsu",
   10: "Lorem ipsu",
   20: "Lorem ipsum dolor sit am",
