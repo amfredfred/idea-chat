@@ -26,7 +26,7 @@ const Chaos: React.FC = () => {
     if (window.innerWidth >= 1200) {
       return { numColumns: 5, numRowsPerColumn: 4, totalSlots: 20 };
     } else if (window.innerWidth >= 600) {
-      return { numColumns: 3, numRowsPerColumn: 5, totalSlots: 8 };
+      return { numColumns: 4, numRowsPerColumn: 5, totalSlots: 9 };
     } else {
       return { numColumns: 2, numRowsPerColumn: 6, totalSlots: 8 };
     }
@@ -37,7 +37,7 @@ const Chaos: React.FC = () => {
   const generateRandomStyles = () => {
     return {
       marginClass: `px-${Math.floor(Math.random() * 10) + 1}`,
-      colSpanClass: ['col-span-1', 'col-span-1', 'col-span-2 w-[62.5%] max-sm:w-[100%]', 'col-span-1'][Math.floor(Math.random() * 3)],
+      colSpanClass: ['col-span-1 w-[80%] max-sm:w-[100%]', 'col-span-1', 'col-span-2 w-[62.5%] max-sm:w-[100%]', 'col-span-1 w-[90.5%] max-sm:w-[100%]'][Math.floor(Math.random() * 3)],
       rowSpanClass: ['row-span-1', 'row-span-1', 'row-span-1', 'row-span-2'][Math.floor(Math.random() * 3)],
       textClampClass: ['line-clamp-3', 'line-clamp-3', 'line-clamp-2', 'line-clamp-2'][Math.floor(Math.random() * 3)],
     };

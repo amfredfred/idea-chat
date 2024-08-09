@@ -69,8 +69,8 @@ export default function App() {
       background: theme.bgColor,
       isolation: 'isolate'
     }}>
-      <Box className=' fixed -z-10 left-0 top-0 h-full w-full overflow-hidden'>
-        <svg style={{ width: '100%', height: '100%' }} viewBox="0 0 1440 1064" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <Box className=' scale-125 fixed -z-10 left-0 top-0 h-full w-full overflow-hidden'>
+        <svg style={{ width: '100%', height: '100%'}} viewBox="0 0 1440 1064" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g opacity="0.16">
             <path d="M210.794 886.111H1229.93V313.894H210.794V886.111ZM1232.33 888.506H208.399V311.504H1232.33V888.506Z" fill={useColor} />
             <path d="M1231.12 806.414H209.593V804.02H1231.12V806.414Z" fill={useColor} />
