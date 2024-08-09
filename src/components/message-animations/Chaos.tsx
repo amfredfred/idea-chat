@@ -122,7 +122,7 @@ const Chaos: React.FC = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       dispatch(addNewMessage(makeMessage()));
-    }, 200);
+    }, 500);
 
     window.addEventListener('resize', debouncedHandleResize);
 
