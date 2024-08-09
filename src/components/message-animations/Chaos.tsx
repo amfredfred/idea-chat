@@ -41,6 +41,16 @@ const Chaos: React.FC = () => {
   const dispatch = useAppDispatch();
   const newMessage = useAppSelector((state) => state.chat.newMessage);
 
+  const initGridData = () => {
+    const data = [] as MessageItem[];
+    const { totalSlots } = getGridDimensions();
+    for (let i = 0; i < totalSlots; i++) {
+      const { marginClass, textClampClass, colSpanClass, rowSpanClass } = generateRandomStyles();
+      data.push({ ...makeMessage(true), message: '', marginClass, textClampClass, colSpanClass, rowSpanClass });
+    }
+    return data;
+  }
+
   const getGridDimensions = () => {
     if (window.innerWidth >= 1200) {
       return { numColumns: 5, numRowsPerColumn: 4, totalSlots: 20 };
@@ -76,15 +86,7 @@ const Chaos: React.FC = () => {
     return newMsg;
   };
 
-  const [gridData, setGridData] = useState<MessageItem[]>(() => {
-    const data = [] as MessageItem[];
-    const { totalSlots } = getGridDimensions();
-    for (let i = 0; i < totalSlots; i++) {
-      const { marginClass, textClampClass , colSpanClass, rowSpanClass} = generateRandomStyles();
-      data.push({ ...makeMessage(true), message: '', marginClass, textClampClass, colSpanClass, rowSpanClass });
-    }
-    return data;
-  });
+  const [gridData, setGridData] = useState<MessageItem[]>(initGridData());
 
   const adjustGridData = (newTotalSlots: number) => {
     setGridData((prevData) => {
@@ -135,7 +137,15 @@ const Chaos: React.FC = () => {
   const debouncedHandleResize = useCallback(debounce(handleResize, 300), [handleResize]);
 
   useEffect(() => {
+    setGridData(initGridData())
+    return () => {
+      setGridData(initGridData())
+    }
+  }, [])
+
+  useEffect(() => {
     if (newMessage) updateGridWithNewMessage();
+
   }, [newMessage]);
 
   useEffect(() => {
@@ -158,7 +168,7 @@ const Chaos: React.FC = () => {
           <motion.div
             key={_id}
             initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0}}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, scale: 0.5, rotate: 20 }}
             transition={{ type: 'spring', stiffness: 100, damping: 20 }}
             className={`flex items-center ${rowSpanClass} ${colSpanClass} `}

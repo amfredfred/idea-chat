@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../libs/redux/hooks";
 import PumpChannel from "../components/chat/PumpDotRay";
 import DenChannel from "../components/chat/DenChannel";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import ContainedLayout from "../layouts/ContainedLayout";
 import { setMusicIsPlaying } from "../libs/redux/slices/chat-slice";
 
@@ -21,13 +21,13 @@ const Chat = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   // const notificationRef = useRef<HTMLAudioElement | null>(null);
   const chatState = useAppSelector(state => state.chat.state)
-  // const isMusicPlaying = useAppSelector(state => state.chat.isMusicPlaying)
+  const isMusicPlaying = useAppSelector(state => state.chat.isMusicPlaying)
   const shouldPlayAudio = useAppSelector(state => state.chat.shouldPlayAudio)
 
   const theme = useAppSelector((state) => state.theme.current);
   const chatAudio = useAppSelector(state => state.chat.chatAudio)
 
-  const handlePlay = async () => {
+  const handlePlay = useCallback(async () => {
     if (audioRef.current) {
       if (audioRef.current.src !== chatAudio) {
         audioRef.current.src = chatAudio;
@@ -39,21 +39,26 @@ const Chat = () => {
         console.error("Error playing audio:", error);
       }
     }
-  };
+  }, [chatAudio, dispatch, audioRef]);
 
-  const handlePause = () => {
+  const handlePause = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
       dispatch(setMusicIsPlaying(false));
     }
-  };
+  }, [dispatch, audioRef]);
 
   useEffect(() => {
-    if (shouldPlayAudio)
+    if (shouldPlayAudio) {
       handlePlay();
-    else
-      handlePause()
-  }, [shouldPlayAudio, audioRef, chatAudio]);
+    } else {
+      handlePause();
+    }
+    console.log({ shouldPlayAudio, isMusicPlaying });
+    return () => {
+      handlePause();
+    };
+  }, [shouldPlayAudio, handlePause, handlePlay]);
 
   return (
     <ContainedLayout>
@@ -63,7 +68,7 @@ const Chat = () => {
         }}
         className={`transition-colors duration-1000 flex flex-col relative font-jbm uppercase h-full overflow-hidden`}
       >
-        <audio ref={audioRef} loop hidden>
+        <audio ref={audioRef} loop hidden autoPlay>
           <source src={chatAudio} type="audio/mpeg" />
           <source src={chatAudio} type="audio/mp3" />
         </audio>

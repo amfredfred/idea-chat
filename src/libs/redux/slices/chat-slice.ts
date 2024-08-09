@@ -114,6 +114,7 @@ const chatSlice = createSlice({
             state.typedMessage = action.payload;
         },
         setShouldPlayAudio: (state, action: PayloadAction<boolean>) => {
+            state.shouldPlayAudio = !action.payload;
             state.shouldPlayAudio = action.payload;
         }
     },
