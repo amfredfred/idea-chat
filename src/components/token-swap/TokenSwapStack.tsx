@@ -3,7 +3,7 @@ import Draggable from 'react-draggable';
 import { Button, Box, IconButton, CircularProgress, Tab } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { setIsVisible, setSelectedtokenToSend, setSelectedtokenToReceive, setAmountToSend, setError, handleTokenSwap } from '../../libs/redux/slices/token-swap-slice';
-import { Remove, Close, Settings, Fullscreen } from '@mui/icons-material';
+import { Remove, Close, Settings, Fullscreen, DragHandle } from '@mui/icons-material';
 import TokenSwapInput from './TokenSwapInput';
 import TokenSwapAnalytic from './TokenSwapAnalytic';
 import { motion } from 'framer-motion';
@@ -11,7 +11,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
 import { toast } from 'react-toastify';
 import { useMediaQuery } from '@mui/material';
-import { getDimensions, parseAmount } from '../../utils'; 
+import { getDimensions, parseAmount } from '../../utils';
 import TokenSwapConfigs from './TokenSwapConfigs';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
@@ -41,6 +41,7 @@ const TokenswapStack: React.FC = () => {
   const wallet = useWallet();
   const containerRef = useRef<HTMLDivElement>(null)
   const theme = useAppSelector(state => state.theme.current.styles)
+  console.log('rerenderd')
 
   const RPC_URL = import.meta.env.VITE_RPC_URL;
   const connection = new Connection(RPC_URL, 'confirmed');
@@ -143,7 +144,11 @@ const TokenswapStack: React.FC = () => {
         e
         setPosition({ x: data.x, y: data.y })
       }}
-      disabled={isMobile} // Disable dragging on mobile devices
+      disabled={isMobile}
+      allowAnyClick
+      handle=".handle"
+      grid={[10, 10]}
+      scale={1}
     >
       <Box
         ref={containerRef}
@@ -169,7 +174,7 @@ const TokenswapStack: React.FC = () => {
         }}
       >
         <TabContext value={value}  >
-          <Box sx={{ background: theme.bgColor == '#0000FF' ? 'grey': theme.pump_card_bg }} className=' flex items-center justify-between gap-4  px-4'>
+          <Box sx={{ background: theme.bgColor == '#0000FF' ? 'grey' : theme.pump_card_bg }} className=' flex items-center justify-between gap-4  px-4'>
             <Box className=' flex-grow' >
               <TabList TabIndicatorProps={{ style: { display: 'none' } }} onChange={handleChange}>
                 <Tab
@@ -178,7 +183,16 @@ const TokenswapStack: React.FC = () => {
                   value="1" />
               </TabList>
             </Box>
-            <div className="text-yellow-100 flex w-full" style={{
+
+            <div
+              style={{
+                backgroundImage: `linear-gradient(to right , transparent, transparent , ${theme.text_color} , transparent, transparent )`
+              }}
+              className="handle  rounded-full flex items-center opacity-0 hover:opacity-100 justify-center cursor-move   h-full w-full">
+              <DragHandle className=' ' style={{ color: theme.bgColor }} />
+            </div>
+
+            <div className="text-yellow-100 flex" style={{
               justifyContent: 'space-between',
               alignItems: 'center',
               cursor: isMobile ? 'default' : 'move', // Disable move cursor on mobile
