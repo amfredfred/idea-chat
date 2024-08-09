@@ -26,9 +26,9 @@ const Chaos: React.FC = () => {
     if (window.innerWidth >= 1200) {
       return { numColumns: 5, numRowsPerColumn: 4, totalSlots: 20 };
     } else if (window.innerWidth >= 600) {
-      return { numColumns: 3, numRowsPerColumn: 5, totalSlots: 10 };
+      return { numColumns: 3, numRowsPerColumn: 5, totalSlots: 8 };
     } else {
-      return { numColumns: 2, numRowsPerColumn: 6, totalSlots: 9 };
+      return { numColumns: 2, numRowsPerColumn: 6, totalSlots: 8 };
     }
   };
 
